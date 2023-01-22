@@ -233,6 +233,7 @@ export type Product = {
   brandName?: Maybe<Scalars['String']>;
   /** Cost value */
   costValue: Scalars['Int'];
+  createdAt: Scalars['DateTime'];
   /** ID */
   id: Scalars['ID'];
   /** Cost is post paid? (consigned) */
@@ -241,9 +242,10 @@ export type Product = {
   name: Scalars['String'];
   /** Retail price */
   priceValue: Scalars['Int'];
-  provider: User;
+  provider: Provider;
   /** FK: Provider.id */
   providerId?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type ProductAvgAggregate = {
@@ -263,11 +265,13 @@ export type ProductCountAggregate = {
   blameUserId: Scalars['Int'];
   brandName: Scalars['Int'];
   costValue: Scalars['Int'];
+  createdAt: Scalars['Int'];
   id: Scalars['Int'];
   isPostPaid: Scalars['Int'];
   name: Scalars['Int'];
   priceValue: Scalars['Int'];
   providerId: Scalars['Int'];
+  updatedAt: Scalars['Int'];
 };
 
 export type ProductCreateInput = {
@@ -400,11 +404,13 @@ export type ProductMaxAggregate = {
   blameUserId?: Maybe<Scalars['String']>;
   brandName?: Maybe<Scalars['String']>;
   costValue?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['String']>;
   isPostPaid?: Maybe<Scalars['Boolean']>;
   name?: Maybe<Scalars['String']>;
   priceValue?: Maybe<Scalars['Int']>;
   providerId?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type ProductMinAggregate = {
@@ -412,11 +418,13 @@ export type ProductMinAggregate = {
   blameUserId?: Maybe<Scalars['String']>;
   brandName?: Maybe<Scalars['String']>;
   costValue?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['String']>;
   isPostPaid?: Maybe<Scalars['Boolean']>;
   name?: Maybe<Scalars['String']>;
   priceValue?: Maybe<Scalars['Int']>;
   providerId?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type ProductOrderByRelationAggregateInput = {
@@ -428,6 +436,7 @@ export type ProductOrderByWithRelationInput = {
   blameUserId?: InputMaybe<SortOrder>;
   brandName?: InputMaybe<SortOrder>;
   costValue?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   isPostPaid?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
@@ -435,6 +444,7 @@ export type ProductOrderByWithRelationInput = {
   provider?: InputMaybe<ProviderOrderByWithRelationInput>;
   providerId?: InputMaybe<SortOrder>;
   sales?: InputMaybe<SaleOrderByRelationAggregateInput>;
+  updatedAt?: InputMaybe<SortOrder>;
 };
 
 export type ProductPaginated = {
@@ -459,11 +469,13 @@ export enum ProductScalarFieldEnum {
   BlameUserId = 'blameUserId',
   BrandName = 'brandName',
   CostValue = 'costValue',
+  CreatedAt = 'createdAt',
   Id = 'id',
   IsPostPaid = 'isPostPaid',
   Name = 'name',
   PriceValue = 'priceValue',
-  ProviderId = 'providerId'
+  ProviderId = 'providerId',
+  UpdatedAt = 'updatedAt'
 }
 
 export type ProductScalarWhereInput = {
@@ -473,11 +485,13 @@ export type ProductScalarWhereInput = {
   blameUserId?: InputMaybe<StringFilter>;
   brandName?: InputMaybe<StringNullableFilter>;
   costValue?: InputMaybe<IntFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
   isPostPaid?: InputMaybe<BoolFilter>;
   name?: InputMaybe<StringFilter>;
   priceValue?: InputMaybe<IntFilter>;
   providerId?: InputMaybe<StringNullableFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type ProductSumAggregate = {
@@ -616,6 +630,7 @@ export type ProductWhereInput = {
   blameUserId?: InputMaybe<StringFilter>;
   brandName?: InputMaybe<StringNullableFilter>;
   costValue?: InputMaybe<IntFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
   isPostPaid?: InputMaybe<BoolFilter>;
   name?: InputMaybe<StringFilter>;
@@ -623,6 +638,7 @@ export type ProductWhereInput = {
   provider?: InputMaybe<ProviderRelationFilter>;
   providerId?: InputMaybe<StringNullableFilter>;
   sales?: InputMaybe<SaleListRelationFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type ProductWhereUniqueInput = {
@@ -643,6 +659,7 @@ export type Provider = {
   blameUser: User;
   /** FK: User.id - User to blame for */
   blameUserId: Scalars['String'];
+  createdAt: Scalars['DateTime'];
   /** Document */
   document?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
@@ -650,6 +667,7 @@ export type Provider = {
   id: Scalars['ID'];
   /** Name */
   name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
   /** Whatsapp */
   whatsapp?: Maybe<Scalars['String']>;
 };
@@ -664,10 +682,12 @@ export type ProviderCountAggregate = {
   __typename?: 'ProviderCountAggregate';
   _all: Scalars['Int'];
   blameUserId: Scalars['Int'];
+  createdAt: Scalars['Int'];
   document: Scalars['Int'];
   email: Scalars['Int'];
   id: Scalars['Int'];
   name: Scalars['Int'];
+  updatedAt: Scalars['Int'];
   whatsapp: Scalars['Int'];
 };
 
@@ -776,20 +796,24 @@ export type ProviderListRelationFilter = {
 export type ProviderMaxAggregate = {
   __typename?: 'ProviderMaxAggregate';
   blameUserId?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
   document?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
   whatsapp?: Maybe<Scalars['String']>;
 };
 
 export type ProviderMinAggregate = {
   __typename?: 'ProviderMinAggregate';
   blameUserId?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
   document?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
   whatsapp?: Maybe<Scalars['String']>;
 };
 
@@ -802,10 +826,12 @@ export type ProviderOrderByWithRelationInput = {
   Sale?: InputMaybe<SaleOrderByRelationAggregateInput>;
   blameUser?: InputMaybe<UserOrderByWithRelationInput>;
   blameUserId?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
   document?: InputMaybe<SortOrder>;
   email?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
   whatsapp?: InputMaybe<SortOrder>;
 };
 
@@ -829,10 +855,12 @@ export type ProviderRelationFilter = {
 
 export enum ProviderScalarFieldEnum {
   BlameUserId = 'blameUserId',
+  CreatedAt = 'createdAt',
   Document = 'document',
   Email = 'email',
   Id = 'id',
   Name = 'name',
+  UpdatedAt = 'updatedAt',
   Whatsapp = 'whatsapp'
 }
 
@@ -841,10 +869,12 @@ export type ProviderScalarWhereInput = {
   NOT?: InputMaybe<Array<ProviderScalarWhereInput>>;
   OR?: InputMaybe<Array<ProviderScalarWhereInput>>;
   blameUserId?: InputMaybe<StringFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
   document?: InputMaybe<StringNullableFilter>;
   email?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
   whatsapp?: InputMaybe<StringNullableFilter>;
 };
 
@@ -960,10 +990,12 @@ export type ProviderWhereInput = {
   Sale?: InputMaybe<SaleListRelationFilter>;
   blameUser?: InputMaybe<UserRelationFilter>;
   blameUserId?: InputMaybe<StringFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
   document?: InputMaybe<StringNullableFilter>;
   email?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
   whatsapp?: InputMaybe<StringNullableFilter>;
 };
 
@@ -1066,6 +1098,7 @@ export type Sale = {
   blameUserId: Scalars['String'];
   /** Cost value (the same from Product.costValue) */
   costValue: Scalars['Int'];
+  createdAt: Scalars['DateTime'];
   /** Date Time */
   date: Scalars['DateTime'];
   /** ID */
@@ -1080,6 +1113,7 @@ export type Sale = {
   provider: Provider;
   /** Provider (usually the same as Product.providerId) */
   providerId?: Maybe<Scalars['String']>;
+  updatedAt: Scalars['DateTime'];
 };
 
 export type SaleAvgAggregate = {
@@ -1093,12 +1127,14 @@ export type SaleCountAggregate = {
   _all: Scalars['Int'];
   blameUserId: Scalars['Int'];
   costValue: Scalars['Int'];
+  createdAt: Scalars['Int'];
   date: Scalars['Int'];
   id: Scalars['Int'];
   isPostPaid: Scalars['Int'];
   priceValue: Scalars['Int'];
   productId: Scalars['Int'];
   providerId: Scalars['Int'];
+  updatedAt: Scalars['Int'];
 };
 
 export type SaleCreateInput = {
@@ -1241,24 +1277,28 @@ export type SaleMaxAggregate = {
   __typename?: 'SaleMaxAggregate';
   blameUserId?: Maybe<Scalars['String']>;
   costValue?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
   date?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['String']>;
   isPostPaid?: Maybe<Scalars['Boolean']>;
   priceValue?: Maybe<Scalars['Int']>;
   productId?: Maybe<Scalars['String']>;
   providerId?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type SaleMinAggregate = {
   __typename?: 'SaleMinAggregate';
   blameUserId?: Maybe<Scalars['String']>;
   costValue?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
   date?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['String']>;
   isPostPaid?: Maybe<Scalars['Boolean']>;
   priceValue?: Maybe<Scalars['Int']>;
   productId?: Maybe<Scalars['String']>;
   providerId?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type SaleOrderByRelationAggregateInput = {
@@ -1269,6 +1309,7 @@ export type SaleOrderByWithRelationInput = {
   blameUser?: InputMaybe<UserOrderByWithRelationInput>;
   blameUserId?: InputMaybe<SortOrder>;
   costValue?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
   date?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   isPostPaid?: InputMaybe<SortOrder>;
@@ -1277,6 +1318,7 @@ export type SaleOrderByWithRelationInput = {
   productId?: InputMaybe<SortOrder>;
   provider?: InputMaybe<ProviderOrderByWithRelationInput>;
   providerId?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
 };
 
 export type SalePaginated = {
@@ -1295,12 +1337,14 @@ export type SalePaginated = {
 export enum SaleScalarFieldEnum {
   BlameUserId = 'blameUserId',
   CostValue = 'costValue',
+  CreatedAt = 'createdAt',
   Date = 'date',
   Id = 'id',
   IsPostPaid = 'isPostPaid',
   PriceValue = 'priceValue',
   ProductId = 'productId',
-  ProviderId = 'providerId'
+  ProviderId = 'providerId',
+  UpdatedAt = 'updatedAt'
 }
 
 export type SaleScalarWhereInput = {
@@ -1309,12 +1353,14 @@ export type SaleScalarWhereInput = {
   OR?: InputMaybe<Array<SaleScalarWhereInput>>;
   blameUserId?: InputMaybe<StringFilter>;
   costValue?: InputMaybe<IntFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
   date?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
   isPostPaid?: InputMaybe<BoolFilter>;
   priceValue?: InputMaybe<IntFilter>;
   productId?: InputMaybe<StringFilter>;
   providerId?: InputMaybe<StringNullableFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type SaleSumAggregate = {
@@ -1464,6 +1510,7 @@ export type SaleWhereInput = {
   blameUser?: InputMaybe<UserRelationFilter>;
   blameUserId?: InputMaybe<StringFilter>;
   costValue?: InputMaybe<IntFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
   date?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
   isPostPaid?: InputMaybe<BoolFilter>;
@@ -1472,6 +1519,7 @@ export type SaleWhereInput = {
   productId?: InputMaybe<StringFilter>;
   provider?: InputMaybe<ProviderRelationFilter>;
   providerId?: InputMaybe<StringNullableFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type SaleWhereUniqueInput = {
@@ -1529,11 +1577,13 @@ export type StringNullableFilter = {
 export type User = {
   __typename?: 'User';
   _count: UserCount;
+  createdAt: Scalars['DateTime'];
   email: Scalars['String'];
   /** ID */
   id: Scalars['ID'];
   /** Name */
   name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type UserCount = {
@@ -1546,9 +1596,11 @@ export type UserCount = {
 export type UserCountAggregate = {
   __typename?: 'UserCountAggregate';
   _all: Scalars['Int'];
+  createdAt: Scalars['Int'];
   email: Scalars['Int'];
   id: Scalars['Int'];
   name: Scalars['Int'];
+  updatedAt: Scalars['Int'];
 };
 
 export type UserCreateInput = {
@@ -1625,25 +1677,31 @@ export type UserCreateWithoutSaleInput = {
 
 export type UserMaxAggregate = {
   __typename?: 'UserMaxAggregate';
+  createdAt?: Maybe<Scalars['DateTime']>;
   email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type UserMinAggregate = {
   __typename?: 'UserMinAggregate';
+  createdAt?: Maybe<Scalars['DateTime']>;
   email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type UserOrderByWithRelationInput = {
   Product?: InputMaybe<ProductOrderByRelationAggregateInput>;
   Provider?: InputMaybe<ProviderOrderByRelationAggregateInput>;
   Sale?: InputMaybe<SaleOrderByRelationAggregateInput>;
+  createdAt?: InputMaybe<SortOrder>;
   email?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   name?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
 };
 
 export type UserPaginated = {
@@ -1665,9 +1723,11 @@ export type UserRelationFilter = {
 };
 
 export enum UserScalarFieldEnum {
+  CreatedAt = 'createdAt',
   Email = 'email',
   Id = 'id',
-  Name = 'name'
+  Name = 'name',
+  UpdatedAt = 'updatedAt'
 }
 
 export type UserUpdateInput = {
@@ -1745,9 +1805,11 @@ export type UserWhereInput = {
   Product?: InputMaybe<ProductListRelationFilter>;
   Provider?: InputMaybe<ProviderListRelationFilter>;
   Sale?: InputMaybe<SaleListRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
   email?: InputMaybe<StringFilter>;
   id?: InputMaybe<StringFilter>;
   name?: InputMaybe<StringFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
 export type UserWhereUniqueInput = {
@@ -2251,12 +2313,14 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
   blameUserId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   brandName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   costValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isPostPaid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   priceValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  provider?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  provider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType>;
   providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2276,11 +2340,13 @@ export type ProductCountAggregateResolvers<ContextType = any, ParentType extends
   blameUserId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   brandName?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   costValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   isPostPaid?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   priceValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   providerId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2288,11 +2354,13 @@ export type ProductMaxAggregateResolvers<ContextType = any, ParentType extends R
   blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   brandName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   costValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isPostPaid?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   priceValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2300,11 +2368,13 @@ export type ProductMinAggregateResolvers<ContextType = any, ParentType extends R
   blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   brandName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   costValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isPostPaid?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   priceValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2333,10 +2403,12 @@ export type ProviderResolvers<ContextType = any, ParentType extends ResolversPar
   _count?: Resolver<ResolversTypes['ProviderCount'], ParentType, ContextType>;
   blameUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   blameUserId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   document?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   whatsapp?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -2350,30 +2422,36 @@ export type ProviderCountResolvers<ContextType = any, ParentType extends Resolve
 export type ProviderCountAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProviderCountAggregate'] = ResolversParentTypes['ProviderCountAggregate']> = {
   _all?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   blameUserId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   document?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   whatsapp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ProviderMaxAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProviderMaxAggregate'] = ResolversParentTypes['ProviderMaxAggregate']> = {
   blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   document?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   whatsapp?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type ProviderMinAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProviderMinAggregate'] = ResolversParentTypes['ProviderMinAggregate']> = {
   blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   document?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   whatsapp?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -2408,6 +2486,7 @@ export type SaleResolvers<ContextType = any, ParentType extends ResolversParentT
   blameUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   blameUserId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   costValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   date?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isPostPaid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
@@ -2416,6 +2495,7 @@ export type SaleResolvers<ContextType = any, ParentType extends ResolversParentT
   productId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   provider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType>;
   providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2429,36 +2509,42 @@ export type SaleCountAggregateResolvers<ContextType = any, ParentType extends Re
   _all?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   blameUserId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   costValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   date?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   isPostPaid?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   priceValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   productId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   providerId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type SaleMaxAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SaleMaxAggregate'] = ResolversParentTypes['SaleMaxAggregate']> = {
   blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   costValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   date?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isPostPaid?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   priceValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   productId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type SaleMinAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SaleMinAggregate'] = ResolversParentTypes['SaleMinAggregate']> = {
   blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   costValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   date?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isPostPaid?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   priceValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   productId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2485,9 +2571,11 @@ export type SalesOutputResolvers<ContextType = any, ParentType extends Resolvers
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   _count?: Resolver<ResolversTypes['UserCount'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2500,23 +2588,29 @@ export type UserCountResolvers<ContextType = any, ParentType extends ResolversPa
 
 export type UserCountAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserCountAggregate'] = ResolversParentTypes['UserCountAggregate']> = {
   _all?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type UserMaxAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserMaxAggregate'] = ResolversParentTypes['UserMaxAggregate']> = {
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type UserMinAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserMinAggregate'] = ResolversParentTypes['UserMinAggregate']> = {
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

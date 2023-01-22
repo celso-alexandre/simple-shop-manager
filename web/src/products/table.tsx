@@ -1,36 +1,41 @@
 import { Table } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
-import { SalesNode } from '.';
+import { ProductsNode } from '.';
 import { formatMoneyFromInt } from '../helpers';
 import { BooleanTag } from '../components/tag';
 
-export function SalesTable(props: TableProps<SalesNode>) {
+export function ProductsTable(props: TableProps<ProductsNode>) {
   const columns: typeof props.columns = [
     {
       title: 'ID',
-      dataIndex: nameof<SalesNode>(x => x.id),
+      dataIndex: nameof<ProductsNode>(x => x.id),
       ellipsis: true,
     },
     {
       title: 'Data',
-      dataIndex: nameof<SalesNode>(x => x.date),
+      dataIndex: nameof<ProductsNode>(x => x.createdAt),
       render: value => dayjs(value).format('L LTS'),
     },
     {
       title: 'Preço',
-      dataIndex: nameof<SalesNode>(x => x.priceValue),
+      dataIndex: nameof<ProductsNode>(x => x.priceValue),
       render: value => formatMoneyFromInt(value),
     },
     {
       title: 'Tp Custo',
-      dataIndex: nameof<SalesNode>(x => x.isPostPaid),
+      dataIndex: nameof<ProductsNode>(x => x.isPostPaid),
       render: value => <BooleanTag bool={value}>{value ? 'Consignado' : 'Normal'}</BooleanTag>,
     },
     {
       title: 'Custo',
-      dataIndex: nameof<SalesNode>(x => x.costValue),
+      dataIndex: nameof<ProductsNode>(x => x.costValue),
       render: value => formatMoneyFromInt(value),
+    },
+    {
+      title: 'Fornecedor',
+      dataIndex: nameof<ProductsNode>(x => x.provider),
+      render: (value, record) => `${record.provider?.name} ${record.provider?.whatsapp}`,
     },
   ];
 

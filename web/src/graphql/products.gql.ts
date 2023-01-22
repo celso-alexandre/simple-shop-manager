@@ -1,6 +1,22 @@
 import { gql } from '@apollo/client';
 
 gql`
+  mutation CreateProduct($data: ProductCreateInput!) {
+    createProduct(data: $data) {
+      id
+    }
+  }
+`;
+
+gql`
+  mutation UpdateProduct($data: ProductUpdateInput!, $where: ProductWhereUniqueInput!) {
+    updateProduct(data: $data, where: $where) {
+      id
+    }
+  }
+`;
+
+gql`
   query Products($where: ProductWhereInput, $orderBy: [ProductOrderByWithRelationInput!], $take: Int, $skip: Int) {
     products(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
       nodes {
@@ -10,11 +26,14 @@ gql`
         isPostPaid
         costValue
         priceValue
+        createdAt
+        updatedAt
 
         provider {
           id
           name
           email
+          whatsapp
         }
         blameUser {
           id

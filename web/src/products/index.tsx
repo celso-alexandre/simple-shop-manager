@@ -1,12 +1,12 @@
 import { Skeleton } from 'antd';
 import { Title } from '../components/title';
-import { SalesQuery, useSalesQuery } from '../graphql/__generated__/sales.gql.generated';
+import { ProductsQuery, useProductsQuery } from '../graphql/__generated__/products.gql.generated';
 import { SortOrder } from '../types';
-import { SalesTable } from './table';
+import { ProductsTable } from './table';
 
-export type SalesNode = SalesQuery['sales']['nodes'][0];
-export function Sales() {
-  const { data, loading } = useSalesQuery({
+export type ProductsNode = ProductsQuery['products']['nodes'][0];
+export function Products() {
+  const { data, loading } = useProductsQuery({
     variables: {
       orderBy: { id: SortOrder.Desc },
     },
@@ -16,12 +16,12 @@ export function Sales() {
 
   return (
     <>
-      <Title title="Vendas" />
+      <Title title="Produtos" />
 
       <div style={{ padding: '0px 30px' }}>Filter here</div>
 
       <div style={{ padding: '0px 30px' }}>
-        <SalesTable dataSource={data?.sales.nodes} />
+        <ProductsTable dataSource={data?.products.nodes} />
       </div>
     </>
   );
