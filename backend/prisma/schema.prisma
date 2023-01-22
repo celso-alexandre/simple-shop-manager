@@ -74,7 +74,7 @@ model Product {
   /// Cost value
   costValue   Int
   /// FK: Provider.id
-  providerId  Int
+  providerId  Int?
   /// FK: User.id - User to blame for
   blameUserId Int
 
@@ -82,7 +82,7 @@ model Product {
   /// @HideField({ output: true })
   blameUser User     @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
-  provider  Provider @relation(fields: [providerId], references: [id])
+  provider  Provider? @relation(fields: [providerId], references: [id])
   /// @HideField({ output: true })
   sales     Sale[]
 }
@@ -101,7 +101,7 @@ model Sale {
   /// isPostPaid (usually the same as Product.isPostPaid)
   isPostPaid  Boolean
   /// Provider (usually the same as Product.providerId)
-  providerId  Int
+  providerId  Int?
   /// FK: User.id - User to blame for
   blameUserId Int
 
@@ -109,7 +109,7 @@ model Sale {
   /// @HideField({ output: true })
   blameUser User     @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
-  provider  Provider @relation(fields: [providerId], references: [id])
+  provider  Provider? @relation(fields: [providerId], references: [id])
   /// @HideField({ output: true })
   product   Product  @relation(fields: [productId], references: [id])
 }
