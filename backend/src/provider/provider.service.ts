@@ -40,6 +40,6 @@ export class ProviderService {
   }
 
   forBlameUser({ id }: Provider) {
-    return this.prisma.product.findUniqueOrThrow({ where: { id } }).blameUser();
+    return this.prisma.provider.findUnique({ where: { id: id } }).blameUser();
   }
 }

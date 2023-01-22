@@ -28,6 +28,11 @@ model User {
   /// Name
   name  String
 
+  /// @HideField({ match: '@(*Update*|*Create*)Input' })
+  createdAt DateTime @default(now())
+  /// @HideField({ match: '@(*Update*|*Create*)Input' })
+  updatedAt DateTime @updatedAt
+
   /// Relations
   /// @HideField({ output: true })
   Provider Provider[]
@@ -50,6 +55,11 @@ model Provider {
   whatsapp    String?
   /// FK: User.id - User to blame for
   blameUserId String @db.ObjectId
+
+  /// @HideField({ match: '@(*Update*|*Create*)Input' })
+  createdAt DateTime @default(now())
+  /// @HideField({ match: '@(*Update*|*Create*)Input' })
+  updatedAt DateTime @updatedAt
 
   /// Relations
   /// @HideField({ output: true })
@@ -78,6 +88,11 @@ model Product {
   /// FK: User.id - User to blame for
   blameUserId String @db.ObjectId
 
+  /// @HideField({ match: '@(*Update*|*Create*)Input' })
+  createdAt DateTime @default(now())
+  /// @HideField({ match: '@(*Update*|*Create*)Input' })
+  updatedAt DateTime @updatedAt
+
   /// Relations
   /// @HideField({ output: true })
   blameUser User     @relation(fields: [blameUserId], references: [id])
@@ -104,6 +119,11 @@ model Sale {
   providerId  String? @db.ObjectId
   /// FK: User.id - User to blame for
   blameUserId String @db.ObjectId
+
+  /// @HideField({ match: '@(*Update*|*Create*)Input' })
+  createdAt DateTime @default(now())
+  /// @HideField({ match: '@(*Update*|*Create*)Input' })
+  updatedAt DateTime @updatedAt
 
   /// Relations
   /// @HideField({ output: true })
