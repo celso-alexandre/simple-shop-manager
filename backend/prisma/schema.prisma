@@ -1,0 +1,103 @@
+generator client {
+  provider        = "prisma-client-js"
+  binaryTargets   = [env("PRISMA_BINARY_TARGET")]
+  previewFeatures = ["filteredRelationCount"]
+}
+
+generator nestgraphql {
+  provider                        = "node node_modules/prisma-nestjs-graphql"
+  output                          = "../src/prisma/@generated"
+  reExport                        = "All"
+  fields_Scalars_from             = "graphql-scalars"
+  fields_Scalars_input            = true
+  fields_Scalars_output           = true
+  graphqlScalars_BigInt_name      = "GraphQLBigInt"
+  graphqlScalars_BigInt_specifier = "graphql-scalars"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  /// ID
+  id Int @id @default(autoincrement())
+  /// @Validator.IsEmail()
+  email    String     @unique
+  /// Name
+  name     String
+
+  /// Relations
+  /// @HideField({ output: true })
+  Provider Provider[]
+  /// @HideField({ output: true })
+  Product  Product[]
+  /// @HideField({ output: true })
+  Sale     Sale[]
+}
+
+model Provider {
+  /// ID
+  id Int @id @default(autoincrement())
+  /// Name
+  name        String @unique
+  /// Document
+  document String? @unique()
+  /// @Validator.IsEmail()
+  email       String? @unique
+  /// Whatsapp
+  whatsapp    String?
+  /// FK: User.id - User to blame for
+  blameUserId Int
+
+  /// Relations
+  /// @HideField({ output: true })
+  blameUser User @relation(fields: [blameUserId], references: [id])
+}
+
+model Product {
+  /// ID
+  id Int @id @default(autoincrement())
+  /// Name
+  name        String
+  /// Brand name
+  brandName   String?
+  /// Retail price
+  retailPrice Int
+  /// Cost is post paid? (consigned)
+  isPostPaid  Boolean
+  /// Cost value
+  costValue   Int
+  /// FK: User.id - User to blame for
+  blameUserId Int
+
+  /// Relations
+  /// @HideField({ output: true })
+  blameUser User   @relation(fields: [blameUserId], references: [id])
+  /// @HideField({ output: true })
+  sales     Sale[]
+}
+
+model Sale {
+  /// ID
+  id Int @id @default(autoincrement())
+  /// Date Time
+  date        DateTime
+  /// FK: Product.id
+  productId   Int
+  /// Sold Price (usually the same as registered)
+  soldPrice   Int
+  /// isPostPaid (usually the same as registered)
+  isPostPaid  Boolean
+  /// Cost value (the same from Product.costValue)
+  costValue   Int
+  /// FK: User.id - User to blame for
+  blameUserId Int
+
+  /// Relations
+  /// @HideField({ output: true })
+  blameUser User    @relation(fields: [blameUserId], references: [id])
+  /// @HideField({ output: true })
+  product   Product @relation(fields: [productId], references: [id])
+}
