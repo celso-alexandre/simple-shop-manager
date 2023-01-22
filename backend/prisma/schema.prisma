@@ -1,0 +1,115 @@
+generator client {
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native"]
+  previewFeatures = ["filteredRelationCount"]
+}
+
+generator nestgraphql {
+  provider                        = "node node_modules/prisma-nestjs-graphql"
+  output                          = "../src/prisma/@generated"
+  reExport                        = "All"
+  fields_Scalars_from             = "graphql-scalars"
+  fields_Scalars_input            = true
+  fields_Scalars_output           = true
+  graphqlScalars_BigInt_name      = "GraphQLBigInt"
+  graphqlScalars_BigInt_specifier = "graphql-scalars"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  /// ID
+  id    String    @id @default(auto()) @map("_id") @db.ObjectId
+  /// @Validator.IsEmail()
+  email String @unique
+  /// Name
+  name  String
+
+  /// Relations
+  /// @HideField({ output: true })
+  Provider Provider[]
+  /// @HideField({ output: true })
+  Product  Product[]
+  /// @HideField({ output: true })
+  Sale     Sale[]
+}
+
+model Provider {
+  /// ID
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  /// Name
+  name        String  @unique
+  /// Document
+  document    String? @unique()
+  /// @Validator.IsEmail()
+  email       String? @unique
+  /// Whatsapp
+  whatsapp    String?
+  /// FK: User.id - User to blame for
+  blameUserId String @db.ObjectId
+
+  /// Relations
+  /// @HideField({ output: true })
+  blameUser User      @relation(fields: [blameUserId], references: [id])
+  /// @HideField({ output: true })
+  Product   Product[]
+  /// @HideField({ output: true })
+  Sale      Sale[]
+}
+
+model Product {
+  /// ID
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  /// Name
+  name        String
+  /// Brand name
+  brandName   String?
+  /// Retail price
+  priceValue  Int
+  /// Cost is post paid? (consigned)
+  isPostPaid  Boolean
+  /// Cost value
+  costValue   Int
+  /// FK: Provider.id
+  providerId  String? @db.ObjectId
+  /// FK: User.id - User to blame for
+  blameUserId String @db.ObjectId
+
+  /// Relations
+  /// @HideField({ output: true })
+  blameUser User     @relation(fields: [blameUserId], references: [id])
+  /// @HideField({ output: true })
+  provider  Provider? @relation(fields: [providerId], references: [id])
+  /// @HideField({ output: true })
+  sales     Sale[]
+}
+
+model Sale {
+  /// ID
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  /// Date Time
+  date        DateTime
+  /// FK: Product.id
+  productId   String @db.ObjectId
+  /// Sold Price (usually the same as Product.priceValue)
+  priceValue  Int
+  /// Cost value (the same from Product.costValue)
+  costValue   Int
+  /// isPostPaid (usually the same as Product.isPostPaid)
+  isPostPaid  Boolean
+  /// Provider (usually the same as Product.providerId)
+  providerId  String? @db.ObjectId
+  /// FK: User.id - User to blame for
+  blameUserId String @db.ObjectId
+
+  /// Relations
+  /// @HideField({ output: true })
+  blameUser User     @relation(fields: [blameUserId], references: [id])
+  /// @HideField({ output: true })
+  provider  Provider? @relation(fields: [providerId], references: [id])
+  /// @HideField({ output: true })
+  product   Product  @relation(fields: [productId], references: [id])
+}
