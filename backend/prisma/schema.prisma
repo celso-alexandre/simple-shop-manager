@@ -22,11 +22,11 @@ datasource db {
 
 model User {
   /// ID
-  id Int @id @default(autoincrement())
+  id    Int    @id @default(autoincrement())
   /// @Validator.IsEmail()
-  email    String     @unique
+  email String @unique
   /// Name
-  name     String
+  name  String
 
   /// Relations
   /// @HideField({ output: true })
@@ -39,11 +39,11 @@ model User {
 
 model Provider {
   /// ID
-  id Int @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   /// Name
-  name        String @unique
+  name        String  @unique
   /// Document
-  document String? @unique()
+  document    String? @unique()
   /// @Validator.IsEmail()
   email       String? @unique
   /// Whatsapp
@@ -53,51 +53,63 @@ model Provider {
 
   /// Relations
   /// @HideField({ output: true })
-  blameUser User @relation(fields: [blameUserId], references: [id])
+  blameUser User      @relation(fields: [blameUserId], references: [id])
+  /// @HideField({ output: true })
+  Product   Product[]
+  /// @HideField({ output: true })
+  Sale      Sale[]
 }
 
 model Product {
   /// ID
-  id Int @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   /// Name
   name        String
   /// Brand name
   brandName   String?
   /// Retail price
-  retailPrice Int
+  priceValue  Int
   /// Cost is post paid? (consigned)
   isPostPaid  Boolean
   /// Cost value
   costValue   Int
+  /// FK: Provider.id
+  providerId  Int
   /// FK: User.id - User to blame for
   blameUserId Int
 
   /// Relations
   /// @HideField({ output: true })
-  blameUser User   @relation(fields: [blameUserId], references: [id])
+  blameUser User     @relation(fields: [blameUserId], references: [id])
+  /// @HideField({ output: true })
+  provider  Provider @relation(fields: [providerId], references: [id])
   /// @HideField({ output: true })
   sales     Sale[]
 }
 
 model Sale {
   /// ID
-  id Int @id @default(autoincrement())
+  id          Int      @id @default(autoincrement())
   /// Date Time
   date        DateTime
   /// FK: Product.id
   productId   Int
-  /// Sold Price (usually the same as registered)
-  soldPrice   Int
-  /// isPostPaid (usually the same as registered)
-  isPostPaid  Boolean
+  /// Sold Price (usually the same as Product.priceValue)
+  priceValue  Int
   /// Cost value (the same from Product.costValue)
   costValue   Int
+  /// isPostPaid (usually the same as Product.isPostPaid)
+  isPostPaid  Boolean
+  /// Provider (usually the same as Product.providerId)
+  providerId  Int
   /// FK: User.id - User to blame for
   blameUserId Int
 
   /// Relations
   /// @HideField({ output: true })
-  blameUser User    @relation(fields: [blameUserId], references: [id])
+  blameUser User     @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
-  product   Product @relation(fields: [productId], references: [id])
+  provider  Provider @relation(fields: [providerId], references: [id])
+  /// @HideField({ output: true })
+  product   Product  @relation(fields: [productId], references: [id])
 }

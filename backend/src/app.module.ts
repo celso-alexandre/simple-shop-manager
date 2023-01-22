@@ -6,7 +6,7 @@ import { ApolloDriver } from '@nestjs/apollo';
 import { Enviroment } from '@Src/common/env.config';
 import { CommonModule } from './common/common.module';
 import { UserModule } from './user/user.module';
-import { InvestmentGoalModule } from './investment-goal/investment-goal.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -35,7 +35,7 @@ import { InvestmentGoalModule } from './investment-goal/investment-goal.module';
     }),
     CommonModule,
     UserModule,
-    InvestmentGoalModule,
+    ProductModule,
   ],
 })
 export class AppModule {}

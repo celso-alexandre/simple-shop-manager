@@ -2,7 +2,6 @@ import { Resolver, Args, Query, Mutation } from '@nestjs/graphql';
 import {
   CreateManyUserArgs,
   CreateOneUserArgs,
-  DeleteManyUserArgs,
   DeleteOneUserArgs,
   FindManyUserArgs,
   FindUniqueUserArgs,
