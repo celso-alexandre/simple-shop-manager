@@ -2,8 +2,7 @@ import { Table } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
 import { SalesNode } from '.';
-import { formatMoneyFromInt } from '../helpers';
-import { BooleanTag } from '../components/tag';
+import { formatMoneyFromInt, formatPercentFromDecimal } from '../helpers';
 
 export function SalesTable(props: TableProps<SalesNode>) {
   const columns: typeof props.columns = [
@@ -18,19 +17,14 @@ export function SalesTable(props: TableProps<SalesNode>) {
       render: value => dayjs(value).format('L LTS'),
     },
     {
-      title: 'Preço',
-      dataIndex: nameof<SalesNode>(x => x.priceValue),
+      title: 'Valor',
+      dataIndex: nameof<SalesNode>(x => x.totalValue),
       render: value => formatMoneyFromInt(value),
     },
     {
-      title: 'Tp Custo',
-      dataIndex: nameof<SalesNode>(x => x.isPostPaid),
-      render: value => <BooleanTag bool={value}>{value ? 'Consignado' : 'Normal'}</BooleanTag>,
-    },
-    {
-      title: 'Custo',
-      dataIndex: nameof<SalesNode>(x => x.costValue),
-      render: value => formatMoneyFromInt(value),
+      title: 'M Líquida',
+      dataIndex: nameof<SalesNode>(x => x.netMarginPercent),
+      render: value => formatPercentFromDecimal(value),
     },
   ];
 

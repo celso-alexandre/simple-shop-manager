@@ -17,27 +17,58 @@ gql`
 `;
 
 gql`
+  query Sale($where: SaleWhereUniqueInput!) {
+    sale(where: $where) {
+      id
+      date
+      totalValue
+      totalCostValue
+      netMarginValue
+      netMarginPercent
+      createdAt
+      updatedAt
+
+      blameUser {
+        id
+        name
+        email
+      }
+      saleItems {
+        nodes {
+          id
+          costIsPostPaid
+          quantity
+          totalValue
+          totalCostValue
+          product {
+            id
+            name
+            brandName
+          }
+          provider {
+            id
+            name
+            whatsapp
+          }
+        }
+      }
+    }
+  }
+`;
+
+gql`
   query Sales($where: SaleWhereInput, $orderBy: [SaleOrderByWithRelationInput!], $take: Int, $skip: Int) {
     sales(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
       nodes {
         id
         date
-        priceValue
-        isPostPaid
-        costValue
+        totalValue
+        totalCostValue
+        netMarginValue
+        netMarginPercent
         createdAt
         updatedAt
 
-        product {
-          id
-          name
-          brandName
-        }
-        provider {
-          id
-          name
-          whatsapp
-        }
         blameUser {
           id
           name

@@ -14,8 +14,14 @@ export function formatMoneyFromInt<T extends number | undefined>(value: T) {
   return Intl.NumberFormat(undefined, {
     style: 'currency',
     currency: 'BRL',
-    // minimumFractionDigits: 2,
-    // signDisplay: 'auto',
-    // currencyDisplay: 'R$',
   }).format(serializeIntAsDecimal(value));
+}
+
+export function formatPercentFromDecimal<T extends number | undefined>(value: T) {
+  if (!value) return value;
+  return Intl.NumberFormat(undefined, {
+    style: 'percent',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value * 100);
 }
