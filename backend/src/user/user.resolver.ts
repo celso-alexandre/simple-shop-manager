@@ -15,32 +15,32 @@ export class UserResolver {
   constructor(private readonly service: UserService) {}
 
   @Query(() => User, { name: 'user' })
-  findUnique(@Args() args: FindUniqueUserArgs): Promise<User> {
+  findUnique(@Args() args: FindUniqueUserArgs) {
     return this.service.findUnique(args);
   }
 
   @Query(() => [User], { name: 'users' })
-  findMany(@Args() args: FindManyUserArgs): Promise<User[]> {
+  findMany(@Args() args: FindManyUserArgs) {
     return this.service.findMany(args);
   }
 
   @Mutation(() => User, { name: 'createUser' })
-  createOne(@Args() args: CreateOneUserArgs): Promise<User> {
+  createOne(@Args() args: CreateOneUserArgs) {
     return this.service.createOne(args);
   }
 
   @Mutation(() => Boolean, { name: 'createUsers' })
-  createMany(@Args() args: CreateManyUserArgs): Promise<boolean> {
+  createMany(@Args() args: CreateManyUserArgs) {
     return this.service.createMany(args);
   }
 
   @Mutation(() => User, { name: 'updateUser' })
-  updateOne(@Args() args: UpdateOneUserArgs): Promise<User> {
+  updateOne(@Args() args: UpdateOneUserArgs) {
     return this.service.updateOne(args);
   }
 
   @Mutation(() => User, { name: 'deleteUser' })
-  deleteOne(@Args() args: DeleteOneUserArgs): Promise<User> {
+  deleteOne(@Args() args: DeleteOneUserArgs) {
     return this.service.deleteOne(args);
   }
 }

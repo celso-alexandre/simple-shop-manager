@@ -15,32 +15,32 @@ export class SaleResolver {
   constructor(private readonly service: SaleService) {}
 
   @Query(() => Sale, { name: 'sale' })
-  findUnique(@Args() args: FindUniqueSaleArgs): Promise<Sale> {
+  findUnique(@Args() args: FindUniqueSaleArgs) {
     return this.service.findUnique(args);
   }
 
   @Query(() => [Sale], { name: 'sales' })
-  findMany(@Args() args: FindManySaleArgs): Promise<Sale[]> {
+  findMany(@Args() args: FindManySaleArgs) {
     return this.service.findMany(args);
   }
 
   @Mutation(() => Sale, { name: 'createSale' })
-  createOne(@Args() args: CreateOneSaleArgs): Promise<Sale> {
+  createOne(@Args() args: CreateOneSaleArgs) {
     return this.service.createOne(args);
   }
 
   @Mutation(() => Boolean, { name: 'createSales' })
-  createMany(@Args() args: CreateManySaleArgs): Promise<boolean> {
+  createMany(@Args() args: CreateManySaleArgs) {
     return this.service.createMany(args);
   }
 
   @Mutation(() => Sale, { name: 'updateSale' })
-  updateOne(@Args() args: UpdateOneSaleArgs): Promise<Sale> {
+  updateOne(@Args() args: UpdateOneSaleArgs) {
     return this.service.updateOne(args);
   }
 
   @Mutation(() => Sale, { name: 'deleteSale' })
-  deleteOne(@Args() args: DeleteOneSaleArgs): Promise<Sale> {
+  deleteOne(@Args() args: DeleteOneSaleArgs) {
     return this.service.deleteOne(args);
   }
 }
