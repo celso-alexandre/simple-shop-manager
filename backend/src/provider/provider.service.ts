@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
-import {
+import type {
   CreateManyProviderArgs,
   CreateOneProviderArgs,
   DeleteOneProviderArgs,
   FindManyProviderArgs,
   FindUniqueProviderArgs,
+  Provider,
   UpdateOneProviderArgs,
 } from './dto';
 
@@ -18,7 +19,7 @@ export class ProviderService {
   }
 
   findMany(args: FindManyProviderArgs) {
-    return this.prisma.provider.findMany(args);
+    return this.prisma.findManyPaginated(this.prisma.provider, args);
   }
 
   createOne(args: CreateOneProviderArgs) {
@@ -36,5 +37,9 @@ export class ProviderService {
 
   deleteOne(args: DeleteOneProviderArgs) {
     return this.prisma.provider.delete(args);
+  }
+
+  forBlameUser({ id }: Provider) {
+    return this.prisma.provider.findUnique({ where: { id: id } }).blameUser();
   }
 }

@@ -1,0 +1,17 @@
+schema:
+  - ${VITE_API_URI}
+documents: 'src/**/*.gql.ts'
+generates:
+  ./src/types.ts:
+    plugins:
+      - typescript
+      - typescript-resolvers
+
+  ./src:
+    preset: near-operation-file
+    presetConfig:
+      folder: __generated__
+      baseTypesPath: types.ts
+    plugins:
+      - typescript-operations
+      - typescript-react-apollo

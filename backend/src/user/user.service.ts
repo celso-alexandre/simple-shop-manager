@@ -18,7 +18,7 @@ export class UserService {
   }
 
   findMany(args: FindManyUserArgs) {
-    return this.prisma.user.findMany(args);
+    return this.prisma.findManyPaginated(this.prisma.user, args);
   }
 
   createOne(args: CreateOneUserArgs) {

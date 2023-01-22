@@ -6,6 +6,7 @@ import {
   FindManyUserArgs,
   FindUniqueUserArgs,
   UpdateOneUserArgs,
+  UsersOutput,
 } from './dto';
 import { User } from './dto';
 import { UserService } from './user.service';
@@ -19,7 +20,7 @@ export class UserResolver {
     return this.service.findUnique(args);
   }
 
-  @Query(() => [User], { name: 'users' })
+  @Query(() => UsersOutput, { name: 'users' })
   findMany(@Args() args: FindManyUserArgs) {
     return this.service.findMany(args);
   }

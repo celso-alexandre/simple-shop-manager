@@ -1,10 +1,20 @@
-import { Resolver, Args, Query, Mutation } from '@nestjs/graphql';
+import {
+  Resolver,
+  Args,
+  Query,
+  Mutation,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
+import { Provider } from '../provider/dto';
+import { User } from '../user/dto';
 import {
   CreateManyProductArgs,
   CreateOneProductArgs,
   DeleteOneProductArgs,
   FindManyProductArgs,
   FindUniqueProductArgs,
+  ProductsOutput,
   UpdateOneProductArgs,
 } from './dto';
 import { Product } from './dto';
@@ -19,7 +29,7 @@ export class ProductResolver {
     return this.service.findUnique(args);
   }
 
-  @Query(() => [Product], { name: 'products' })
+  @Query(() => ProductsOutput, { name: 'products' })
   findMany(@Args() args: FindManyProductArgs) {
     return this.service.findMany(args);
   }
@@ -42,5 +52,15 @@ export class ProductResolver {
   @Mutation(() => Product, { name: 'deleteProduct' })
   deleteOne(@Args() args: DeleteOneProductArgs) {
     return this.service.deleteOne(args);
+  }
+
+  @ResolveField(() => User, { name: 'blameUser' })
+  forBlameUser(@Parent() parent: Product) {
+    return this.service.forBlameUser(parent);
+  }
+
+  @ResolveField(() => Provider, { name: 'provider' })
+  forProvider(@Parent() parent: Product) {
+    return this.service.forProvider(parent);
   }
 }
