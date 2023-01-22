@@ -226,6 +226,7 @@ export type NullableStringFieldUpdateOperationsInput = {
 export type Product = {
   __typename?: 'Product';
   _count: ProductCount;
+  blameUser: User;
   /** FK: User.id - User to blame for */
   blameUserId: Scalars['String'];
   /** Brand name */
@@ -240,6 +241,7 @@ export type Product = {
   name: Scalars['String'];
   /** Retail price */
   priceValue: Scalars['Int'];
+  provider: User;
   /** FK: Provider.id */
   providerId?: Maybe<Scalars['String']>;
 };
@@ -435,6 +437,19 @@ export type ProductOrderByWithRelationInput = {
   sales?: InputMaybe<SaleOrderByRelationAggregateInput>;
 };
 
+export type ProductPaginated = {
+  __typename?: 'ProductPaginated';
+  /** Number of current page */
+  currentPage?: Maybe<Scalars['Int']>;
+  /** Boolean to use on a cursor-based pagination. E.g: Mobile scroll */
+  hasNextPage?: Maybe<Scalars['Boolean']>;
+  /** Number of last page */
+  lastPage?: Maybe<Scalars['Int']>;
+  nextCursor?: Maybe<Scalars['Int']>;
+  /** Count for query results without skip, take and cursor */
+  total?: Maybe<Scalars['Int']>;
+};
+
 export type ProductRelationFilter = {
   is?: InputMaybe<ProductWhereInput>;
   isNot?: InputMaybe<ProductWhereInput>;
@@ -614,9 +629,18 @@ export type ProductWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+export type ProductsOutput = {
+  __typename?: 'ProductsOutput';
+  /** Grouped ObjectType for findManyrequests */
+  nodes: Array<Product>;
+  /** Pagination info for findMany requests */
+  pageInfo?: Maybe<ProductPaginated>;
+};
+
 export type Provider = {
   __typename?: 'Provider';
   _count: ProviderCount;
+  blameUser: User;
   /** FK: User.id - User to blame for */
   blameUserId: Scalars['String'];
   /** Document */
@@ -785,6 +809,19 @@ export type ProviderOrderByWithRelationInput = {
   whatsapp?: InputMaybe<SortOrder>;
 };
 
+export type ProviderPaginated = {
+  __typename?: 'ProviderPaginated';
+  /** Number of current page */
+  currentPage?: Maybe<Scalars['Int']>;
+  /** Boolean to use on a cursor-based pagination. E.g: Mobile scroll */
+  hasNextPage?: Maybe<Scalars['Boolean']>;
+  /** Number of last page */
+  lastPage?: Maybe<Scalars['Int']>;
+  nextCursor?: Maybe<Scalars['Int']>;
+  /** Count for query results without skip, take and cursor */
+  total?: Maybe<Scalars['Int']>;
+};
+
 export type ProviderRelationFilter = {
   is?: InputMaybe<ProviderWhereInput>;
   isNot?: InputMaybe<ProviderWhereInput>;
@@ -937,16 +974,24 @@ export type ProviderWhereUniqueInput = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+export type ProvidersOutput = {
+  __typename?: 'ProvidersOutput';
+  /** Grouped ObjectType for findManyrequests */
+  nodes: Array<Provider>;
+  /** Pagination info for findMany requests */
+  pageInfo?: Maybe<ProviderPaginated>;
+};
+
 export type Query = {
   __typename?: 'Query';
   product: Product;
-  products: Array<Product>;
+  products: ProductsOutput;
   provider: Provider;
-  providers: Array<Provider>;
+  providers: ProvidersOutput;
   sale: Sale;
-  sales: Array<Sale>;
+  sales: SalesOutput;
   user: User;
-  users: Array<User>;
+  users: UsersOutput;
 };
 
 
@@ -1016,6 +1061,7 @@ export enum QueryMode {
 
 export type Sale = {
   __typename?: 'Sale';
+  blameUser: User;
   /** FK: User.id - User to blame for */
   blameUserId: Scalars['String'];
   /** Cost value (the same from Product.costValue) */
@@ -1028,8 +1074,10 @@ export type Sale = {
   isPostPaid: Scalars['Boolean'];
   /** Sold Price (usually the same as Product.priceValue) */
   priceValue: Scalars['Int'];
+  product: Product;
   /** FK: Product.id */
   productId: Scalars['String'];
+  provider: Provider;
   /** Provider (usually the same as Product.providerId) */
   providerId?: Maybe<Scalars['String']>;
 };
@@ -1231,6 +1279,19 @@ export type SaleOrderByWithRelationInput = {
   providerId?: InputMaybe<SortOrder>;
 };
 
+export type SalePaginated = {
+  __typename?: 'SalePaginated';
+  /** Number of current page */
+  currentPage?: Maybe<Scalars['Int']>;
+  /** Boolean to use on a cursor-based pagination. E.g: Mobile scroll */
+  hasNextPage?: Maybe<Scalars['Boolean']>;
+  /** Number of last page */
+  lastPage?: Maybe<Scalars['Int']>;
+  nextCursor?: Maybe<Scalars['Int']>;
+  /** Count for query results without skip, take and cursor */
+  total?: Maybe<Scalars['Int']>;
+};
+
 export enum SaleScalarFieldEnum {
   BlameUserId = 'blameUserId',
   CostValue = 'costValue',
@@ -1417,6 +1478,14 @@ export type SaleWhereUniqueInput = {
   id?: InputMaybe<Scalars['String']>;
 };
 
+export type SalesOutput = {
+  __typename?: 'SalesOutput';
+  /** Grouped ObjectType for findManyrequests */
+  nodes: Array<Sale>;
+  /** Pagination info for findMany requests */
+  pageInfo?: Maybe<SalePaginated>;
+};
+
 export enum SortOrder {
   Asc = 'asc',
   Desc = 'desc'
@@ -1577,6 +1646,19 @@ export type UserOrderByWithRelationInput = {
   name?: InputMaybe<SortOrder>;
 };
 
+export type UserPaginated = {
+  __typename?: 'UserPaginated';
+  /** Number of current page */
+  currentPage?: Maybe<Scalars['Int']>;
+  /** Boolean to use on a cursor-based pagination. E.g: Mobile scroll */
+  hasNextPage?: Maybe<Scalars['Boolean']>;
+  /** Number of last page */
+  lastPage?: Maybe<Scalars['Int']>;
+  nextCursor?: Maybe<Scalars['Int']>;
+  /** Count for query results without skip, take and cursor */
+  total?: Maybe<Scalars['Int']>;
+};
+
 export type UserRelationFilter = {
   is?: InputMaybe<UserWhereInput>;
   isNot?: InputMaybe<UserWhereInput>;
@@ -1671,6 +1753,14 @@ export type UserWhereInput = {
 export type UserWhereUniqueInput = {
   email?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['String']>;
+};
+
+export type UsersOutput = {
+  __typename?: 'UsersOutput';
+  /** Grouped ObjectType for findManyrequests */
+  nodes: Array<User>;
+  /** Pagination info for findMany requests */
+  pageInfo?: Maybe<UserPaginated>;
 };
 
 
@@ -1784,6 +1874,7 @@ export type ResolversTypes = {
   ProductMinAggregate: ResolverTypeWrapper<ProductMinAggregate>;
   ProductOrderByRelationAggregateInput: ProductOrderByRelationAggregateInput;
   ProductOrderByWithRelationInput: ProductOrderByWithRelationInput;
+  ProductPaginated: ResolverTypeWrapper<ProductPaginated>;
   ProductRelationFilter: ProductRelationFilter;
   ProductScalarFieldEnum: ProductScalarFieldEnum;
   ProductScalarWhereInput: ProductScalarWhereInput;
@@ -1805,6 +1896,7 @@ export type ResolversTypes = {
   ProductUpsertWithoutSalesInput: ProductUpsertWithoutSalesInput;
   ProductWhereInput: ProductWhereInput;
   ProductWhereUniqueInput: ProductWhereUniqueInput;
+  ProductsOutput: ResolverTypeWrapper<ProductsOutput>;
   Provider: ResolverTypeWrapper<Provider>;
   ProviderCount: ResolverTypeWrapper<ProviderCount>;
   ProviderCountAggregate: ResolverTypeWrapper<ProviderCountAggregate>;
@@ -1826,6 +1918,7 @@ export type ResolversTypes = {
   ProviderMinAggregate: ResolverTypeWrapper<ProviderMinAggregate>;
   ProviderOrderByRelationAggregateInput: ProviderOrderByRelationAggregateInput;
   ProviderOrderByWithRelationInput: ProviderOrderByWithRelationInput;
+  ProviderPaginated: ResolverTypeWrapper<ProviderPaginated>;
   ProviderRelationFilter: ProviderRelationFilter;
   ProviderScalarFieldEnum: ProviderScalarFieldEnum;
   ProviderScalarWhereInput: ProviderScalarWhereInput;
@@ -1844,6 +1937,7 @@ export type ResolversTypes = {
   ProviderUpsertWithoutSaleInput: ProviderUpsertWithoutSaleInput;
   ProviderWhereInput: ProviderWhereInput;
   ProviderWhereUniqueInput: ProviderWhereUniqueInput;
+  ProvidersOutput: ResolverTypeWrapper<ProvidersOutput>;
   Query: ResolverTypeWrapper<{}>;
   QueryMode: QueryMode;
   Sale: ResolverTypeWrapper<Sale>;
@@ -1871,6 +1965,7 @@ export type ResolversTypes = {
   SaleMinAggregate: ResolverTypeWrapper<SaleMinAggregate>;
   SaleOrderByRelationAggregateInput: SaleOrderByRelationAggregateInput;
   SaleOrderByWithRelationInput: SaleOrderByWithRelationInput;
+  SalePaginated: ResolverTypeWrapper<SalePaginated>;
   SaleScalarFieldEnum: SaleScalarFieldEnum;
   SaleScalarWhereInput: SaleScalarWhereInput;
   SaleSumAggregate: ResolverTypeWrapper<SaleSumAggregate>;
@@ -1893,6 +1988,7 @@ export type ResolversTypes = {
   SaleUpsertWithWhereUniqueWithoutProviderInput: SaleUpsertWithWhereUniqueWithoutProviderInput;
   SaleWhereInput: SaleWhereInput;
   SaleWhereUniqueInput: SaleWhereUniqueInput;
+  SalesOutput: ResolverTypeWrapper<SalesOutput>;
   SortOrder: SortOrder;
   String: ResolverTypeWrapper<Scalars['String']>;
   StringFieldUpdateOperationsInput: StringFieldUpdateOperationsInput;
@@ -1915,6 +2011,7 @@ export type ResolversTypes = {
   UserMaxAggregate: ResolverTypeWrapper<UserMaxAggregate>;
   UserMinAggregate: ResolverTypeWrapper<UserMinAggregate>;
   UserOrderByWithRelationInput: UserOrderByWithRelationInput;
+  UserPaginated: ResolverTypeWrapper<UserPaginated>;
   UserRelationFilter: UserRelationFilter;
   UserScalarFieldEnum: UserScalarFieldEnum;
   UserUpdateInput: UserUpdateInput;
@@ -1929,6 +2026,7 @@ export type ResolversTypes = {
   UserUpsertWithoutSaleInput: UserUpsertWithoutSaleInput;
   UserWhereInput: UserWhereInput;
   UserWhereUniqueInput: UserWhereUniqueInput;
+  UsersOutput: ResolverTypeWrapper<UsersOutput>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -1975,6 +2073,7 @@ export type ResolversParentTypes = {
   ProductMinAggregate: ProductMinAggregate;
   ProductOrderByRelationAggregateInput: ProductOrderByRelationAggregateInput;
   ProductOrderByWithRelationInput: ProductOrderByWithRelationInput;
+  ProductPaginated: ProductPaginated;
   ProductRelationFilter: ProductRelationFilter;
   ProductScalarWhereInput: ProductScalarWhereInput;
   ProductSumAggregate: ProductSumAggregate;
@@ -1995,6 +2094,7 @@ export type ResolversParentTypes = {
   ProductUpsertWithoutSalesInput: ProductUpsertWithoutSalesInput;
   ProductWhereInput: ProductWhereInput;
   ProductWhereUniqueInput: ProductWhereUniqueInput;
+  ProductsOutput: ProductsOutput;
   Provider: Provider;
   ProviderCount: ProviderCount;
   ProviderCountAggregate: ProviderCountAggregate;
@@ -2016,6 +2116,7 @@ export type ResolversParentTypes = {
   ProviderMinAggregate: ProviderMinAggregate;
   ProviderOrderByRelationAggregateInput: ProviderOrderByRelationAggregateInput;
   ProviderOrderByWithRelationInput: ProviderOrderByWithRelationInput;
+  ProviderPaginated: ProviderPaginated;
   ProviderRelationFilter: ProviderRelationFilter;
   ProviderScalarWhereInput: ProviderScalarWhereInput;
   ProviderUpdateInput: ProviderUpdateInput;
@@ -2033,6 +2134,7 @@ export type ResolversParentTypes = {
   ProviderUpsertWithoutSaleInput: ProviderUpsertWithoutSaleInput;
   ProviderWhereInput: ProviderWhereInput;
   ProviderWhereUniqueInput: ProviderWhereUniqueInput;
+  ProvidersOutput: ProvidersOutput;
   Query: {};
   Sale: Sale;
   SaleAvgAggregate: SaleAvgAggregate;
@@ -2059,6 +2161,7 @@ export type ResolversParentTypes = {
   SaleMinAggregate: SaleMinAggregate;
   SaleOrderByRelationAggregateInput: SaleOrderByRelationAggregateInput;
   SaleOrderByWithRelationInput: SaleOrderByWithRelationInput;
+  SalePaginated: SalePaginated;
   SaleScalarWhereInput: SaleScalarWhereInput;
   SaleSumAggregate: SaleSumAggregate;
   SaleUpdateInput: SaleUpdateInput;
@@ -2080,6 +2183,7 @@ export type ResolversParentTypes = {
   SaleUpsertWithWhereUniqueWithoutProviderInput: SaleUpsertWithWhereUniqueWithoutProviderInput;
   SaleWhereInput: SaleWhereInput;
   SaleWhereUniqueInput: SaleWhereUniqueInput;
+  SalesOutput: SalesOutput;
   String: Scalars['String'];
   StringFieldUpdateOperationsInput: StringFieldUpdateOperationsInput;
   StringFilter: StringFilter;
@@ -2101,6 +2205,7 @@ export type ResolversParentTypes = {
   UserMaxAggregate: UserMaxAggregate;
   UserMinAggregate: UserMinAggregate;
   UserOrderByWithRelationInput: UserOrderByWithRelationInput;
+  UserPaginated: UserPaginated;
   UserRelationFilter: UserRelationFilter;
   UserUpdateInput: UserUpdateInput;
   UserUpdateOneRequiredWithoutProductNestedInput: UserUpdateOneRequiredWithoutProductNestedInput;
@@ -2114,6 +2219,7 @@ export type ResolversParentTypes = {
   UserUpsertWithoutSaleInput: UserUpsertWithoutSaleInput;
   UserWhereInput: UserWhereInput;
   UserWhereUniqueInput: UserWhereUniqueInput;
+  UsersOutput: UsersOutput;
 };
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
@@ -2141,6 +2247,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
   _count?: Resolver<ResolversTypes['ProductCount'], ParentType, ContextType>;
+  blameUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   blameUserId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   brandName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   costValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -2148,6 +2255,7 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
   isPostPaid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   priceValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  provider?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -2200,14 +2308,30 @@ export type ProductMinAggregateResolvers<ContextType = any, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ProductPaginatedResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductPaginated'] = ResolversParentTypes['ProductPaginated']> = {
+  currentPage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  hasNextPage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  lastPage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  nextCursor?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  total?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ProductSumAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductSumAggregate'] = ResolversParentTypes['ProductSumAggregate']> = {
   costValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   priceValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ProductsOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductsOutput'] = ResolversParentTypes['ProductsOutput']> = {
+  nodes?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType>;
+  pageInfo?: Resolver<Maybe<ResolversTypes['ProductPaginated']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type ProviderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Provider'] = ResolversParentTypes['Provider']> = {
   _count?: Resolver<ResolversTypes['ProviderCount'], ParentType, ContextType>;
+  blameUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   blameUserId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   document?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2254,25 +2378,43 @@ export type ProviderMinAggregateResolvers<ContextType = any, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ProviderPaginatedResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProviderPaginated'] = ResolversParentTypes['ProviderPaginated']> = {
+  currentPage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  hasNextPage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  lastPage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  nextCursor?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  total?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProvidersOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProvidersOutput'] = ResolversParentTypes['ProvidersOutput']> = {
+  nodes?: Resolver<Array<ResolversTypes['Provider']>, ParentType, ContextType>;
+  pageInfo?: Resolver<Maybe<ResolversTypes['ProviderPaginated']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   product?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<QueryProductArgs, 'where'>>;
-  products?: Resolver<Array<ResolversTypes['Product']>, ParentType, ContextType, Partial<QueryProductsArgs>>;
+  products?: Resolver<ResolversTypes['ProductsOutput'], ParentType, ContextType, Partial<QueryProductsArgs>>;
   provider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<QueryProviderArgs, 'where'>>;
-  providers?: Resolver<Array<ResolversTypes['Provider']>, ParentType, ContextType, Partial<QueryProvidersArgs>>;
+  providers?: Resolver<ResolversTypes['ProvidersOutput'], ParentType, ContextType, Partial<QueryProvidersArgs>>;
   sale?: Resolver<ResolversTypes['Sale'], ParentType, ContextType, RequireFields<QuerySaleArgs, 'where'>>;
-  sales?: Resolver<Array<ResolversTypes['Sale']>, ParentType, ContextType, Partial<QuerySalesArgs>>;
+  sales?: Resolver<ResolversTypes['SalesOutput'], ParentType, ContextType, Partial<QuerySalesArgs>>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'where'>>;
-  users?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType, Partial<QueryUsersArgs>>;
+  users?: Resolver<ResolversTypes['UsersOutput'], ParentType, ContextType, Partial<QueryUsersArgs>>;
 };
 
 export type SaleResolvers<ContextType = any, ParentType extends ResolversParentTypes['Sale'] = ResolversParentTypes['Sale']> = {
+  blameUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   blameUserId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   costValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   date?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isPostPaid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   priceValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  product?: Resolver<ResolversTypes['Product'], ParentType, ContextType>;
   productId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  provider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType>;
   providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -2320,9 +2462,24 @@ export type SaleMinAggregateResolvers<ContextType = any, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type SalePaginatedResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaginated'] = ResolversParentTypes['SalePaginated']> = {
+  currentPage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  hasNextPage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  lastPage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  nextCursor?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  total?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type SaleSumAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SaleSumAggregate'] = ResolversParentTypes['SaleSumAggregate']> = {
   costValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   priceValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SalesOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalesOutput'] = ResolversParentTypes['SalesOutput']> = {
+  nodes?: Resolver<Array<ResolversTypes['Sale']>, ParentType, ContextType>;
+  pageInfo?: Resolver<Maybe<ResolversTypes['SalePaginated']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -2363,6 +2520,21 @@ export type UserMinAggregateResolvers<ContextType = any, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type UserPaginatedResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserPaginated'] = ResolversParentTypes['UserPaginated']> = {
+  currentPage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  hasNextPage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  lastPage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  nextCursor?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  total?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UsersOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['UsersOutput'] = ResolversParentTypes['UsersOutput']> = {
+  nodes?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>;
+  pageInfo?: Resolver<Maybe<ResolversTypes['UserPaginated']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   DateTime?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
@@ -2372,23 +2544,31 @@ export type Resolvers<ContextType = any> = {
   ProductCountAggregate?: ProductCountAggregateResolvers<ContextType>;
   ProductMaxAggregate?: ProductMaxAggregateResolvers<ContextType>;
   ProductMinAggregate?: ProductMinAggregateResolvers<ContextType>;
+  ProductPaginated?: ProductPaginatedResolvers<ContextType>;
   ProductSumAggregate?: ProductSumAggregateResolvers<ContextType>;
+  ProductsOutput?: ProductsOutputResolvers<ContextType>;
   Provider?: ProviderResolvers<ContextType>;
   ProviderCount?: ProviderCountResolvers<ContextType>;
   ProviderCountAggregate?: ProviderCountAggregateResolvers<ContextType>;
   ProviderMaxAggregate?: ProviderMaxAggregateResolvers<ContextType>;
   ProviderMinAggregate?: ProviderMinAggregateResolvers<ContextType>;
+  ProviderPaginated?: ProviderPaginatedResolvers<ContextType>;
+  ProvidersOutput?: ProvidersOutputResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Sale?: SaleResolvers<ContextType>;
   SaleAvgAggregate?: SaleAvgAggregateResolvers<ContextType>;
   SaleCountAggregate?: SaleCountAggregateResolvers<ContextType>;
   SaleMaxAggregate?: SaleMaxAggregateResolvers<ContextType>;
   SaleMinAggregate?: SaleMinAggregateResolvers<ContextType>;
+  SalePaginated?: SalePaginatedResolvers<ContextType>;
   SaleSumAggregate?: SaleSumAggregateResolvers<ContextType>;
+  SalesOutput?: SalesOutputResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserCount?: UserCountResolvers<ContextType>;
   UserCountAggregate?: UserCountAggregateResolvers<ContextType>;
   UserMaxAggregate?: UserMaxAggregateResolvers<ContextType>;
   UserMinAggregate?: UserMinAggregateResolvers<ContextType>;
+  UserPaginated?: UserPaginatedResolvers<ContextType>;
+  UsersOutput?: UsersOutputResolvers<ContextType>;
 };
 

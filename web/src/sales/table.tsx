@@ -5,7 +5,7 @@ import { SalesNode } from '.';
 import { formatMoneyFromInt } from '../helpers';
 import { BooleanTag } from '../components/tag';
 
-export function SalesTable(props: TableProps<SalesNode[]>) {
+export function SalesTable(props: TableProps<SalesNode>) {
   const columns: typeof props.columns = [
     {
       title: 'ID',

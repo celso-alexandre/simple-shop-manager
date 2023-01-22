@@ -11,17 +11,41 @@ export type SalesQueryVariables = Types.Exact<{
 }>;
 
 
-export type SalesQuery = { __typename?: 'Query', sales: Array<{ __typename?: 'Sale', id: string, date: any, priceValue: number, isPostPaid: boolean, costValue: number }> };
+export type SalesQuery = { __typename?: 'Query', sales: { __typename?: 'SalesOutput', nodes: Array<{ __typename?: 'Sale', id: string, date: any, priceValue: number, isPostPaid: boolean, costValue: number, product: { __typename?: 'Product', id: string, name: string, brandName?: string | null }, provider: { __typename?: 'Provider', id: string, name: string, whatsapp?: string | null }, blameUser: { __typename?: 'User', id: string, name: string, email: string } }>, pageInfo?: { __typename?: 'SalePaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
 
 
 export const SalesDocument = gql`
     query Sales($where: SaleWhereInput, $orderBy: [SaleOrderByWithRelationInput!], $take: Int, $skip: Int) {
   sales(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
-    id
-    date
-    priceValue
-    isPostPaid
-    costValue
+    nodes {
+      id
+      date
+      priceValue
+      isPostPaid
+      costValue
+      product {
+        id
+        name
+        brandName
+      }
+      provider {
+        id
+        name
+        whatsapp
+      }
+      blameUser {
+        id
+        name
+        email
+      }
+    }
+    pageInfo {
+      currentPage
+      hasNextPage
+      lastPage
+      nextCursor
+      total
+    }
   }
 }
     `;
