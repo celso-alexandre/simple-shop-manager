@@ -7,6 +7,8 @@ import { Enviroment } from '@Src/common/env.config';
 import { CommonModule } from './common/common.module';
 import { UserModule } from './user/user.module';
 import { ProductModule } from './product/product.module';
+import { ProviderModule } from './provider/provider.module';
+import { SaleModule } from './sale/sale.module';
 
 @Module({
   imports: [
@@ -36,6 +38,8 @@ import { ProductModule } from './product/product.module';
     CommonModule,
     UserModule,
     ProductModule,
+    ProviderModule,
+    SaleModule,
   ],
 })
 export class AppModule {}
