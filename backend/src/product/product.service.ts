@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
-import {
+import type {
   CreateManyProductArgs,
   CreateOneProductArgs,
   DeleteOneProductArgs,
   FindManyProductArgs,
   FindUniqueProductArgs,
+  Product,
   UpdateOneProductArgs,
 } from './dto';
 
@@ -18,7 +19,7 @@ export class ProductService {
   }
 
   findMany(args: FindManyProductArgs) {
-    return this.prisma.product.findMany(args);
+    return this.prisma.findManyPaginated(this.prisma.product, args);
   }
 
   createOne(args: CreateOneProductArgs) {
@@ -36,5 +37,13 @@ export class ProductService {
 
   deleteOne(args: DeleteOneProductArgs) {
     return this.prisma.product.delete(args);
+  }
+
+  forBlameUser({ id }: Product) {
+    return this.prisma.product.findUniqueOrThrow({ where: { id } }).blameUser();
+  }
+
+  forProvider({ id }: Product) {
+    return this.prisma.product.findUniqueOrThrow({ where: { id } }).provider();
   }
 }
