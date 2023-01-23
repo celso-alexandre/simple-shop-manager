@@ -18,6 +18,13 @@ export type UpdateSaleMutationVariables = Types.Exact<{
 
 export type UpdateSaleMutation = { __typename?: 'Mutation', updateSale: { __typename?: 'Sale', id: string } };
 
+export type SaleQueryVariables = Types.Exact<{
+  where: Types.SaleWhereUniqueInput;
+}>;
+
+
+export type SaleQuery = { __typename?: 'Query', sale: { __typename?: 'Sale', id: string, date: any, totalValue: number, totalCostValue: number, netMarginValue: number, netMarginPercent: number, createdAt: any, updatedAt: any, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null, saleItems: { __typename?: 'SaleItemsOutput', nodes: Array<{ __typename?: 'SaleItem', id: string, costIsPostPaid: boolean, quantity: number, totalValue: number, totalCostValue: number, product: { __typename?: 'Product', id: string, name: string, brandName?: string | null }, provider: { __typename?: 'Provider', id: string, name: string, whatsapp?: string | null } }> } } };
+
 export type SalesQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.SaleWhereInput>;
   orderBy?: Types.InputMaybe<Array<Types.SaleOrderByWithRelationInput> | Types.SaleOrderByWithRelationInput>;
@@ -26,7 +33,7 @@ export type SalesQueryVariables = Types.Exact<{
 }>;
 
 
-export type SalesQuery = { __typename?: 'Query', sales: { __typename?: 'SalesOutput', nodes: Array<{ __typename?: 'Sale', id: string, date: any, priceValue: number, isPostPaid: boolean, costValue: number, createdAt: any, updatedAt: any, product: { __typename?: 'Product', id: string, name: string, brandName?: string | null }, provider: { __typename?: 'Provider', id: string, name: string, whatsapp?: string | null }, blameUser: { __typename?: 'User', id: string, name: string, email: string } }>, pageInfo?: { __typename?: 'SalePaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
+export type SalesQuery = { __typename?: 'Query', sales: { __typename?: 'SalesOutput', nodes: Array<{ __typename?: 'Sale', id: string, date: any, totalValue: number, totalCostValue: number, netMarginValue: number, netMarginPercent: number, createdAt: any, updatedAt: any, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null }>, pageInfo?: { __typename?: 'SalePaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
 
 
 export const CreateSaleDocument = gql`
@@ -96,27 +103,84 @@ export function useUpdateSaleMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateSaleMutationHookResult = ReturnType<typeof useUpdateSaleMutation>;
 export type UpdateSaleMutationResult = Apollo.MutationResult<UpdateSaleMutation>;
 export type UpdateSaleMutationOptions = Apollo.BaseMutationOptions<UpdateSaleMutation, UpdateSaleMutationVariables>;
+export const SaleDocument = gql`
+    query Sale($where: SaleWhereUniqueInput!) {
+  sale(where: $where) {
+    id
+    date
+    totalValue
+    totalCostValue
+    netMarginValue
+    netMarginPercent
+    createdAt
+    updatedAt
+    blameUser {
+      id
+      name
+      email
+    }
+    saleItems {
+      nodes {
+        id
+        costIsPostPaid
+        quantity
+        totalValue
+        totalCostValue
+        product {
+          id
+          name
+          brandName
+        }
+        provider {
+          id
+          name
+          whatsapp
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useSaleQuery__
+ *
+ * To run a query within a React component, call `useSaleQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSaleQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSaleQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useSaleQuery(baseOptions: Apollo.QueryHookOptions<SaleQuery, SaleQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SaleQuery, SaleQueryVariables>(SaleDocument, options);
+      }
+export function useSaleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SaleQuery, SaleQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SaleQuery, SaleQueryVariables>(SaleDocument, options);
+        }
+export type SaleQueryHookResult = ReturnType<typeof useSaleQuery>;
+export type SaleLazyQueryHookResult = ReturnType<typeof useSaleLazyQuery>;
+export type SaleQueryResult = Apollo.QueryResult<SaleQuery, SaleQueryVariables>;
 export const SalesDocument = gql`
     query Sales($where: SaleWhereInput, $orderBy: [SaleOrderByWithRelationInput!], $take: Int, $skip: Int) {
   sales(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
     nodes {
       id
       date
-      priceValue
-      isPostPaid
-      costValue
+      totalValue
+      totalCostValue
+      netMarginValue
+      netMarginPercent
       createdAt
       updatedAt
-      product {
-        id
-        name
-        brandName
-      }
-      provider {
-        id
-        name
-        whatsapp
-      }
       blameUser {
         id
         name

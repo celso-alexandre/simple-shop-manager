@@ -6,6 +6,8 @@ import { NoMatch } from './not-found';
 import { Products } from './products';
 import { Providers } from './providers';
 import { Sales } from './sales';
+import { ProviderInsert } from './providers/insert';
+import { ProviderEdit } from './providers/edit';
 
 dayjs.extend(LocalizedFormat);
 
@@ -14,12 +16,17 @@ export function App() {
     <div style={{ display: 'flex' }}>
       <SideMenu />
 
-      <div style={{ justifyContent: 'flex-end', marginLeft: '30px' }}>
+      <div style={{ justifyContent: 'flex-end', marginLeft: '30px', width: '100%' }}>
         <Routes>
           <Route path="/" element={<Sales />} />
           <Route path="/sales" element={<Sales />} />
+
           <Route path="/providers" element={<Providers />} />
+          <Route path="/provider" element={<ProviderInsert />} />
+          <Route path="/provider/:id" element={<ProviderEdit />} />
+
           <Route path="/products" element={<Products />} />
+
           <Route path="*" element={<NoMatch />} />
         </Routes>
       </div>

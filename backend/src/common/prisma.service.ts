@@ -59,7 +59,7 @@ export class PrismaService
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     P extends Parameters<R>[0],
-  >(model: K, id: number, subset: S, args: P) {
+  >(model: K, id: number | string, subset: S, args: P) {
     const baseSet = (model.findUnique as any)({
       where: {
         id,

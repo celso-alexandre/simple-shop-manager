@@ -6,11 +6,9 @@ import {
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
-import { Product } from '../product/dto';
-import { Provider } from '../provider/dto';
+import { FindManySaleItemArgs, SaleItemsOutput } from '../sale-item/dto';
 import { User } from '../user/dto';
 import {
-  CreateManySaleArgs,
   CreateOneSaleArgs,
   DeleteOneSaleArgs,
   FindManySaleArgs,
@@ -40,10 +38,10 @@ export class SaleResolver {
     return this.service.createOne(args);
   }
 
-  @Mutation(() => Boolean, { name: 'createSales' })
-  createMany(@Args() args: CreateManySaleArgs) {
-    return this.service.createMany(args);
-  }
+  // @Mutation(() => Boolean, { name: 'createSales' })
+  // createMany(@Args() args: CreateManySaleArgs) {
+  //   return this.service.createMany(args);
+  // }
 
   @Mutation(() => Sale, { name: 'updateSale' })
   updateOne(@Args() args: UpdateOneSaleArgs) {
@@ -55,18 +53,23 @@ export class SaleResolver {
     return this.service.deleteOne(args);
   }
 
-  @ResolveField(() => User, { name: 'blameUser' })
+  @ResolveField(() => User, { name: 'blameUser', nullable: true })
   forBlameUser(@Parent() parent: Sale) {
     return this.service.forBlameUser(parent);
   }
 
-  @ResolveField(() => Provider, { name: 'provider' })
-  forProvider(@Parent() parent: Sale) {
-    return this.service.forProvider(parent);
+  @ResolveField(() => SaleItemsOutput, { name: 'saleItems' })
+  forSaleItems(@Parent() parent: Sale, @Args() args: FindManySaleItemArgs) {
+    return this.service.forSaleItems(parent, args);
   }
 
-  @ResolveField(() => Product, { name: 'product' })
-  forProduct(@Parent() parent: Sale) {
-    return this.service.forProduct(parent);
+  @ResolveField(() => Number, { name: 'netMarginValue' })
+  forProfit(@Parent() { totalValue, totalCostValue }: Sale) {
+    return totalValue - totalCostValue;
+  }
+
+  @ResolveField(() => Number, { name: 'netMarginPercent' })
+  forProfitMargin(@Parent() { totalValue, totalCostValue }: Sale) {
+    return (totalValue - totalCostValue) / totalValue;
   }
 }
