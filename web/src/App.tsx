@@ -8,6 +8,8 @@ import { Providers } from './providers';
 import { Sales } from './sales';
 import { ProviderInsert } from './providers/insert';
 import { ProviderEdit } from './providers/edit';
+import { ProductInsert } from './products/insert';
+import { ProductEdit } from './products/edit';
 
 dayjs.extend(LocalizedFormat);
 
@@ -26,6 +28,8 @@ export function App() {
           <Route path="/provider/:id" element={<ProviderEdit />} />
 
           <Route path="/products" element={<Products />} />
+          <Route path="/product" element={<ProductInsert />} />
+          <Route path="/product/:id" element={<ProductEdit />} />
 
           <Route path="*" element={<NoMatch />} />
         </Routes>

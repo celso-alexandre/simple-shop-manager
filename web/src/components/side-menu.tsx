@@ -12,7 +12,7 @@ type MenuItem = Required<MenuProps>['items'][number];
 
 export function SideMenu() {
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 800px)',
+    query: '(min-width: 1079px)',
   });
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(true);
@@ -49,10 +49,27 @@ export function SideMenu() {
       ],
     },
     {
-      key: '/products',
+      key: '2',
       label: 'Produtos',
       icon: <BiBarcode />,
-      onClick: () => navigate('/products'),
+      children: [
+        {
+          key: '/products',
+          label: 'Listar Produtos',
+          icon: <BiListUl />,
+          onClick: () => navigate('/products'),
+        },
+        {
+          key: '/product',
+          label: 'Novo Produto',
+          icon: <BiListPlus />,
+          onClick: () => navigate('/product'),
+        },
+        {
+          style: { visibility: 'hidden', height: 0 },
+          key: '/product/:id',
+        },
+      ],
     },
     {
       key: '3',
@@ -68,7 +85,7 @@ export function SideMenu() {
         {
           key: '/provider',
           label: 'Novo Fornecedor',
-          icon: <BiListUl />,
+          icon: <BiListPlus />,
           onClick: () => navigate('/provider'),
         },
         {

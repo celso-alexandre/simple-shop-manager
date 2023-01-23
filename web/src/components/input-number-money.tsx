@@ -5,7 +5,7 @@ export function InputNumberMoney(props: InputNumberProps) {
   return (
     <InputNumber
       style={{ width: '100%' }}
-      addonBefore="$"
+      addonBefore="R$"
       min={0}
       decimalSeparator=","
       precision={2}
