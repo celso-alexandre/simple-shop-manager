@@ -56,7 +56,7 @@ model Provider {
   /// Whatsapp
   whatsapp    String?
   /// FK: User.id - User to blame for
-  blameUserId String  @db.ObjectId
+  blameUserId String?  @db.ObjectId
 
   /// @HideField({ match: '@(*Update*|*Create*)Input' })
   createdAt DateTime @default(now())
@@ -65,7 +65,7 @@ model Provider {
 
   /// Relations
   /// @HideField({ output: true })
-  blameUser User       @relation(fields: [blameUserId], references: [id])
+  blameUser User?       @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
   products   Product[]
   /// @HideField({ output: true })
@@ -88,7 +88,7 @@ model Product {
   /// FK: Provider.id
   providerId  String? @db.ObjectId
   /// FK: User.id - User to blame for
-  blameUserId String  @db.ObjectId
+  blameUserId String?  @db.ObjectId
 
   /// @HideField({ match: '@(*Update*|*Create*)Input' })
   createdAt DateTime @default(now())
@@ -97,7 +97,7 @@ model Product {
 
   /// Relations
   /// @HideField({ output: true })
-  blameUser User       @relation(fields: [blameUserId], references: [id])
+  blameUser User?       @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
   provider  Provider?  @relation(fields: [providerId], references: [id])
   /// @HideField({ output: true })
@@ -110,7 +110,7 @@ model Sale {
   /// Date Time
   date        DateTime
   /// FK: User.id - User to blame for
-  blameUserId String   @db.ObjectId
+  blameUserId String?   @db.ObjectId
   /// Grand Total
   totalValue Int
   /// Total Cost
@@ -123,7 +123,7 @@ model Sale {
 
   /// Relations
   /// @HideField({ output: true })
-  blameUser User       @relation(fields: [blameUserId], references: [id])
+  blameUser User?       @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
   saleItems  SaleItem[]
 }
@@ -146,7 +146,7 @@ model SaleItem {
   /// FK: Provider.id (usually the same as Product.providerId)
   providerId     String? @db.ObjectId
   /// FK: User.id - User to blame for
-  blameUserId    String  @db.ObjectId
+  blameUserId    String?  @db.ObjectId
 
   /// @HideField({ match: '@(*Update*|*Create*)Input' })
   createdAt DateTime @default(now())
@@ -155,7 +155,7 @@ model SaleItem {
 
   /// Relations
   /// @HideField({ output: true })
-  blameUser User      @relation(fields: [blameUserId], references: [id])
+  blameUser User?      @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
   sale      Sale?     @relation(fields: [saleId], references: [id])
   /// @HideField({ output: true })

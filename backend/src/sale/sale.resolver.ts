@@ -53,7 +53,7 @@ export class SaleResolver {
     return this.service.deleteOne(args);
   }
 
-  @ResolveField(() => User, { name: 'blameUser' })
+  @ResolveField(() => User, { name: 'blameUser', nullable: true })
   forBlameUser(@Parent() parent: Sale) {
     return this.service.forBlameUser(parent);
   }

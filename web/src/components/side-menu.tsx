@@ -57,7 +57,20 @@ export function SideMenu() {
       key: '3',
       label: 'Fornecedores',
       icon: <MdOutlineAddBusiness />,
-      onClick: () => navigate('/providers'),
+      children: [
+        {
+          key: '3.1',
+          label: 'Listar Fornecedores',
+          icon: <BiListUl />,
+          onClick: () => navigate('/providers'),
+        },
+        {
+          key: '3.2',
+          label: 'Novo Fornecedor',
+          icon: <BiListUl />,
+          onClick: () => navigate('/provider'),
+        },
+      ],
     },
     {
       key: '4',

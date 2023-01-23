@@ -4,7 +4,8 @@ import { ProvidersQuery, useProvidersQuery } from '../graphql/__generated__/prov
 import { SortOrder } from '../types';
 import { ProvidersTable } from './table';
 
-export type ProvidersNode = ProvidersQuery['providers']['nodes'][0];
+export type ProvidersNode = Omit<ProvidersQuery['providers']['nodes'][0], 'id'> & { id?: string };
+export type ProvidersFormNode = Pick<ProvidersNode, 'id' | 'name' | 'email' | 'document' | 'whatsapp'>;
 export function Providers() {
   const { data, loading } = useProvidersQuery({
     variables: {
