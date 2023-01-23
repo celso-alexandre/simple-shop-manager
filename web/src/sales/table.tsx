@@ -1,10 +1,13 @@
-import { Table } from 'antd';
+import { Button, Table } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 import { SalesNode } from '.';
 import { formatMoneyFromInt, formatPercentFromDecimal } from '../helpers';
 
 export function SalesTable(props: TableProps<SalesNode>) {
+  const navigate = useNavigate();
+
   const columns: typeof props.columns = [
     {
       title: 'ID',
@@ -25,6 +28,18 @@ export function SalesTable(props: TableProps<SalesNode>) {
       title: 'M Líquida',
       dataIndex: nameof<SalesNode>(x => x.netMarginPercent),
       render: value => formatPercentFromDecimal(value),
+    },
+    {
+      key: 'actions',
+      render: (value, record) => {
+        return (
+          <div>
+            <Button onClick={() => navigate(`/sale/${record.id}`)} size="middle" type="primary">
+              Editar
+            </Button>
+          </div>
+        );
+      },
     },
   ];
 

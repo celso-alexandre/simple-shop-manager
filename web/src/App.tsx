@@ -10,6 +10,8 @@ import { ProviderInsert } from './providers/insert';
 import { ProviderEdit } from './providers/edit';
 import { ProductInsert } from './products/insert';
 import { ProductEdit } from './products/edit';
+import { SaleInsert } from './sales/insert';
+import { SaleEdit } from './sales/edit';
 
 dayjs.extend(LocalizedFormat);
 
@@ -22,6 +24,8 @@ export function App() {
         <Routes>
           <Route path="/" element={<Sales />} />
           <Route path="/sales" element={<Sales />} />
+          <Route path="/sales" element={<SaleInsert />} />
+          <Route path="/sales" element={<SaleEdit />} />
 
           <Route path="/providers" element={<Providers />} />
           <Route path="/provider" element={<ProviderInsert />} />

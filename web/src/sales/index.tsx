@@ -1,10 +1,11 @@
 import { Skeleton } from 'antd';
 import { Title } from '../components/title';
-import { SalesQuery, useSalesQuery } from '../graphql/__generated__/sales.gql.generated';
+import { SaleQuery, SalesQuery, useSalesQuery } from '../graphql/__generated__/sales.gql.generated';
 import { SortOrder } from '../types';
 import { SalesTable } from './table';
 
 export type SalesNode = SalesQuery['sales']['nodes'][0];
+export type SalesFormNode = Pick<SaleQuery['sale'], 'id' | 'date' | 'saleItems'>;
 export function Sales() {
   const { data, loading } = useSalesQuery({
     variables: {
