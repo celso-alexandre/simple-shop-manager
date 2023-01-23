@@ -220,7 +220,7 @@ export type NullableStringFieldUpdateOperationsInput = {
 export type Product = {
   __typename?: 'Product';
   _count: ProductCount;
-  blameUser: User;
+  blameUser?: Maybe<User>;
   /** FK: User.id - User to blame for */
   blameUserId?: Maybe<Scalars['String']>;
   /** Brand name */
@@ -650,7 +650,7 @@ export type ProductsOutput = {
 export type Provider = {
   __typename?: 'Provider';
   _count: ProviderCount;
-  blameUser: User;
+  blameUser?: Maybe<User>;
   /** FK: User.id - User to blame for */
   blameUserId?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
@@ -1105,7 +1105,7 @@ export enum QueryMode {
 export type Sale = {
   __typename?: 'Sale';
   _count: SaleCount;
-  blameUser: User;
+  blameUser?: Maybe<User>;
   /** FK: User.id - User to blame for */
   blameUserId?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
@@ -1217,7 +1217,7 @@ export type SaleCreateWithoutSaleItemsInput = {
 
 export type SaleItem = {
   __typename?: 'SaleItem';
-  blameUser: User;
+  blameUser?: Maybe<User>;
   /** FK: User.id - User to blame for */
   blameUserId?: Maybe<Scalars['String']>;
   /** isPostPaid (usually the same as Product.isPostPaid) */
@@ -2857,7 +2857,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type ProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['Product'] = ResolversParentTypes['Product']> = {
   _count?: Resolver<ResolversTypes['ProductCount'], ParentType, ContextType>;
-  blameUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  blameUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   brandName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   costValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -2949,7 +2949,7 @@ export type ProductsOutputResolvers<ContextType = any, ParentType extends Resolv
 
 export type ProviderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Provider'] = ResolversParentTypes['Provider']> = {
   _count?: Resolver<ResolversTypes['ProviderCount'], ParentType, ContextType>;
-  blameUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  blameUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   document?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -3034,7 +3034,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type SaleResolvers<ContextType = any, ParentType extends ResolversParentTypes['Sale'] = ResolversParentTypes['Sale']> = {
   _count?: Resolver<ResolversTypes['SaleCount'], ParentType, ContextType>;
-  blameUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  blameUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   date?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -3072,7 +3072,7 @@ export type SaleCountAggregateResolvers<ContextType = any, ParentType extends Re
 };
 
 export type SaleItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['SaleItem'] = ResolversParentTypes['SaleItem']> = {
-  blameUser?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  blameUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   costIsPostPaid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;

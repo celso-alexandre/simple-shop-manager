@@ -17,6 +17,26 @@ gql`
 `;
 
 gql`
+  query Provider($where: ProviderWhereUniqueInput!) {
+    provider(where: $where) {
+      id
+      name
+      email
+      whatsapp
+      document
+      createdAt
+      updatedAt
+
+      blameUser {
+        id
+        name
+        email
+      }
+    }
+  }
+`;
+
+gql`
   query Providers($where: ProviderWhereInput, $orderBy: [ProviderOrderByWithRelationInput!], $take: Int, $skip: Int) {
     providers(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
       nodes {

@@ -26,7 +26,7 @@ export type ProductsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products: { __typename?: 'ProductsOutput', nodes: Array<{ __typename?: 'Product', id: string, name: string, brandName?: string | null, isPostPaid: boolean, costValue: number, priceValue: number, createdAt: any, updatedAt: any, provider: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null }, blameUser: { __typename?: 'User', id: string, name: string, email: string } }>, pageInfo?: { __typename?: 'ProductPaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
+export type ProductsQuery = { __typename?: 'Query', products: { __typename?: 'ProductsOutput', nodes: Array<{ __typename?: 'Product', id: string, name: string, brandName?: string | null, isPostPaid: boolean, costValue: number, priceValue: number, createdAt: any, updatedAt: any, provider: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null }, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null }>, pageInfo?: { __typename?: 'ProductPaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
 
 
 export const CreateProductDocument = gql`

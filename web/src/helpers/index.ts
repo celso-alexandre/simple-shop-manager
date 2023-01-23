@@ -25,3 +25,13 @@ export function formatPercentFromDecimal<T extends number | undefined>(value: T)
     maximumFractionDigits: 2,
   }).format(value * 100);
 }
+
+export function objectPropertiesSet<T extends object>(data: T) {
+  return Object.entries(data).reduce((prev, cur) => {
+    const [key, val] = cur;
+    return {
+      ...prev,
+      [key]: { set: val },
+    };
+  }, {} as any);
+}

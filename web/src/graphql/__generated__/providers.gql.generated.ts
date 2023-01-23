@@ -18,6 +18,13 @@ export type UpdateProviderMutationVariables = Types.Exact<{
 
 export type UpdateProviderMutation = { __typename?: 'Mutation', updateProvider: { __typename?: 'Provider', id: string } };
 
+export type ProviderQueryVariables = Types.Exact<{
+  where: Types.ProviderWhereUniqueInput;
+}>;
+
+
+export type ProviderQuery = { __typename?: 'Query', provider: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null, document?: string | null, createdAt: any, updatedAt: any, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null } };
+
 export type ProvidersQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ProviderWhereInput>;
   orderBy?: Types.InputMaybe<Array<Types.ProviderOrderByWithRelationInput> | Types.ProviderOrderByWithRelationInput>;
@@ -26,7 +33,7 @@ export type ProvidersQueryVariables = Types.Exact<{
 }>;
 
 
-export type ProvidersQuery = { __typename?: 'Query', providers: { __typename?: 'ProvidersOutput', nodes: Array<{ __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null, document?: string | null, createdAt: any, updatedAt: any, blameUser: { __typename?: 'User', id: string, name: string, email: string } }>, pageInfo?: { __typename?: 'ProviderPaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
+export type ProvidersQuery = { __typename?: 'Query', providers: { __typename?: 'ProvidersOutput', nodes: Array<{ __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null, document?: string | null, createdAt: any, updatedAt: any, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null }>, pageInfo?: { __typename?: 'ProviderPaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
 
 
 export const CreateProviderDocument = gql`
@@ -96,6 +103,52 @@ export function useUpdateProviderMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateProviderMutationHookResult = ReturnType<typeof useUpdateProviderMutation>;
 export type UpdateProviderMutationResult = Apollo.MutationResult<UpdateProviderMutation>;
 export type UpdateProviderMutationOptions = Apollo.BaseMutationOptions<UpdateProviderMutation, UpdateProviderMutationVariables>;
+export const ProviderDocument = gql`
+    query Provider($where: ProviderWhereUniqueInput!) {
+  provider(where: $where) {
+    id
+    name
+    email
+    whatsapp
+    document
+    createdAt
+    updatedAt
+    blameUser {
+      id
+      name
+      email
+    }
+  }
+}
+    `;
+
+/**
+ * __useProviderQuery__
+ *
+ * To run a query within a React component, call `useProviderQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProviderQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProviderQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProviderQuery(baseOptions: Apollo.QueryHookOptions<ProviderQuery, ProviderQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProviderQuery, ProviderQueryVariables>(ProviderDocument, options);
+      }
+export function useProviderLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProviderQuery, ProviderQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProviderQuery, ProviderQueryVariables>(ProviderDocument, options);
+        }
+export type ProviderQueryHookResult = ReturnType<typeof useProviderQuery>;
+export type ProviderLazyQueryHookResult = ReturnType<typeof useProviderLazyQuery>;
+export type ProviderQueryResult = Apollo.QueryResult<ProviderQuery, ProviderQueryVariables>;
 export const ProvidersDocument = gql`
     query Providers($where: ProviderWhereInput, $orderBy: [ProviderOrderByWithRelationInput!], $take: Int, $skip: Int) {
   providers(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {

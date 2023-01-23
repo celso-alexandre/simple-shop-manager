@@ -1,9 +1,12 @@
-import { Table } from 'antd';
+import { Button, Table } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 import { ProvidersNode } from '.';
 
 export function ProvidersTable(props: TableProps<ProvidersNode>) {
+  const navigate = useNavigate();
+
   const columns: typeof props.columns = [
     {
       title: 'ID',
@@ -28,6 +31,18 @@ export function ProvidersTable(props: TableProps<ProvidersNode>) {
       title: 'Atualização',
       dataIndex: nameof<ProvidersNode>(x => x.createdAt),
       render: (value, record) => record.updatedAt !== record.createdAt && dayjs(value).format('L'),
+    },
+    {
+      key: 'actions',
+      render: (value, record) => {
+        return (
+          <div>
+            <Button onClick={() => navigate(`/provider/${record.id}`)} size="middle" type="primary">
+              Editar
+            </Button>
+          </div>
+        );
+      },
     },
   ];
 
