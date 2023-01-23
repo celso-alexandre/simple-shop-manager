@@ -71,6 +71,10 @@ export function SideMenu() {
           icon: <BiListUl />,
           onClick: () => navigate('/provider'),
         },
+        {
+          style: { visibility: 'hidden', height: 0 },
+          key: '/provider/:id',
+        },
       ],
     },
     {
@@ -91,19 +95,20 @@ export function SideMenu() {
             ? [{ path: cur.key as string }]
             : cur.children
                 ?.filter(child => child?.key)
-                ?.flatMap(child => ({ path: child?.key as string, parent: cur.key as string })) ?? []),
+                ?.flatMap(child => ({ path: child?.key as string, parent: cur.key as string })) || []),
         ];
       }, [] as { path: string; parent?: string }[]),
     []
   );
 
-  const [{ route }] = matchRoutes(routes, location) ?? [];
+  const matches = matchRoutes(routes, location);
+  const { route } = matches?.[0] || {};
 
   return (
     <div style={{ width: !collapsed ? 256 : 80, justifyContent: 'flex-start' }}>
       <Menu
-        defaultOpenKeys={[route.parent ?? '1']}
-        defaultSelectedKeys={[route.path ?? '/sales']}
+        defaultOpenKeys={[route?.parent ?? '1']}
+        defaultSelectedKeys={[route?.path ?? '/sales']}
         mode="inline"
         theme="light"
         inlineCollapsed={collapsed}
