@@ -46,7 +46,7 @@ export class SaleItemResolver {
     return this.service.forBlameUser(parent);
   }
 
-  @ResolveField(() => Provider, { name: 'provider' })
+  @ResolveField(() => Provider, { name: 'provider', nullable: true })
   forProvider(@Parent() parent: SaleItem) {
     return this.service.forProvider(parent);
   }
