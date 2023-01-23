@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
 import { FiUsers } from 'react-icons/fi';
@@ -6,7 +6,7 @@ import { BiBarcode, BiListPlus, BiListUl } from 'react-icons/bi';
 import { MdOutlineAddBusiness, MdOutlinePointOfSale } from 'react-icons/md';
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from 'react-icons/ai';
 import { useMediaQuery } from 'react-responsive';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, matchRoutes, useLocation } from 'react-router-dom';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -16,6 +16,7 @@ export function SideMenu() {
   });
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(true);
+  const location = useLocation();
 
   const toggleCollapsed = () => {
     setCollapsed(bol => !bol);
@@ -34,21 +35,21 @@ export function SideMenu() {
       icon: <MdOutlinePointOfSale />,
       children: [
         {
-          key: '1.1',
+          key: '/sales',
           label: 'Listar Vendas',
           icon: <BiListUl />,
           onClick: () => navigate('/sales'),
         },
         {
-          key: '1.2',
-          label: 'Nova venda',
+          key: '/sale',
+          label: 'Nova Venda',
           icon: <BiListPlus />,
           onClick: () => navigate('/sale'),
         },
       ],
     },
     {
-      key: '2',
+      key: '/products',
       label: 'Produtos',
       icon: <BiBarcode />,
       onClick: () => navigate('/products'),
@@ -59,13 +60,13 @@ export function SideMenu() {
       icon: <MdOutlineAddBusiness />,
       children: [
         {
-          key: '3.1',
+          key: '/providers',
           label: 'Listar Fornecedores',
           icon: <BiListUl />,
           onClick: () => navigate('/providers'),
         },
         {
-          key: '3.2',
+          key: '/provider',
           label: 'Novo Fornecedor',
           icon: <BiListUl />,
           onClick: () => navigate('/provider'),
@@ -73,18 +74,36 @@ export function SideMenu() {
       ],
     },
     {
-      key: '4',
+      key: '/users',
       label: 'Administradores',
       icon: <FiUsers />,
       onClick: () => navigate('/users'),
     },
   ];
 
+  const routes = useMemo(
+    () =>
+      items.reduce((prev, cur) => {
+        if (!(cur.key as string)?.includes('/') && !cur.children?.length) return prev;
+        return [
+          ...prev,
+          ...(!cur.children
+            ? [{ path: cur.key as string }]
+            : cur.children
+                ?.filter(child => child?.key)
+                ?.flatMap(child => ({ path: child?.key as string, parent: cur.key as string })) ?? []),
+        ];
+      }, [] as { path: string; parent?: string }[]),
+    []
+  );
+
+  const [{ route }] = matchRoutes(routes, location) ?? [];
+
   return (
     <div style={{ width: !collapsed ? 256 : 80, justifyContent: 'flex-start' }}>
       <Menu
-        defaultOpenKeys={['1']}
-        defaultSelectedKeys={['1.1']}
+        defaultOpenKeys={[route.parent ?? '1']}
+        defaultSelectedKeys={[route.path ?? '/sales']}
         mode="inline"
         theme="light"
         inlineCollapsed={collapsed}
