@@ -4,7 +4,11 @@ import { ProductsQuery, useProductsQuery } from '../graphql/__generated__/produc
 import { SortOrder } from '../types';
 import { ProductsTable } from './table';
 
-export type ProductsNode = ProductsQuery['products']['nodes'][0];
+export type ProductsNode = Omit<ProductsQuery['products']['nodes'][0], 'id'> & { id?: string };
+export type ProductsFormNode = Pick<
+  ProductsNode,
+  'id' | 'name' | 'brandName' | 'priceValue' | 'isPostPaid' | 'costValue'
+>;
 export function Products() {
   const { data, loading } = useProductsQuery({
     variables: {

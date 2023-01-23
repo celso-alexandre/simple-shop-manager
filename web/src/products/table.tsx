@@ -13,9 +13,19 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
       ellipsis: true,
     },
     {
+      title: 'Nome',
+      dataIndex: nameof<ProductsNode>(x => x.name),
+      ellipsis: true,
+    },
+    {
+      title: 'Marca',
+      dataIndex: nameof<ProductsNode>(x => x.brandName),
+      ellipsis: true,
+    },
+    {
       title: 'Data',
       dataIndex: nameof<ProductsNode>(x => x.createdAt),
-      render: value => dayjs(value).format('L LTS'),
+      render: value => dayjs(value).format('L'),
     },
     {
       title: 'Preço',
@@ -35,7 +45,8 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
     {
       title: 'Fornecedor',
       dataIndex: nameof<ProductsNode>(x => x.provider),
-      render: (value, record) => `${record.provider?.name} ${record.provider?.whatsapp}`,
+      render: (value, record) => record.provider && `${record.provider?.name} ${record.provider?.whatsapp}`,
+      ellipsis: true,
     },
   ];
 

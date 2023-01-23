@@ -18,6 +18,13 @@ export type UpdateProductMutationVariables = Types.Exact<{
 
 export type UpdateProductMutation = { __typename?: 'Mutation', updateProduct: { __typename?: 'Product', id: string } };
 
+export type ProductQueryVariables = Types.Exact<{
+  where: Types.ProductWhereUniqueInput;
+}>;
+
+
+export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', id: string, name: string, brandName?: string | null, isPostPaid: boolean, costValue: number, priceValue: number, createdAt: any, updatedAt: any, provider: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null }, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null } };
+
 export type ProductsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ProductWhereInput>;
   orderBy?: Types.InputMaybe<Array<Types.ProductOrderByWithRelationInput> | Types.ProductOrderByWithRelationInput>;
@@ -96,6 +103,59 @@ export function useUpdateProductMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateProductMutationHookResult = ReturnType<typeof useUpdateProductMutation>;
 export type UpdateProductMutationResult = Apollo.MutationResult<UpdateProductMutation>;
 export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<UpdateProductMutation, UpdateProductMutationVariables>;
+export const ProductDocument = gql`
+    query Product($where: ProductWhereUniqueInput!) {
+  product(where: $where) {
+    id
+    name
+    brandName
+    isPostPaid
+    costValue
+    priceValue
+    createdAt
+    updatedAt
+    provider {
+      id
+      name
+      email
+      whatsapp
+    }
+    blameUser {
+      id
+      name
+      email
+    }
+  }
+}
+    `;
+
+/**
+ * __useProductQuery__
+ *
+ * To run a query within a React component, call `useProductQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProductQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useProductQuery(baseOptions: Apollo.QueryHookOptions<ProductQuery, ProductQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProductQuery, ProductQueryVariables>(ProductDocument, options);
+      }
+export function useProductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductQuery, ProductQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProductQuery, ProductQueryVariables>(ProductDocument, options);
+        }
+export type ProductQueryHookResult = ReturnType<typeof useProductQuery>;
+export type ProductLazyQueryHookResult = ReturnType<typeof useProductLazyQuery>;
+export type ProductQueryResult = Apollo.QueryResult<ProductQuery, ProductQueryVariables>;
 export const ProductsDocument = gql`
     query Products($where: ProductWhereInput, $orderBy: [ProductOrderByWithRelationInput!], $take: Int, $skip: Int) {
   products(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
