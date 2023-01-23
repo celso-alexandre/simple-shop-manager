@@ -52,7 +52,7 @@ export function ProductEdit() {
 
   return (
     <>
-      <Title title={initialValues?.name ?? 'Fornecedor não encontrado'} />
+      <Title title={initialValues?.name ?? 'Produto não encontrado'} />
 
       <ProductsForm initialValues={initialValues} form={form} onFinish={values => onSubmit(values, update)} />
 

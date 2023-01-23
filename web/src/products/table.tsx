@@ -1,11 +1,14 @@
-import { Table } from 'antd';
+import { Button, Table } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 import { ProductsNode } from '.';
 import { formatMoneyFromInt } from '../helpers';
 import { BooleanTag } from '../components/tag';
 
 export function ProductsTable(props: TableProps<ProductsNode>) {
+  const navigate = useNavigate();
+
   const columns: typeof props.columns = [
     {
       title: 'ID',
@@ -47,6 +50,18 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
       dataIndex: nameof<ProductsNode>(x => x.provider),
       render: (value, record) => record.provider && `${record.provider?.name} ${record.provider?.whatsapp}`,
       ellipsis: true,
+    },
+    {
+      key: 'actions',
+      render: (value, record) => {
+        return (
+          <div>
+            <Button onClick={() => navigate(`/product/${record.id}`)} size="middle" type="primary">
+              Editar
+            </Button>
+          </div>
+        );
+      },
     },
   ];
 

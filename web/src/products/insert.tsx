@@ -27,7 +27,7 @@ export function ProductInsert() {
 
   return (
     <>
-      <Title title="Novo Fornecedor" />
+      <Title title="Novo Produto" />
 
       <ProductsForm form={form} onFinish={values => onSubmit(values, create)} />
 
