@@ -6,9 +6,21 @@ import { useCreateSaleMutation, SalesDocument } from '../graphql/__generated__/s
 import { SalesForm } from './form';
 
 async function onSubmit(data: SalesFormNode, create: ReturnType<typeof useCreateSaleMutation>[0]) {
+  const { date, saleItems } = data;
   await create({
     variables: {
-      data,
+      data: {
+        date,
+        saleItems: {
+          createMany: {
+            data: saleItems.nodes.map(item => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const { id, ...rest } = item;
+              return rest;
+            }),
+          },
+        },
+      },
     },
   });
 }
@@ -21,7 +33,7 @@ export function SaleInsert() {
 
   return (
     <>
-      <Title title="Novo Fornecedor" />
+      <Title title="Nova Venda" />
 
       <SalesForm form={form} onFinish={values => onSubmit(values, create)} />
 

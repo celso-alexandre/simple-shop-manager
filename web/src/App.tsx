@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
-import LocalizedFormat from 'dayjs/plugin/localizedFormat';
 import dayjs from 'dayjs';
+import localeData from 'dayjs/plugin/localeData';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { SideMenu } from './components/side-menu';
 import { NoMatch } from './not-found';
 import { Products } from './products';
@@ -13,7 +14,11 @@ import { ProductEdit } from './products/edit';
 import { SaleInsert } from './sales/insert';
 import { SaleEdit } from './sales/edit';
 
-dayjs.extend(LocalizedFormat);
+import('dayjs/locale/pt-br');
+
+dayjs.extend(localizedFormat);
+dayjs.extend(localeData);
+dayjs.locale('pt-br');
 
 export function App() {
   return (
@@ -24,8 +29,8 @@ export function App() {
         <Routes>
           <Route path="/" element={<Sales />} />
           <Route path="/sales" element={<Sales />} />
-          <Route path="/sales" element={<SaleInsert />} />
-          <Route path="/sales" element={<SaleEdit />} />
+          <Route path="/sale" element={<SaleInsert />} />
+          <Route path="/sale/:id" element={<SaleEdit />} />
 
           <Route path="/providers" element={<Providers />} />
           <Route path="/provider" element={<ProviderInsert />} />

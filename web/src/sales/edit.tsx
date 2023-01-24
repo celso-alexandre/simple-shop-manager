@@ -7,11 +7,27 @@ import { useUpdateSaleMutation, SalesDocument, useSaleQuery } from '../graphql/_
 import { objectPropertiesSet } from '../helpers';
 import { SalesForm } from './form';
 
-async function onSubmit({ id, ...data }: SalesFormNode, update: ReturnType<typeof useUpdateSaleMutation>[0]) {
+async function onSubmit({ id, date, saleItems }: SalesFormNode, update: ReturnType<typeof useUpdateSaleMutation>[0]) {
+  const createMany = saleItems.nodes.filter(item => !item.id);
+  const updateMany = saleItems.nodes.filter(item => item.id);
   await update({
     variables: {
       where: { id },
-      data: objectPropertiesSet(data),
+      data: {
+        date: { set: date },
+        saleItems: {
+          createMany: {
+            data: createMany,
+          },
+          update: updateMany.map(item => {
+            const { id: itemId, ...rest } = item;
+            return {
+              where: { id: itemId },
+              data: objectPropertiesSet(rest),
+            };
+          }),
+        },
+      },
     },
   });
 }
@@ -32,7 +48,7 @@ export function SaleEdit() {
 
   return (
     <>
-      <Title title={data?.sale?.id ?? 'Fornecedor não encontrado'} />
+      <Title title={data?.sale?.id ?? 'Venda não encontrada'} />
 
       <SalesForm initialValues={data?.sale} form={form} onFinish={values => onSubmit(values, update)} />
 

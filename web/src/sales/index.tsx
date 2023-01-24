@@ -5,7 +5,14 @@ import { SortOrder } from '../types';
 import { SalesTable } from './table';
 
 export type SalesNode = SalesQuery['sales']['nodes'][0];
-export type SalesFormNode = Pick<SaleQuery['sale'], 'id' | 'date' | 'saleItems'>;
+export type SaleItem = Pick<
+  SaleQuery['sale']['saleItems']['nodes'][number],
+  'productId' | 'providerId' | 'totalValue' | 'quantity' | 'totalCostValue' | 'costIsPostPaid' | 'netMarginPercent'
+> & { id?: string };
+export type SalesFormNode = Pick<SaleQuery['sale'], 'date'> & {
+  id?: string;
+  saleItems: { nodes: SaleItem[] };
+};
 export function Sales() {
   const { data, loading } = useSalesQuery({
     variables: {

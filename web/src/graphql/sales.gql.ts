@@ -40,11 +40,16 @@ gql`
           quantity
           totalValue
           totalCostValue
+          netMarginValue
+          netMarginPercent
+
+          productId
           product {
             id
             name
             brandName
           }
+          providerId
           provider {
             id
             name
