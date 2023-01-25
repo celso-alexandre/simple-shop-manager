@@ -1,5 +1,6 @@
 import { Button, Col, DatePicker, Form, Input, InputNumber, Switch } from 'antd';
 import dayjs from 'dayjs';
+import _ from 'lodash';
 import { Fragment } from 'react';
 import { BiTrashAlt } from 'react-icons/bi';
 import { FiPlus } from 'react-icons/fi';
@@ -9,8 +10,9 @@ import { InputNumberMoney } from '../components/input-number-money';
 import { InputNumberPercent } from '../components/input-number-percent';
 import { ProductAsyncSelect } from '../components/product-async-select.component';
 import { ProviderAsyncSelect } from '../components/provider-async-select.component';
+import { ProductQuery, useProductLazyQuery } from '../graphql/__generated__/products.gql.generated';
 
-const initialValues: SalesFormNode = {
+const defaultInitialValues: SalesFormNode = {
   date: dayjs(),
   saleItems: {
     nodes: [
@@ -31,6 +33,78 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
     if (finish) await finish(values);
     navigate('/sales');
   }
+  const [getProduct] = useProductLazyQuery();
+
+  type SaleItemRes = SalesFormNode['saleItems']['nodes'][number];
+  async function setSaleItem(
+    index: number,
+    saleItemOverride: (saleItem: SaleItemRes, product: ProductQuery['product']) => SaleItemRes
+  ) {
+    if (!props.form) return;
+    const {
+      saleItems: { nodes },
+    } = props.form.getFieldsValue();
+    const item = nodes[index];
+    const { productId } = item;
+    const { data } = await getProduct({
+      variables: {
+        where: { id: productId },
+      },
+    });
+    if (!data?.product) throw new Error('Could not get product');
+
+    Object.assign(nodes[index], saleItemOverride(item, data.product));
+    props.form.setFieldsValue({ saleItems: { nodes } });
+  }
+
+  function setSaleItemProduct(index: number) {
+    return setSaleItem(index, (saleItem, product) => {
+      const netMargin = product.priceValue - product.costValue;
+      const netMarginPercent = netMargin / product.priceValue;
+      console.log('provider', product.provider?.id);
+      return {
+        ...saleItem,
+        quantity: 1,
+        costIsPostPaid: product.isPostPaid,
+        netMarginPercent: netMarginPercent * 100,
+        providerId: product.provider?.id || null,
+        totalValue: product.priceValue,
+        totalCostValue: product.costValue,
+      };
+    });
+  }
+
+  function setSaleItemQty(index: number, quantity: number) {
+    return setSaleItem(index, (saleItem, product) => {
+      return {
+        ...saleItem,
+        quantity,
+        totalValue: product.priceValue * quantity,
+        totalCostValue: product.costValue * quantity,
+      };
+    });
+  }
+
+  const mergedInitialValues = _.pick(props.initialValues ?? defaultInitialValues ?? {}, [
+    'id',
+    'date',
+    'saleItems',
+  ] as (keyof typeof defaultInitialValues)[]) as typeof defaultInitialValues;
+  const initialValues = {
+    ...mergedInitialValues,
+    saleItems:
+      mergedInitialValues.saleItems.nodes.map(item =>
+        _.pick(item, [
+          'id',
+          'costIsPostPaid',
+          'productId',
+          'providerId',
+          'quantity',
+          'totalCostValue',
+          'totalValue',
+        ] as (keyof typeof item)[])
+      ) ?? [],
+  };
 
   return (
     <Form initialValues={initialValues} onFinish={onFinish} style={{ width: '100%' }} layout="inline" {...props}>
@@ -44,7 +118,7 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
         </Form.Item>
       </Col>
 
-      <Col span={24} />
+      <Col span={24} style={{ height: 20 }} />
 
       <Form.List name={nameof.split<SalesFormNode>(x => x.saleItems.nodes)}>
         {(fields, { add, remove }) =>
@@ -53,14 +127,23 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
             return (
               <Fragment key={field.key ?? field.name}>
                 <Col>
-                  <Form.Item labelCol={{ span: 24 }} hidden name={[field.name, 'id' as SaleItemKeys]}>
-                    <Input />
+                  <Form.Item hidden labelCol={{ span: 24 }} name={[field.name, 'id' as SaleItemKeys]}>
+                    <InputNumber />
                   </Form.Item>
                 </Col>
 
                 <Col>
-                  <Form.Item labelCol={{ span: 24 }} label="Produto" name={[field.name, 'productId']}>
-                    <ProductAsyncSelect />
+                  <Form.Item
+                    labelCol={{ span: 24 }}
+                    label="Produto"
+                    name={[field.name, nameof<SaleItem>(x => x.productId)]}
+                  >
+                    <ProductAsyncSelect
+                      style={{ width: 200 }}
+                      onChange={async () => {
+                        await setSaleItemProduct(field.name);
+                      }}
+                    />
                   </Form.Item>
                 </Col>
 
@@ -70,7 +153,13 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
                     label="Quantidade"
                     name={[field.name, nameof<SaleItem>(x => x.quantity)]}
                   >
-                    <InputNumber precision={0} min={1} />
+                    <InputNumber
+                      precision={0}
+                      min={1}
+                      onChange={async quantity => {
+                        await setSaleItemQty(field.name, quantity ?? 0);
+                      }}
+                    />
                   </Form.Item>
                 </Col>
 
@@ -88,7 +177,8 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
                   <Form.Item
                     labelCol={{ span: 24 }}
                     label="Fornecedor"
-                    name={[field.name, nameof<SaleItem>(x => x.providerId), 'id']}
+                    name={[field.name, nameof<SaleItem>(x => x.providerId)]}
+                    style={{ width: 300 }}
                   >
                     <ProviderAsyncSelect style={{ width: '100%' }} />
                   </Form.Item>

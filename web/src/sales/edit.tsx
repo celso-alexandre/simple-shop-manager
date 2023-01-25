@@ -1,10 +1,14 @@
 import { Button, Row, Skeleton } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import dayjs from 'dayjs';
+import _ from 'lodash';
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import type { SalesFormNode } from '.';
 import { Title } from '../components/title';
 import { useUpdateSaleMutation, SalesDocument, useSaleQuery } from '../graphql/__generated__/sales.gql.generated';
 import { objectPropertiesSet } from '../helpers';
+import { SaleItemUpdateWithWhereUniqueWithoutSaleInput } from '../types';
 import { SalesForm } from './form';
 
 async function onSubmit({ id, date, saleItems }: SalesFormNode, update: ReturnType<typeof useUpdateSaleMutation>[0]) {
@@ -16,15 +20,24 @@ async function onSubmit({ id, date, saleItems }: SalesFormNode, update: ReturnTy
       data: {
         date: { set: date },
         saleItems: {
-          createMany: {
-            data: createMany,
-          },
+          createMany: !createMany.length
+            ? undefined
+            : {
+                data: createMany,
+              },
           update: updateMany.map(item => {
-            const { id: itemId, ...rest } = item;
-            return {
+            const { id: itemId, productId, providerId, ...rest } = item;
+            const res: SaleItemUpdateWithWhereUniqueWithoutSaleInput = {
               where: { id: itemId },
-              data: objectPropertiesSet(rest),
+              data: {
+                ...objectPropertiesSet(
+                  _.pick(rest, ['costIsPostPaid', 'quantity', 'totalCostValue', 'totalValue'] as (keyof typeof rest)[])
+                ),
+                product: !productId ? undefined : { connect: { id: productId } },
+                provider: !providerId ? undefined : { connect: { id: providerId } },
+              },
             };
+            return res;
           }),
         },
       },
@@ -44,13 +57,21 @@ export function SaleEdit() {
     },
   });
 
+  const initialValues = useMemo(
+    () => ({
+      ...data?.sale,
+      date: !data?.sale?.date ? undefined : dayjs(data?.sale?.date),
+    }),
+    [data]
+  );
+
   if (loading) return <Skeleton />;
 
   return (
     <>
       <Title title={data?.sale?.id ?? 'Venda não encontrada'} />
 
-      <SalesForm initialValues={data?.sale} form={form} onFinish={values => onSubmit(values, update)} />
+      <SalesForm initialValues={initialValues} form={form} onFinish={values => onSubmit(values, update)} />
 
       <Row style={{ marginTop: '20px' }}>
         <Button size="large" type="primary" onClick={() => form.submit()}>
