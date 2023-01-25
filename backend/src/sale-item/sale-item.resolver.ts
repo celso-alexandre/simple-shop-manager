@@ -55,4 +55,14 @@ export class SaleItemResolver {
   forProduct(@Parent() parent: SaleItem) {
     return this.service.forProduct(parent);
   }
+
+  @ResolveField(() => Number, { name: 'netMarginValue' })
+  forNetMarginValue(@Parent() { totalValue, totalCostValue }: SaleItem) {
+    return totalValue - totalCostValue;
+  }
+
+  @ResolveField(() => Number, { name: 'netMarginPercent' })
+  forNetMarginPercent(@Parent() { totalValue, totalCostValue }: SaleItem) {
+    return (totalValue - totalCostValue) / totalValue;
+  }
 }

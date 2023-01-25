@@ -23,7 +23,7 @@ export type ProductQueryVariables = Types.Exact<{
 }>;
 
 
-export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', id: string, name: string, brandName?: string | null, isPostPaid: boolean, costValue: number, priceValue: number, createdAt: any, updatedAt: any, provider: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null }, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null } };
+export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', id: string, name: string, brandName?: string | null, isPostPaid: boolean, costValue: number, priceValue: number, createdAt: any, updatedAt: any, provider?: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null } | null, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null } };
 
 export type ProductsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ProductWhereInput>;
@@ -33,7 +33,17 @@ export type ProductsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products: { __typename?: 'ProductsOutput', nodes: Array<{ __typename?: 'Product', id: string, name: string, brandName?: string | null, isPostPaid: boolean, costValue: number, priceValue: number, createdAt: any, updatedAt: any, provider: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null }, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null }>, pageInfo?: { __typename?: 'ProductPaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
+export type ProductsQuery = { __typename?: 'Query', products: { __typename?: 'ProductsOutput', nodes: Array<{ __typename?: 'Product', id: string, name: string, brandName?: string | null, isPostPaid: boolean, costValue: number, priceValue: number, createdAt: any, updatedAt: any, provider?: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null } | null, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null }>, pageInfo?: { __typename?: 'ProductPaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
+
+export type ProductsSelectQueryVariables = Types.Exact<{
+  where?: Types.InputMaybe<Types.ProductWhereInput>;
+  orderBy?: Types.InputMaybe<Array<Types.ProductOrderByWithRelationInput> | Types.ProductOrderByWithRelationInput>;
+  take?: Types.InputMaybe<Types.Scalars['Int']>;
+  skip?: Types.InputMaybe<Types.Scalars['Int']>;
+}>;
+
+
+export type ProductsSelectQuery = { __typename?: 'Query', products: { __typename?: 'ProductsOutput', nodes: Array<{ __typename?: 'Product', value: string, label: string }>, pageInfo?: { __typename?: 'ProductPaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
 
 
 export const CreateProductDocument = gql`
@@ -221,3 +231,51 @@ export function useProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<P
 export type ProductsQueryHookResult = ReturnType<typeof useProductsQuery>;
 export type ProductsLazyQueryHookResult = ReturnType<typeof useProductsLazyQuery>;
 export type ProductsQueryResult = Apollo.QueryResult<ProductsQuery, ProductsQueryVariables>;
+export const ProductsSelectDocument = gql`
+    query ProductsSelect($where: ProductWhereInput, $orderBy: [ProductOrderByWithRelationInput!], $take: Int, $skip: Int) {
+  products(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+    nodes {
+      value: id
+      label: name
+    }
+    pageInfo {
+      currentPage
+      hasNextPage
+      lastPage
+      nextCursor
+      total
+    }
+  }
+}
+    `;
+
+/**
+ * __useProductsSelectQuery__
+ *
+ * To run a query within a React component, call `useProductsSelectQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductsSelectQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProductsSelectQuery({
+ *   variables: {
+ *      where: // value for 'where'
+ *      orderBy: // value for 'orderBy'
+ *      take: // value for 'take'
+ *      skip: // value for 'skip'
+ *   },
+ * });
+ */
+export function useProductsSelectQuery(baseOptions?: Apollo.QueryHookOptions<ProductsSelectQuery, ProductsSelectQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProductsSelectQuery, ProductsSelectQueryVariables>(ProductsSelectDocument, options);
+      }
+export function useProductsSelectLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductsSelectQuery, ProductsSelectQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProductsSelectQuery, ProductsSelectQueryVariables>(ProductsSelectDocument, options);
+        }
+export type ProductsSelectQueryHookResult = ReturnType<typeof useProductsSelectQuery>;
+export type ProductsSelectLazyQueryHookResult = ReturnType<typeof useProductsSelectLazyQuery>;
+export type ProductsSelectQueryResult = Apollo.QueryResult<ProductsSelectQuery, ProductsSelectQueryVariables>;

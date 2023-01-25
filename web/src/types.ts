@@ -236,7 +236,7 @@ export type Product = {
   name: Scalars['String'];
   /** Retail price */
   priceValue: Scalars['Int'];
-  provider: Provider;
+  provider?: Maybe<Provider>;
   /** FK: Provider.id */
   providerId?: Maybe<Scalars['String']>;
   updatedAt: Scalars['DateTime'];
@@ -1161,15 +1161,11 @@ export type SaleCreateInput = {
   date: Scalars['DateTime'];
   id?: InputMaybe<Scalars['String']>;
   saleItems?: InputMaybe<SaleItemCreateNestedManyWithoutSaleInput>;
-  totalCostValue: Scalars['Int'];
-  totalValue: Scalars['Int'];
 };
 
 export type SaleCreateManyBlameUserInput = {
   date: Scalars['DateTime'];
   id?: InputMaybe<Scalars['String']>;
-  totalCostValue: Scalars['Int'];
-  totalValue: Scalars['Int'];
 };
 
 export type SaleCreateManyBlameUserInputEnvelope = {
@@ -1203,16 +1199,12 @@ export type SaleCreateWithoutBlameUserInput = {
   date: Scalars['DateTime'];
   id?: InputMaybe<Scalars['String']>;
   saleItems?: InputMaybe<SaleItemCreateNestedManyWithoutSaleInput>;
-  totalCostValue: Scalars['Int'];
-  totalValue: Scalars['Int'];
 };
 
 export type SaleCreateWithoutSaleItemsInput = {
   blameUser?: InputMaybe<UserCreateNestedOneWithoutSalesInput>;
   date: Scalars['DateTime'];
   id?: InputMaybe<Scalars['String']>;
-  totalCostValue: Scalars['Int'];
-  totalValue: Scalars['Int'];
 };
 
 export type SaleItem = {
@@ -1225,10 +1217,12 @@ export type SaleItem = {
   createdAt: Scalars['DateTime'];
   /** ID */
   id: Scalars['ID'];
+  netMarginPercent: Scalars['Float'];
+  netMarginValue: Scalars['Float'];
   product: Product;
   /** FK: Product.id */
   productId: Scalars['String'];
-  provider: Provider;
+  provider?: Maybe<Provider>;
   /** FK: Provider.id (usually the same as Product.providerId) */
   providerId?: Maybe<Scalars['String']>;
   /** Quantity */
@@ -1828,14 +1822,10 @@ export type SaleUpdateInput = {
   blameUser?: InputMaybe<UserUpdateOneWithoutSalesNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   saleItems?: InputMaybe<SaleItemUpdateManyWithoutSaleNestedInput>;
-  totalCostValue?: InputMaybe<IntFieldUpdateOperationsInput>;
-  totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
 };
 
 export type SaleUpdateManyMutationInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  totalCostValue?: InputMaybe<IntFieldUpdateOperationsInput>;
-  totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
 };
 
 export type SaleUpdateManyWithWhereWithoutBlameUserInput = {
@@ -1875,15 +1865,11 @@ export type SaleUpdateWithWhereUniqueWithoutBlameUserInput = {
 export type SaleUpdateWithoutBlameUserInput = {
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   saleItems?: InputMaybe<SaleItemUpdateManyWithoutSaleNestedInput>;
-  totalCostValue?: InputMaybe<IntFieldUpdateOperationsInput>;
-  totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
 };
 
 export type SaleUpdateWithoutSaleItemsInput = {
   blameUser?: InputMaybe<UserUpdateOneWithoutSalesNestedInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  totalCostValue?: InputMaybe<IntFieldUpdateOperationsInput>;
-  totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
 };
 
 export type SaleUpsertWithWhereUniqueWithoutBlameUserInput = {
@@ -2866,7 +2852,7 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
   isPostPaid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   priceValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  provider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType>;
+  provider?: Resolver<Maybe<ResolversTypes['Provider']>, ParentType, ContextType>;
   providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -3077,9 +3063,11 @@ export type SaleItemResolvers<ContextType = any, ParentType extends ResolversPar
   costIsPostPaid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  netMarginPercent?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  netMarginValue?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   product?: Resolver<ResolversTypes['Product'], ParentType, ContextType>;
   productId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  provider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType>;
+  provider?: Resolver<Maybe<ResolversTypes['Provider']>, ParentType, ContextType>;
   providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   saleId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

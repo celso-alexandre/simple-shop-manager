@@ -64,12 +64,12 @@ export class SaleResolver {
   }
 
   @ResolveField(() => Number, { name: 'netMarginValue' })
-  forProfit(@Parent() { totalValue, totalCostValue }: Sale) {
+  forNetMarginValue(@Parent() { totalValue, totalCostValue }: Sale) {
     return totalValue - totalCostValue;
   }
 
   @ResolveField(() => Number, { name: 'netMarginPercent' })
-  forProfitMargin(@Parent() { totalValue, totalCostValue }: Sale) {
+  forNetMarginPercent(@Parent() { totalValue, totalCostValue }: Sale) {
     return (totalValue - totalCostValue) / totalValue;
   }
 }

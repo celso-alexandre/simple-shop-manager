@@ -112,8 +112,10 @@ model Sale {
   /// FK: User.id - User to blame for
   blameUserId String?   @db.ObjectId
   /// Grand Total
+  /// @HideField({ match: '@(*Update*|*Create*)Input' })
   totalValue Int
   /// Total Cost
+  /// @HideField({ match: '@(*Update*|*Create*)Input' })
   totalCostValue Int
 
   /// @HideField({ match: '@(*Update*|*Create*)Input' })

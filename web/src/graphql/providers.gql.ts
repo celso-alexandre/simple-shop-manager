@@ -64,3 +64,26 @@ gql`
     }
   }
 `;
+
+gql`
+  query ProvidersSelect(
+    $where: ProviderWhereInput
+    $orderBy: [ProviderOrderByWithRelationInput!]
+    $take: Int
+    $skip: Int
+  ) {
+    providers(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+      nodes {
+        value: id
+        label: name
+      }
+      pageInfo {
+        currentPage
+        hasNextPage
+        lastPage
+        nextCursor
+        total
+      }
+    }
+  }
+`;

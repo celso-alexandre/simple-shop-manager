@@ -78,3 +78,26 @@ gql`
     }
   }
 `;
+
+gql`
+  query ProductsSelect(
+    $where: ProductWhereInput
+    $orderBy: [ProductOrderByWithRelationInput!]
+    $take: Int
+    $skip: Int
+  ) {
+    products(where: $where, orderBy: $orderBy, take: $take, skip: $skip) {
+      nodes {
+        value: id
+        label: name
+      }
+      pageInfo {
+        currentPage
+        hasNextPage
+        lastPage
+        nextCursor
+        total
+      }
+    }
+  }
+`;
