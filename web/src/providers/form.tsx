@@ -32,7 +32,7 @@ export function ProvidersForm({ onFinish: finish, ...props }: Parameters<typeof 
           name={nameof<ProvidersFormNode>(x => x.email)}
           label="E-mail"
           labelCol={{ span: 24 }}
-          rules={[{ required: true, type: 'regexp', pattern: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g }]}
+          // rules={[{ required: true, type: 'regexp', pattern: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g }]}
         >
           <Input style={{ width: '100%' }} />
         </Form.Item>
