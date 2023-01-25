@@ -12,16 +12,22 @@ import {
 import { objectPropertiesSet, serializeDecimalAsInt, serializeIntAsDecimal } from '../helpers';
 import { ProductsForm } from './form';
 
-async function onSubmit({ id, ...data }: ProductsFormNode, update: ReturnType<typeof useUpdateProductMutation>[0]) {
+async function onSubmit(
+  { id, providerId, ...data }: ProductsFormNode,
+  update: ReturnType<typeof useUpdateProductMutation>[0]
+) {
   await update({
     variables: {
       where: { id },
-      data: objectPropertiesSet({
-        ...data,
-        isPostPaid: data.isPostPaid ?? false,
-        costValue: serializeDecimalAsInt(data.costValue),
-        priceValue: serializeDecimalAsInt(data.priceValue),
-      }),
+      data: {
+        ...objectPropertiesSet({
+          ...data,
+          isPostPaid: data.isPostPaid ?? false,
+          costValue: serializeDecimalAsInt(data.costValue),
+          priceValue: serializeDecimalAsInt(data.priceValue),
+        }),
+        provider: { connect: { id: providerId } },
+      },
     },
   });
 }

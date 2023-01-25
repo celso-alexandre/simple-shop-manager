@@ -6,7 +6,7 @@ import { BiBarcode, BiListPlus, BiListUl } from 'react-icons/bi';
 import { MdOutlineAddBusiness, MdOutlinePointOfSale } from 'react-icons/md';
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from 'react-icons/ai';
 import { useMediaQuery } from 'react-responsive';
-import { useNavigate, matchRoutes, useLocation } from 'react-router-dom';
+import { matchRoutes, useLocation, Link } from 'react-router-dom';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -14,7 +14,6 @@ export function SideMenu() {
   const isDesktopOrLaptop = useMediaQuery({
     query: '(min-width: 1079px)',
   });
-  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(true);
   const location = useLocation();
 
@@ -36,15 +35,13 @@ export function SideMenu() {
       children: [
         {
           key: '/sales',
-          label: 'Listar Vendas',
+          label: <Link to="/sales">Listar Vendas</Link>,
           icon: <BiListUl />,
-          onClick: () => navigate('/sales'),
         },
         {
           key: '/sale',
-          label: 'Nova Venda',
+          label: <Link to="/sale">Nova Venda</Link>,
           icon: <BiListPlus />,
-          onClick: () => navigate('/sale'),
         },
       ],
     },
@@ -55,15 +52,13 @@ export function SideMenu() {
       children: [
         {
           key: '/products',
-          label: 'Listar Produtos',
+          label: <Link to="/products">Listar Produtos</Link>,
           icon: <BiListUl />,
-          onClick: () => navigate('/products'),
         },
         {
           key: '/product',
-          label: 'Novo Produto',
+          label: <Link to="/product">Novo Produto</Link>,
           icon: <BiListPlus />,
-          onClick: () => navigate('/product'),
         },
         {
           style: { visibility: 'hidden', height: 0 },
@@ -78,15 +73,13 @@ export function SideMenu() {
       children: [
         {
           key: '/providers',
-          label: 'Listar Fornecedores',
+          label: <Link to="/providers">Listar Fornecedores</Link>,
           icon: <BiListUl />,
-          onClick: () => navigate('/providers'),
         },
         {
           key: '/provider',
-          label: 'Novo Fornecedor',
+          label: <Link to="/provider">Novo Fornecedor</Link>,
           icon: <BiListPlus />,
-          onClick: () => navigate('/provider'),
         },
         {
           style: { visibility: 'hidden', height: 0 },
@@ -96,9 +89,8 @@ export function SideMenu() {
     },
     {
       key: '/users',
-      label: 'Administradores',
+      label: <Link to="/users">Administradores</Link>,
       icon: <FiUsers />,
-      onClick: () => navigate('/users'),
     },
   ];
 

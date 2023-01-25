@@ -85,29 +85,8 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
     });
   }
 
-  const mergedInitialValues = _.pick(props.initialValues ?? defaultInitialValues ?? {}, [
-    'id',
-    'date',
-    'saleItems',
-  ] as (keyof typeof defaultInitialValues)[]) as typeof defaultInitialValues;
-  const initialValues = {
-    ...mergedInitialValues,
-    saleItems:
-      mergedInitialValues.saleItems.nodes.map(item =>
-        _.pick(item, [
-          'id',
-          'costIsPostPaid',
-          'productId',
-          'providerId',
-          'quantity',
-          'totalCostValue',
-          'totalValue',
-        ] as (keyof typeof item)[])
-      ) ?? [],
-  };
-
   return (
-    <Form initialValues={initialValues} onFinish={onFinish} style={{ width: '100%' }} layout="inline" {...props}>
+    <Form initialValues={defaultInitialValues} onFinish={onFinish} style={{ width: '100%' }} layout="inline" {...props}>
       <Form.Item hidden name={nameof<SalesFormNode>(x => x.id)}>
         <Input />
       </Form.Item>

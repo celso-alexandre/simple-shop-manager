@@ -23,7 +23,13 @@ export function ProviderInsert() {
     <>
       <Title title="Novo Fornecedor" />
 
-      <ProvidersForm form={form} onFinish={values => onSubmit(values, create)} />
+      <ProvidersForm
+        form={form}
+        onFinish={async values => {
+          await form.validateFields();
+          await onSubmit(values, create);
+        }}
+      />
 
       <Row style={{ marginTop: '20px' }}>
         <Button size="large" type="primary" onClick={() => form.submit()}>

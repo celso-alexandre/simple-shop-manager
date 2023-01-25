@@ -2,6 +2,7 @@ import { Col, Form, Input, Switch } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import type { ProductsFormNode } from '.';
 import { InputNumberMoney } from '../components/input-number-money';
+import { ProviderAsyncSelect } from '../components/provider-async-select.component';
 
 export function ProductsForm({ onFinish: finish, ...props }: Parameters<typeof Form<ProductsFormNode>>[0]) {
   const navigate = useNavigate();
@@ -30,6 +31,17 @@ export function ProductsForm({ onFinish: finish, ...props }: Parameters<typeof F
       <Col>
         <Form.Item name={nameof<ProductsFormNode>(x => x.priceValue)} label="Preço" labelCol={{ span: 24 }}>
           <InputNumberMoney style={{ width: '100%' }} />
+        </Form.Item>
+      </Col>
+
+      <Col>
+        <Form.Item
+          labelCol={{ span: 24 }}
+          label="Fornecedor"
+          name={nameof<ProductsFormNode>(x => x.providerId)}
+          style={{ width: 300 }}
+        >
+          <ProviderAsyncSelect style={{ width: '100%' }} />
         </Form.Item>
       </Col>
 

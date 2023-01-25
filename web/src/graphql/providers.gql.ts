@@ -27,6 +27,12 @@ gql`
       createdAt
       updatedAt
 
+      products {
+        nodes {
+          id
+          name
+        }
+      }
       blameUser {
         id
         name

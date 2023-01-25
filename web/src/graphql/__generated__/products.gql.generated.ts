@@ -23,7 +23,7 @@ export type ProductQueryVariables = Types.Exact<{
 }>;
 
 
-export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', id: string, name: string, brandName?: string | null, isPostPaid: boolean, costValue: number, priceValue: number, createdAt: any, updatedAt: any, provider?: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null } | null, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null } };
+export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', id: string, name: string, brandName?: string | null, isPostPaid: boolean, costValue: number, priceValue: number, createdAt: any, updatedAt: any, providerId?: string | null, provider?: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null } | null, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null } };
 
 export type ProductsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ProductWhereInput>;
@@ -33,7 +33,7 @@ export type ProductsQueryVariables = Types.Exact<{
 }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products: { __typename?: 'ProductsOutput', nodes: Array<{ __typename?: 'Product', id: string, name: string, brandName?: string | null, isPostPaid: boolean, costValue: number, priceValue: number, createdAt: any, updatedAt: any, provider?: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null } | null, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null }>, pageInfo?: { __typename?: 'ProductPaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
+export type ProductsQuery = { __typename?: 'Query', products: { __typename?: 'ProductsOutput', nodes: Array<{ __typename?: 'Product', id: string, name: string, brandName?: string | null, isPostPaid: boolean, costValue: number, priceValue: number, createdAt: any, updatedAt: any, providerId?: string | null, provider?: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null } | null, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null }>, pageInfo?: { __typename?: 'ProductPaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
 
 export type ProductsSelectQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ProductWhereInput>;
@@ -124,6 +124,7 @@ export const ProductDocument = gql`
     priceValue
     createdAt
     updatedAt
+    providerId
     provider {
       id
       name
@@ -178,6 +179,7 @@ export const ProductsDocument = gql`
       priceValue
       createdAt
       updatedAt
+      providerId
       provider {
         id
         name

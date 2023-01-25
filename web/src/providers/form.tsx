@@ -1,6 +1,7 @@
 import { Col, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import type { ProvidersFormNode } from '.';
+import { InputPhone } from '../components/input-phone';
 
 export function ProvidersForm({ onFinish: finish, ...props }: Parameters<typeof Form<ProvidersFormNode>>[0]) {
   const navigate = useNavigate();
@@ -27,14 +28,19 @@ export function ProvidersForm({ onFinish: finish, ...props }: Parameters<typeof 
       </Col>
 
       <Col>
-        <Form.Item name={nameof<ProvidersFormNode>(x => x.email)} label="E-mail" labelCol={{ span: 24 }}>
+        <Form.Item
+          name={nameof<ProvidersFormNode>(x => x.email)}
+          label="E-mail"
+          labelCol={{ span: 24 }}
+          rules={[{ required: true, type: 'regexp', pattern: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g }]}
+        >
           <Input style={{ width: '100%' }} />
         </Form.Item>
       </Col>
 
       <Col>
         <Form.Item name={nameof<ProvidersFormNode>(x => x.whatsapp)} label="Whatsapp" labelCol={{ span: 24 }}>
-          <Input style={{ width: '100%' }} />
+          <InputPhone style={{ width: '100%' }} />
         </Form.Item>
       </Col>
     </Form>

@@ -7,7 +7,7 @@ import { ProductsTable } from './table';
 export type ProductsNode = Omit<ProductsQuery['products']['nodes'][0], 'id'> & { id?: string };
 export type ProductsFormNode = Pick<
   ProductsNode,
-  'id' | 'name' | 'brandName' | 'priceValue' | 'isPostPaid' | 'costValue'
+  'id' | 'name' | 'brandName' | 'priceValue' | 'isPostPaid' | 'costValue' | 'providerId'
 >;
 export function Products() {
   const { data, loading } = useProductsQuery({

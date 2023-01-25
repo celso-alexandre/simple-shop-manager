@@ -23,7 +23,7 @@ export type ProviderQueryVariables = Types.Exact<{
 }>;
 
 
-export type ProviderQuery = { __typename?: 'Query', provider: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null, document?: string | null, createdAt: any, updatedAt: any, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null } };
+export type ProviderQuery = { __typename?: 'Query', provider: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null, document?: string | null, createdAt: any, updatedAt: any, products: { __typename?: 'ProductsOutput', nodes: Array<{ __typename?: 'Product', id: string, name: string }> }, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null } };
 
 export type ProvidersQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ProviderWhereInput>;
@@ -123,6 +123,12 @@ export const ProviderDocument = gql`
     document
     createdAt
     updatedAt
+    products {
+      nodes {
+        id
+        name
+      }
+    }
     blameUser {
       id
       name

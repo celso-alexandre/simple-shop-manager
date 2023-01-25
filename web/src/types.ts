@@ -661,9 +661,20 @@ export type Provider = {
   id: Scalars['ID'];
   /** Name */
   name: Scalars['String'];
+  products: ProductsOutput;
   updatedAt: Scalars['DateTime'];
   /** Whatsapp */
   whatsapp?: Maybe<Scalars['String']>;
+};
+
+
+export type ProviderProductsArgs = {
+  cursor?: InputMaybe<ProductWhereUniqueInput>;
+  distinct?: InputMaybe<Array<ProductScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<ProductOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<ProductWhereInput>;
 };
 
 export type ProviderCount = {
@@ -2942,6 +2953,7 @@ export type ProviderResolvers<ContextType = any, ParentType extends ResolversPar
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  products?: Resolver<ResolversTypes['ProductsOutput'], ParentType, ContextType, Partial<ProviderProductsArgs>>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   whatsapp?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
