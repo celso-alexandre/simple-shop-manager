@@ -11,11 +11,17 @@ import {
 import { objectPropertiesSet } from '../helpers';
 import { ProvidersForm } from './form';
 
-async function onSubmit({ id, ...data }: ProvidersFormNode, update: ReturnType<typeof useUpdateProviderMutation>[0]) {
+async function onSubmit(
+  { id, whatsapp, ...data }: ProvidersFormNode,
+  update: ReturnType<typeof useUpdateProviderMutation>[0]
+) {
   await update({
     variables: {
       where: { id },
-      data: objectPropertiesSet(data),
+      data: {
+        ...objectPropertiesSet(data),
+        whatsapp: { set: !whatsapp || whatsapp === '+55 (__) _____-____' ? undefined : whatsapp },
+      },
     },
   });
 }

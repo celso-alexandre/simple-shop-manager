@@ -5,10 +5,16 @@ import { Title } from '../components/title';
 import { useCreateProviderMutation, ProvidersDocument } from '../graphql/__generated__/providers.gql.generated';
 import { ProvidersForm } from './form';
 
-async function onSubmit(data: ProvidersFormNode, create: ReturnType<typeof useCreateProviderMutation>[0]) {
+async function onSubmit(
+  { whatsapp, ...data }: ProvidersFormNode,
+  create: ReturnType<typeof useCreateProviderMutation>[0]
+) {
   await create({
     variables: {
-      data,
+      data: {
+        ...data,
+        whatsapp: !whatsapp || whatsapp === '+55 (__) _____-____' ? undefined : whatsapp,
+      },
     },
   });
 }
