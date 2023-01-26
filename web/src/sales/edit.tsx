@@ -6,7 +6,12 @@ import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import type { SalesFormNode } from '.';
 import { Title } from '../components/title';
-import { useUpdateSaleMutation, SalesDocument, useSaleQuery } from '../graphql/__generated__/sales.gql.generated';
+import {
+  useUpdateSaleMutation,
+  SalesDocument,
+  SaleDocument,
+  useSaleQuery,
+} from '../graphql/__generated__/sales.gql.generated';
 import { objectPropertiesSet } from '../helpers';
 import { SaleItemUpdateWithWhereUniqueWithoutSaleInput } from '../types';
 import { SalesForm } from './form';
@@ -15,6 +20,7 @@ async function onSubmit({ id, date, saleItems }: SalesFormNode, update: ReturnTy
   const createMany = saleItems.nodes.filter(item => !item.id);
   const updateMany = saleItems.nodes.filter(item => item.id);
   await update({
+    refetchQueries: [SaleDocument, SalesDocument],
     variables: {
       where: { id },
       data: {

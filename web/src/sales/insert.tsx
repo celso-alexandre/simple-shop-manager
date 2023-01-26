@@ -2,13 +2,14 @@ import { Button, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { SalesFormNode } from '.';
 import { Title } from '../components/title';
-import { useCreateSaleMutation, SalesDocument } from '../graphql/__generated__/sales.gql.generated';
+import { useCreateSaleMutation, SalesDocument, SaleDocument } from '../graphql/__generated__/sales.gql.generated';
 import { SalesForm } from './form';
 import { filterValidSaleItem } from './helper';
 
 async function onSubmit(data: SalesFormNode, create: ReturnType<typeof useCreateSaleMutation>[0]) {
   const { date, saleItems } = data;
   await create({
+    refetchQueries: [SaleDocument, SalesDocument],
     variables: {
       data: {
         date,

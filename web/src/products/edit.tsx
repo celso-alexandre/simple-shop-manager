@@ -8,6 +8,7 @@ import {
   useUpdateProductMutation,
   ProductsDocument,
   useProductQuery,
+  ProductDocument,
 } from '../graphql/__generated__/products.gql.generated';
 import { objectPropertiesSet, serializeDecimalAsInt, serializeIntAsDecimal } from '../helpers';
 import { ProductsForm } from './form';
@@ -17,6 +18,7 @@ async function onSubmit(
   update: ReturnType<typeof useUpdateProductMutation>[0]
 ) {
   await update({
+    refetchQueries: [ProductDocument, ProductsDocument],
     variables: {
       where: { id },
       data: {

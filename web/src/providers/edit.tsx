@@ -7,6 +7,7 @@ import {
   useUpdateProviderMutation,
   ProvidersDocument,
   useProviderQuery,
+  ProviderDocument,
 } from '../graphql/__generated__/providers.gql.generated';
 import { objectPropertiesSet } from '../helpers';
 import { ProvidersForm } from './form';
@@ -16,6 +17,7 @@ async function onSubmit(
   update: ReturnType<typeof useUpdateProviderMutation>[0]
 ) {
   await update({
+    refetchQueries: [ProviderDocument, ProvidersDocument],
     variables: {
       where: { id },
       data: {
