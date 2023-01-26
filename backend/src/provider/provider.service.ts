@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
+import type { FindManyProductArgs } from '../product/dto';
 import type {
   CreateManyProviderArgs,
   CreateOneProviderArgs,
@@ -41,5 +42,14 @@ export class ProviderService {
 
   forBlameUser({ id }: Provider) {
     return this.prisma.provider.findUnique({ where: { id: id } }).blameUser();
+  }
+
+  forProducts({ id }: Provider, args: FindManyProductArgs) {
+    return this.prisma.findRelationAndPaginate(
+      this.prisma.provider,
+      id,
+      'products',
+      args,
+    );
   }
 }

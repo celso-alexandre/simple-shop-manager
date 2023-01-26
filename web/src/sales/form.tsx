@@ -85,29 +85,8 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
     });
   }
 
-  const mergedInitialValues = _.pick(props.initialValues ?? defaultInitialValues ?? {}, [
-    'id',
-    'date',
-    'saleItems',
-  ] as (keyof typeof defaultInitialValues)[]) as typeof defaultInitialValues;
-  const initialValues = {
-    ...mergedInitialValues,
-    saleItems:
-      mergedInitialValues.saleItems.nodes.map(item =>
-        _.pick(item, [
-          'id',
-          'costIsPostPaid',
-          'productId',
-          'providerId',
-          'quantity',
-          'totalCostValue',
-          'totalValue',
-        ] as (keyof typeof item)[])
-      ) ?? [],
-  };
-
   return (
-    <Form initialValues={initialValues} onFinish={onFinish} style={{ width: '100%' }} layout="inline" {...props}>
+    <Form initialValues={defaultInitialValues} onFinish={onFinish} style={{ width: '100%' }} layout="inline" {...props}>
       <Form.Item hidden name={nameof<SalesFormNode>(x => x.id)}>
         <Input />
       </Form.Item>
@@ -178,7 +157,7 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
                     labelCol={{ span: 24 }}
                     label="Fornecedor"
                     name={[field.name, nameof<SaleItem>(x => x.providerId)]}
-                    style={{ width: 300 }}
+                    style={{ width: 220 }}
                   >
                     <ProviderAsyncSelect style={{ width: '100%' }} />
                   </Form.Item>
@@ -198,7 +177,7 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
                 <Col>
                   <Form.Item
                     labelCol={{ span: 24 }}
-                    label="Margem"
+                    label="M Líquida"
                     name={[field.name, nameof<SaleItem>(x => x.netMarginPercent)]}
                   >
                     <InputNumberPercent disabled />

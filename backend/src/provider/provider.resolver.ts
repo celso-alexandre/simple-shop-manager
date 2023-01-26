@@ -6,6 +6,7 @@ import {
   ResolveField,
   Parent,
 } from '@nestjs/graphql';
+import { FindManyProductArgs, ProductsOutput } from '../product/dto';
 import { User } from '../user/dto';
 import {
   CreateManyProviderArgs,
@@ -56,5 +57,10 @@ export class ProviderResolver {
   @ResolveField(() => User, { name: 'blameUser', nullable: true })
   forBlameUser(@Parent() parent: Provider) {
     return this.service.forBlameUser(parent);
+  }
+
+  @ResolveField(() => ProductsOutput, { name: 'products' })
+  forProducts(@Parent() parent: Provider, @Args() args: FindManyProductArgs) {
+    return this.service.forProducts(parent, args);
   }
 }

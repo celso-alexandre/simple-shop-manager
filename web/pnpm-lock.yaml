@@ -18,6 +18,7 @@ specifiers:
   '@vitejs/plugin-react-swc': ^3.0.0
   antd: ^5.1.4
   antd-dayjs-vite-plugin: ^1.2.2
+  antd-mask-input: ^2.0.7
   cosmiconfig: ^8.0.0
   cosmiconfig-toml-loader: ^1.0.0
   cosmiconfig-typescript-loader: ^4.3.0
@@ -54,6 +55,7 @@ dependencies:
   '@apollo/client': 3.7.4_gdcq4dv6opitr3wbfwyjmanyra
   antd: 5.1.4_biqbaboplfbrettd7655fr4n2y
   antd-dayjs-vite-plugin: 1.2.2_dayjs@1.11.7+vite@4.0.4
+  antd-mask-input: 2.0.7_antd@5.1.4+react@18.2.0
   dayjs: 1.11.7
   graphql: 16.6.0
   lodash: 4.17.21
@@ -2345,6 +2347,17 @@ packages:
       dayjs: 1.11.7
     dev: false
 
+  /antd-mask-input/2.0.7_antd@5.1.4+react@18.2.0:
+    resolution: {integrity: sha512-EFv/Hjar5nzYuzvgCcIeEcbVzw5+4RynUQTl2S8bLMaR9iajiWoeV/VYvENaP6X+ytnM0OqemE2pHY9ZRR6hEw==}
+    peerDependencies:
+      antd: '>=4.19.0'
+      react: '>=16.0.0'
+    dependencies:
+      antd: 5.1.4_biqbaboplfbrettd7655fr4n2y
+      imask: 6.4.2
+      react: 18.2.0
+    dev: false
+
   /antd/5.1.4_biqbaboplfbrettd7655fr4n2y:
     resolution: {integrity: sha512-74j1+8jRYDglCSvNgx7DGvBH6gerHvtV6k6DylIVQLuViza5YPYH0MVUQwrw6a65iTfuRUY59Oo3EfqerGk8Uw==}
     peerDependencies:
@@ -4097,6 +4110,11 @@ packages:
     resolution: {integrity: sha512-MAb38BcSbH0eHNBxn7ql2NH/kX33OkB3lZ1BNdh7ENeRChHTYsTvWrMubiIAMNS2llXEEgZ1MUOBtXChP3kaFQ==}
     engines: {node: '>= 4'}
     dev: true
+
+  /imask/6.4.2:
+    resolution: {integrity: sha512-xvEgbTdk6y2dW2UAysq0NRPmO6PuaXM5NHIt4TXEJEwXUHj26M0p/fXqyrSJdNXFaGVOtqYjPRnNdrjQQhDuuA==}
+    engines: {npm: '>=4.0.0'}
+    dev: false
 
   /immutable/3.7.6:
     resolution: {integrity: sha512-AizQPcaofEtO11RZhPPHBOJRdo/20MKQF9mBLnVkBoyHi1/zXK8fzVdnEpSV9gxqtnh6Qomfp3F0xT5qP/vThw==}

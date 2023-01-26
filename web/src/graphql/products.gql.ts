@@ -28,6 +28,7 @@ gql`
       createdAt
       updatedAt
 
+      providerId
       provider {
         id
         name
@@ -56,6 +57,7 @@ gql`
         createdAt
         updatedAt
 
+        providerId
         provider {
           id
           name
