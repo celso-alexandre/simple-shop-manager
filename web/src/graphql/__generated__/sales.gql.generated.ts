@@ -23,7 +23,7 @@ export type SaleQueryVariables = Types.Exact<{
 }>;
 
 
-export type SaleQuery = { __typename?: 'Query', sale: { __typename?: 'Sale', id: string, date: any, totalValue: number, totalCostValue: number, netMarginValue: number, netMarginPercent: number, createdAt: any, updatedAt: any, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null, saleItems: { __typename?: 'SaleItemsOutput', nodes: Array<{ __typename?: 'SaleItem', id: string, costIsPostPaid: boolean, quantity: number, totalValue: number, totalCostValue: number, netMarginValue: number, netMarginPercent: number, productId: string, providerId?: string | null, product: { __typename?: 'Product', id: string, name: string, brandName?: string | null }, provider?: { __typename?: 'Provider', id: string, name: string, whatsapp?: string | null } | null }> } } };
+export type SaleQuery = { __typename?: 'Query', sale: { __typename?: 'Sale', id: string, date: any, totalValue: number, totalValueDecimal: number, totalCostValue: number, totalCostValueDecimal: number, netMarginValue: number, netMarginPercent: number, createdAt: any, updatedAt: any, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null, saleItems: { __typename?: 'SaleItemsOutput', nodes: Array<{ __typename?: 'SaleItem', id: string, costIsPostPaid: boolean, quantity: number, totalValue: number, totalValueDecimal: number, totalCostValue: number, totalCostValueDecimal: number, netMarginValue: number, netMarginPercent: number, productId: string, providerId?: string | null, product: { __typename?: 'Product', id: string, name: string, brandName?: string | null }, provider?: { __typename?: 'Provider', id: string, name: string, whatsapp?: string | null } | null }> } } };
 
 export type SalesQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.SaleWhereInput>;
@@ -33,7 +33,7 @@ export type SalesQueryVariables = Types.Exact<{
 }>;
 
 
-export type SalesQuery = { __typename?: 'Query', sales: { __typename?: 'SalesOutput', nodes: Array<{ __typename?: 'Sale', id: string, date: any, totalValue: number, totalCostValue: number, netMarginValue: number, netMarginPercent: number, createdAt: any, updatedAt: any, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null }>, pageInfo?: { __typename?: 'SalePaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
+export type SalesQuery = { __typename?: 'Query', sales: { __typename?: 'SalesOutput', nodes: Array<{ __typename?: 'Sale', id: string, date: any, totalValue: number, totalValueDecimal: number, totalCostValue: number, totalCostValueDecimal: number, netMarginValue: number, netMarginPercent: number, createdAt: any, updatedAt: any, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null }>, pageInfo?: { __typename?: 'SalePaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
 
 
 export const CreateSaleDocument = gql`
@@ -109,7 +109,9 @@ export const SaleDocument = gql`
     id
     date
     totalValue
+    totalValueDecimal
     totalCostValue
+    totalCostValueDecimal
     netMarginValue
     netMarginPercent
     createdAt
@@ -125,7 +127,9 @@ export const SaleDocument = gql`
         costIsPostPaid
         quantity
         totalValue
+        totalValueDecimal
         totalCostValue
+        totalCostValueDecimal
         netMarginValue
         netMarginPercent
         productId
@@ -180,7 +184,9 @@ export const SalesDocument = gql`
       id
       date
       totalValue
+      totalValueDecimal
       totalCostValue
+      totalCostValueDecimal
       netMarginValue
       netMarginPercent
       createdAt

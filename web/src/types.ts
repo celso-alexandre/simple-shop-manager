@@ -227,6 +227,7 @@ export type Product = {
   brandName?: Maybe<Scalars['String']>;
   /** Cost value */
   costValue: Scalars['Int'];
+  costValueDecimal: Scalars['Float'];
   createdAt: Scalars['DateTime'];
   /** ID */
   id: Scalars['ID'];
@@ -234,8 +235,11 @@ export type Product = {
   isPostPaid: Scalars['Boolean'];
   /** Name */
   name: Scalars['String'];
+  netMarginPercent: Scalars['Float'];
+  netMarginValue: Scalars['Float'];
   /** Retail price */
   priceValue: Scalars['Int'];
+  priceValueDecimal: Scalars['Float'];
   provider?: Maybe<Provider>;
   /** FK: Provider.id */
   providerId?: Maybe<Scalars['String']>;
@@ -1129,8 +1133,10 @@ export type Sale = {
   saleItems: SaleItemsOutput;
   /** Total Cost */
   totalCostValue: Scalars['Int'];
+  totalCostValueDecimal: Scalars['Float'];
   /** Grand Total */
   totalValue: Scalars['Int'];
+  totalValueDecimal: Scalars['Float'];
   updatedAt: Scalars['DateTime'];
 };
 
@@ -1242,8 +1248,10 @@ export type SaleItem = {
   saleId: Scalars['String'];
   /** Cost value (the same from Product.costValue) */
   totalCostValue: Scalars['Int'];
+  totalCostValueDecimal: Scalars['Float'];
   /** Sold Price (usually the same as Product.priceValue) */
   totalValue: Scalars['Int'];
+  totalValueDecimal: Scalars['Float'];
   updatedAt: Scalars['DateTime'];
 };
 
@@ -2858,11 +2866,15 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
   blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   brandName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   costValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  costValueDecimal?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isPostPaid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  netMarginPercent?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  netMarginValue?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   priceValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  priceValueDecimal?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   provider?: Resolver<Maybe<ResolversTypes['Provider']>, ParentType, ContextType>;
   providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
@@ -3041,7 +3053,9 @@ export type SaleResolvers<ContextType = any, ParentType extends ResolversParentT
   netMarginValue?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   saleItems?: Resolver<ResolversTypes['SaleItemsOutput'], ParentType, ContextType, Partial<SaleSaleItemsArgs>>;
   totalCostValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totalCostValueDecimal?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   totalValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totalValueDecimal?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -3084,7 +3098,9 @@ export type SaleItemResolvers<ContextType = any, ParentType extends ResolversPar
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   saleId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   totalCostValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totalCostValueDecimal?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   totalValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totalValueDecimal?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

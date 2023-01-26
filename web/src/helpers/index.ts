@@ -11,7 +11,6 @@ export function serializeIntAsDecimal<T extends number | undefined>(value: T) {
 
 export function formatMoneyFromDecimal<T extends number | undefined>(value: T) {
   if (!value) return value;
-  console.log('money', { value });
   return Intl.NumberFormat(undefined, {
     style: 'currency',
     currency: 'BRL',
@@ -20,7 +19,8 @@ export function formatMoneyFromDecimal<T extends number | undefined>(value: T) {
 
 export function formatMoneyFromInt<T extends number | undefined>(value: T) {
   if (!value) return value;
-  return formatMoneyFromDecimal(value * 100);
+  const val = value / 100;
+  return formatMoneyFromDecimal(val);
 }
 
 export function formatPercentFromDecimal<T extends number | undefined>(value: T) {

@@ -22,7 +22,9 @@ gql`
       id
       date
       totalValue
+      totalValueDecimal
       totalCostValue
+      totalCostValueDecimal
       netMarginValue
       netMarginPercent
       createdAt
@@ -39,7 +41,9 @@ gql`
           costIsPostPaid
           quantity
           totalValue
+          totalValueDecimal
           totalCostValue
+          totalCostValueDecimal
           netMarginValue
           netMarginPercent
 
@@ -68,7 +72,9 @@ gql`
         id
         date
         totalValue
+        totalValueDecimal
         totalCostValue
+        totalCostValueDecimal
         netMarginValue
         netMarginPercent
         createdAt
