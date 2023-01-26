@@ -9,12 +9,18 @@ export function serializeIntAsDecimal<T extends number | undefined>(value: T) {
   return value / decimalToIntMultiplier;
 }
 
-export function formatMoneyFromInt<T extends number | undefined>(value: T) {
+export function formatMoneyFromDecimal<T extends number | undefined>(value: T) {
   if (!value) return value;
+  console.log('money', { value });
   return Intl.NumberFormat(undefined, {
     style: 'currency',
     currency: 'BRL',
-  }).format(serializeIntAsDecimal(value));
+  }).format(value);
+}
+
+export function formatMoneyFromInt<T extends number | undefined>(value: T) {
+  if (!value) return value;
+  return formatMoneyFromDecimal(value * 100);
 }
 
 export function formatPercentFromDecimal<T extends number | undefined>(value: T) {
@@ -35,4 +41,16 @@ export function objectPropertiesSet<T extends object>(data: T) {
       [key]: { set: typeof val === 'object' && Object.keys(val).length ? { ...val, __typename: undefined } : val },
     };
   }, {} as any);
+}
+
+export function getNetMargin(price: number, cost: number, infinityToDecimal?: number) {
+  const value = price - cost;
+  const decimal = value / price;
+  const infinity = typeof infinityToDecimal === 'number' && !Number.isFinite(decimal);
+
+  return {
+    value,
+    decimal: infinity ? infinityToDecimal : decimal,
+    percent: infinity ? infinityToDecimal : decimal * 100,
+  };
 }

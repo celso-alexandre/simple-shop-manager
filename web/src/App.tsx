@@ -2,6 +2,8 @@ import { Route, Routes } from 'react-router-dom';
 import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import { QueryParamProvider } from 'use-query-params';
+import { ReactRouter6Adapter } from 'use-query-params/adapters/react-router-6';
 import { SideMenu } from './components/side-menu';
 import { NoMatch } from './not-found';
 import { Products } from './products';
@@ -26,22 +28,24 @@ export function App() {
       <SideMenu />
 
       <div style={{ justifyContent: 'flex-end', marginLeft: '30px', width: '100%' }}>
-        <Routes>
-          <Route path="/" element={<Sales />} />
-          <Route path="/sales" element={<Sales />} />
-          <Route path="/sale" element={<SaleInsert />} />
-          <Route path="/sale/:id" element={<SaleEdit />} />
+        <QueryParamProvider adapter={ReactRouter6Adapter}>
+          <Routes>
+            <Route path="/" element={<Sales />} />
+            <Route path="/sales" element={<Sales />} />
+            <Route path="/sale" element={<SaleInsert />} />
+            <Route path="/sale/:id" element={<SaleEdit />} />
 
-          <Route path="/providers" element={<Providers />} />
-          <Route path="/provider" element={<ProviderInsert />} />
-          <Route path="/provider/:id" element={<ProviderEdit />} />
+            <Route path="/providers" element={<Providers />} />
+            <Route path="/provider" element={<ProviderInsert />} />
+            <Route path="/provider/:id" element={<ProviderEdit />} />
 
-          <Route path="/products" element={<Products />} />
-          <Route path="/product" element={<ProductInsert />} />
-          <Route path="/product/:id" element={<ProductEdit />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/product" element={<ProductInsert />} />
+            <Route path="/product/:id" element={<ProductEdit />} />
 
-          <Route path="*" element={<NoMatch />} />
-        </Routes>
+            <Route path="*" element={<NoMatch />} />
+          </Routes>
+        </QueryParamProvider>
       </div>
     </div>
   );
