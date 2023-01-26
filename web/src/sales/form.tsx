@@ -11,6 +11,7 @@ import { InputNumberPercent } from '../components/input-number-percent';
 import { ProductAsyncSelect } from '../components/product-async-select.component';
 import { ProviderAsyncSelect } from '../components/provider-async-select.component';
 import { ProductQuery, useProductLazyQuery } from '../graphql/__generated__/products.gql.generated';
+import { formatMoneyFromDecimal, getNetMargin, serializeIntAsDecimal, serializeDecimalAsInt } from '../helpers';
 
 const defaultInitialValues: SalesFormNode = {
   date: dayjs(),
@@ -59,28 +60,42 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
 
   function setSaleItemProduct(index: number) {
     return setSaleItem(index, (saleItem, product) => {
-      const netMargin = product.priceValue - product.costValue;
-      const netMarginPercent = netMargin / product.priceValue;
-      console.log('provider', product.provider?.id);
+      const { percent } = getNetMargin(product.priceValue * 100, product.costValue * 100, 0);
       return {
         ...saleItem,
         quantity: 1,
         costIsPostPaid: product.isPostPaid,
-        netMarginPercent: netMarginPercent * 100,
+        netMarginPercent: percent,
         providerId: product.provider?.id || null,
-        totalValue: product.priceValue,
-        totalCostValue: product.costValue,
+        totalValue: serializeIntAsDecimal(product.priceValue),
+        totalCostValue: serializeIntAsDecimal(product.costValue),
       };
     });
   }
 
   function setSaleItemQty(index: number, quantity: number) {
     return setSaleItem(index, (saleItem, product) => {
+      const totalValue = serializeIntAsDecimal(product.priceValue * quantity);
+      const totalCostValue = serializeIntAsDecimal(product.costValue * quantity);
+      const { percent } = getNetMargin(totalValue, totalCostValue, 0);
       return {
         ...saleItem,
         quantity,
-        totalValue: product.priceValue * quantity,
-        totalCostValue: product.costValue * quantity,
+        netMarginPercent: percent,
+        totalValue,
+        totalCostValue,
+      };
+    });
+  }
+
+  function setTotalValue(index: number, totalValue: number) {
+    return setSaleItem(index, (saleItem, product) => {
+      const totalCostValue = serializeIntAsDecimal(product.costValue) * saleItem.quantity;
+      const { percent } = getNetMargin(totalValue, totalCostValue, 0);
+      return {
+        ...saleItem,
+        netMarginPercent: percent,
+        totalCostValue,
       };
     });
   }
@@ -148,7 +163,11 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
                     label="Valor"
                     name={[field.name, nameof<SaleItem>(x => x.totalValue)]}
                   >
-                    <InputNumberMoney disabled />
+                    <InputNumberMoney
+                      onChange={async value => {
+                        await setTotalValue(field.name, +(value ?? 0));
+                      }}
+                    />
                   </Form.Item>
                 </Col>
 
@@ -179,6 +198,13 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
                     labelCol={{ span: 24 }}
                     label="M Líquida"
                     name={[field.name, nameof<SaleItem>(x => x.netMarginPercent)]}
+                    tooltip={`Custo: ${formatMoneyFromDecimal(
+                      props.form?.getFieldValue([
+                        ...nameof.split<SalesFormNode>(x => x.saleItems.nodes),
+                        field.name,
+                        nameof<SaleItem>(x => x.totalCostValue),
+                      ])
+                    )}`}
                   >
                     <InputNumberPercent disabled />
                   </Form.Item>

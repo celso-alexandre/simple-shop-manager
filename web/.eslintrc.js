@@ -5,6 +5,7 @@ module.exports = {
   },
   globals: {
     nameof: true,
+    JSX: 'readonly',
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {

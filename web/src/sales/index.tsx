@@ -26,8 +26,6 @@ export function Sales() {
     <>
       <Title title="Vendas" />
 
-      <div style={{ padding: '0px 30px' }}>Filter here</div>
-
       <div style={{ padding: '0px 30px' }}>
         <SalesTable dataSource={data?.sales.nodes} />
       </div>

@@ -1,9 +1,9 @@
-import { Button, Table } from 'antd';
+import { Button, Table, Typography } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { ProductsNode } from '.';
-import { formatMoneyFromInt } from '../helpers';
+import { formatMoneyFromInt, formatPercentFromDecimal } from '../helpers';
 import { BooleanTag } from '../components/tag';
 
 export function ProductsTable(props: TableProps<ProductsNode>) {
@@ -41,17 +41,26 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
       render: value => <BooleanTag bool={value}>{value ? 'Consignado' : 'Normal'}</BooleanTag>,
     },
     {
-      title: 'Custo',
+      title: 'M Líquida',
       dataIndex: nameof<ProductsNode>(x => x.costValue),
-      render: value => formatMoneyFromInt(value),
+      render: (value, record) => formatPercentFromDecimal((record.priceValue - record.costValue) / record.priceValue),
     },
     {
       title: 'Fornecedor',
       dataIndex: nameof<ProductsNode>(x => x.provider),
-      render: (value, record) => record.provider && `${record.provider?.name} ${record.provider?.whatsapp}`,
+      render: (value, record) => {
+        if (!record.provider) return null;
+        return (
+          <Typography.Link
+            href={`/provider/${record.providerId}`}
+          >{`${record.provider?.name} ${record.provider?.whatsapp}`}</Typography.Link>
+        );
+      },
       ellipsis: true,
     },
     {
+      width: 100,
+      align: 'center',
       key: 'actions',
       render: (value, record) => {
         return (

@@ -19,8 +19,6 @@ export function Providers() {
     <>
       <Title title="Fornecedores" />
 
-      <div style={{ padding: '0px 30px' }}>Filter here</div>
-
       <div style={{ padding: '0px 30px' }}>
         <ProvidersTable dataSource={data?.providers.nodes} />
       </div>
