@@ -56,13 +56,29 @@ export class SaleItemResolver {
     return this.service.forProduct(parent);
   }
 
+  private normalizeFloat(value: number) {
+    if (typeof value !== 'number') return 0;
+    if (!Number.isFinite(value)) return 0;
+    return value || 0;
+  }
+
+  @ResolveField(() => Number, { name: 'totalCostValueDecimal' })
+  forTotalCostValueDecimal(@Parent() { totalCostValue }: SaleItem) {
+    return this.normalizeFloat(totalCostValue / 100);
+  }
+
+  @ResolveField(() => Number, { name: 'totalValueDecimal' })
+  forTotalValueDecimal(@Parent() { totalValue }: SaleItem) {
+    return this.normalizeFloat(totalValue / 100);
+  }
+
   @ResolveField(() => Number, { name: 'netMarginValue' })
   forNetMarginValue(@Parent() { totalValue, totalCostValue }: SaleItem) {
-    return totalValue - totalCostValue;
+    return this.normalizeFloat(totalValue - totalCostValue);
   }
 
   @ResolveField(() => Number, { name: 'netMarginPercent' })
   forNetMarginPercent(@Parent() { totalValue, totalCostValue }: SaleItem) {
-    return (totalValue - totalCostValue) / totalValue;
+    return this.normalizeFloat((totalValue - totalCostValue) / totalValue);
   }
 }

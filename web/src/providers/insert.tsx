@@ -2,7 +2,11 @@ import { Button, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { ProvidersFormNode } from '.';
 import { Title } from '../components/title';
-import { useCreateProviderMutation, ProvidersDocument } from '../graphql/__generated__/providers.gql.generated';
+import {
+  useCreateProviderMutation,
+  ProvidersDocument,
+  ProviderDocument,
+} from '../graphql/__generated__/providers.gql.generated';
 import { ProvidersForm } from './form';
 
 async function onSubmit(
@@ -10,6 +14,7 @@ async function onSubmit(
   create: ReturnType<typeof useCreateProviderMutation>[0]
 ) {
   await create({
+    refetchQueries: [ProviderDocument, ProvidersDocument],
     variables: {
       data: {
         ...data,

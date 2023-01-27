@@ -24,7 +24,11 @@ gql`
       brandName
       isPostPaid
       costValue
+      costValueDecimal
       priceValue
+      priceValueDecimal
+      netMarginValue
+      netMarginPercent
       createdAt
       updatedAt
 
@@ -53,7 +57,11 @@ gql`
         brandName
         isPostPaid
         costValue
+        costValueDecimal
         priceValue
+        priceValueDecimal
+        netMarginValue
+        netMarginPercent
         createdAt
         updatedAt
 

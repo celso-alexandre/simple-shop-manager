@@ -2,18 +2,27 @@ import { Button, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { ProductsFormNode } from '.';
 import { Title } from '../components/title';
-import { useCreateProductMutation, ProductsDocument } from '../graphql/__generated__/products.gql.generated';
+import {
+  useCreateProductMutation,
+  ProductsDocument,
+  ProductDocument,
+} from '../graphql/__generated__/products.gql.generated';
 import { serializeDecimalAsInt } from '../helpers';
 import { ProductsForm } from './form';
+import { productDto } from './helpers';
 
-async function onSubmit(data: ProductsFormNode, create: ReturnType<typeof useCreateProductMutation>[0]) {
+async function onSubmit(product: ProductsFormNode, create: ReturnType<typeof useCreateProductMutation>[0]) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { id, providerId, ...data } = productDto(product);
   await create({
+    refetchQueries: [ProductDocument, ProductsDocument],
     variables: {
       data: {
         ...data,
         isPostPaid: data.isPostPaid ?? false,
         costValue: serializeDecimalAsInt(data.costValue),
         priceValue: serializeDecimalAsInt(data.priceValue),
+        provider: { connect: { id: providerId } },
       },
     },
   });

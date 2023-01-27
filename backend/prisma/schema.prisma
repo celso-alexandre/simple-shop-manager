@@ -140,6 +140,7 @@ model SaleItem {
   /// Sold Price (usually the same as Product.priceValue)
   totalValue     Int
   /// Cost value (the same from Product.costValue)
+  /// @HideField({ match: '@(*Update*|*Create*)Input' })
   totalCostValue Int
   /// isPostPaid (usually the same as Product.isPostPaid)
   costIsPostPaid Boolean

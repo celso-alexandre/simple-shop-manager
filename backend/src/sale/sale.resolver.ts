@@ -9,7 +9,7 @@ import {
 import { FindManySaleItemArgs, SaleItemsOutput } from '../sale-item/dto';
 import { User } from '../user/dto';
 import {
-  CreateOneSaleArgs,
+  CreateOneSaleArgsCustom,
   DeleteOneSaleArgs,
   FindManySaleArgs,
   FindUniqueSaleArgs,
@@ -34,7 +34,7 @@ export class SaleResolver {
   }
 
   @Mutation(() => Sale, { name: 'createSale' })
-  createOne(@Args() args: CreateOneSaleArgs) {
+  createOne(@Args() args: CreateOneSaleArgsCustom) {
     return this.service.createOne(args);
   }
 
@@ -58,18 +58,34 @@ export class SaleResolver {
     return this.service.forBlameUser(parent);
   }
 
+  private normalizeFloat(value: number) {
+    if (typeof value !== 'number') return 0;
+    if (!Number.isFinite(value)) return 0;
+    return value || 0;
+  }
+
   @ResolveField(() => SaleItemsOutput, { name: 'saleItems' })
   forSaleItems(@Parent() parent: Sale, @Args() args: FindManySaleItemArgs) {
     return this.service.forSaleItems(parent, args);
   }
 
+  @ResolveField(() => Number, { name: 'totalCostValueDecimal' })
+  forTotalCostValueDecimal(@Parent() { totalCostValue }: Sale) {
+    return this.normalizeFloat(totalCostValue / 100);
+  }
+
+  @ResolveField(() => Number, { name: 'totalValueDecimal' })
+  forTotalValueDecimal(@Parent() { totalValue }: Sale) {
+    return this.normalizeFloat(totalValue / 100);
+  }
+
   @ResolveField(() => Number, { name: 'netMarginValue' })
   forNetMarginValue(@Parent() { totalValue, totalCostValue }: Sale) {
-    return totalValue - totalCostValue;
+    return this.normalizeFloat(totalValue - totalCostValue);
   }
 
   @ResolveField(() => Number, { name: 'netMarginPercent' })
   forNetMarginPercent(@Parent() { totalValue, totalCostValue }: Sale) {
-    return (totalValue - totalCostValue) / totalValue;
+    return this.normalizeFloat((totalValue - totalCostValue) / totalValue);
   }
 }

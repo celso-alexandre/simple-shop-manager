@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
 import { FindManySaleItemArgs, SaleItem } from '../sale-item/dto';
 import type {
-  CreateOneSaleArgs,
+  CreateOneSaleArgsCustom,
   DeleteOneSaleArgs,
   FindManySaleArgs,
   FindUniqueSaleArgs,
@@ -37,12 +37,50 @@ export class SaleService {
     );
   }
 
-  createOne(args: CreateOneSaleArgs) {
-    return this.prisma.sale.create({
-      data: {
-        ...args.data,
-        ...this.generateTotals(args.data.saleItems.createMany.data),
-      },
+  generateSaleItemTotals({
+    totalValue,
+    quantity,
+    product,
+  }: Pick<SaleItem, 'quantity' | 'totalValue' | 'product'>): Pick<
+    SaleItem,
+    'totalCostValue' | 'totalValue'
+  > {
+    return {
+      totalValue,
+      totalCostValue: quantity * product.costValue,
+    };
+  }
+
+  createOne({ data }: CreateOneSaleArgsCustom) {
+    return this.prisma.$transaction(async (prisma) => {
+      const sale = await prisma.sale.create({
+        data: {
+          ...data,
+          totalValue: 0,
+          totalCostValue: 0,
+          saleItems: {
+            create: data.saleItems.create?.map((item) => ({
+              totalCostValue: 0,
+              ...item,
+            })),
+          },
+        },
+        include: { saleItems: { include: { product: true } } },
+      });
+
+      const saleItems = {
+        update: sale.saleItems.map((item) => ({
+          where: { id: item.id },
+          data: this.generateSaleItemTotals(item),
+        })),
+      };
+      return prisma.sale.update({
+        where: { id: sale.id },
+        data: {
+          ...this.generateTotals(saleItems.update.map((item) => item.data)),
+          saleItems,
+        },
+      });
     });
   }
 
@@ -55,11 +93,22 @@ export class SaleService {
     return this.prisma.$transaction(async (prisma) => {
       const sale = await prisma.sale.update({
         ...args,
-        include: { saleItems: true },
+        include: { saleItems: { include: { product: true } } },
       });
+
+      const saleItems = {
+        update: sale.saleItems.map((item) => ({
+          where: { id: item.id },
+          data: this.generateSaleItemTotals(item),
+        })),
+      };
+
       return prisma.sale.update({
-        where: args.where,
-        data: this.generateTotals(sale.saleItems),
+        where: { id: sale.id },
+        data: {
+          ...this.generateTotals(saleItems.update.map((item) => item.data)),
+          saleItems,
+        },
       });
     });
   }

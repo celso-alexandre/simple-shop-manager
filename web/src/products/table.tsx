@@ -1,9 +1,9 @@
-import { Button, Table, Typography } from 'antd';
+import { Button, Table, Tooltip, Typography } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { ProductsNode } from '.';
-import { formatMoneyFromInt, formatPercentFromDecimal } from '../helpers';
+import { formatPercentFromDecimal, formatMoneyFromDecimal, formatMoneyFromInt } from '../helpers';
 import { BooleanTag } from '../components/tag';
 
 export function ProductsTable(props: TableProps<ProductsNode>) {
@@ -32,8 +32,8 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
     },
     {
       title: 'Preço',
-      dataIndex: nameof<ProductsNode>(x => x.priceValue),
-      render: value => formatMoneyFromInt(value),
+      dataIndex: nameof<ProductsNode>(x => x.priceValueDecimal),
+      render: value => formatMoneyFromDecimal(value),
     },
     {
       title: 'Tp Custo',
@@ -42,8 +42,16 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
     },
     {
       title: 'M Líquida',
-      dataIndex: nameof<ProductsNode>(x => x.costValue),
-      render: (value, record) => formatPercentFromDecimal((record.priceValue - record.costValue) / record.priceValue),
+      dataIndex: nameof<ProductsNode>(x => x.priceValueDecimal),
+      render: (value, record) => {
+        const common = (
+          <>
+            {formatPercentFromDecimal(record.netMarginPercent)} ({formatMoneyFromInt(record.netMarginValue)})
+          </>
+        );
+        if (!record.priceValueDecimal) return common;
+        return <Tooltip title={`Custo: ${formatMoneyFromDecimal(record.costValueDecimal)}`}>{common}</Tooltip>;
+      },
     },
     {
       title: 'Fornecedor',

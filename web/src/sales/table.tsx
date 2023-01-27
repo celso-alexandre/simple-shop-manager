@@ -1,9 +1,9 @@
-import { Button, Table } from 'antd';
+import { Button, Table, Tooltip } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
 import { SalesNode } from '.';
-import { formatMoneyFromInt, formatPercentFromDecimal } from '../helpers';
+import { formatMoneyFromDecimal, formatMoneyFromInt, formatPercentFromDecimal } from '../helpers';
 
 export function SalesTable(props: TableProps<SalesNode>) {
   const navigate = useNavigate();
@@ -21,13 +21,21 @@ export function SalesTable(props: TableProps<SalesNode>) {
     },
     {
       title: 'Valor',
-      dataIndex: nameof<SalesNode>(x => x.totalValue),
-      render: value => formatMoneyFromInt(value),
+      dataIndex: nameof<SalesNode>(x => x.totalValueDecimal),
+      render: value => formatMoneyFromDecimal(value),
     },
     {
       title: 'M Líquida',
       dataIndex: nameof<SalesNode>(x => x.netMarginPercent),
-      render: value => formatPercentFromDecimal(value),
+      render: (value, record) => {
+        const common = (
+          <>
+            {formatPercentFromDecimal(record.netMarginPercent)} ({formatMoneyFromInt(record.netMarginValue)})
+          </>
+        );
+        if (!record.totalValueDecimal) return common;
+        return <Tooltip title={`Custo: ${formatMoneyFromDecimal(record.totalCostValueDecimal)}`}>{common}</Tooltip>;
+      },
     },
     {
       key: 'actions',
