@@ -1624,8 +1624,17 @@ export type SaleItemUpdateManyWithoutSaleNestedInput = {
 };
 
 export type SaleItemUpdateManyWithoutSaleNestedInputCustom = {
+  connect?: InputMaybe<Array<SaleItemWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<SaleItemCreateOrConnectWithoutSaleInput>>;
   create?: InputMaybe<Array<SaleItemCreateWithoutSaleInput>>;
+  createMany?: InputMaybe<SaleItemCreateManySaleInputEnvelope>;
+  delete?: InputMaybe<Array<SaleItemWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<SaleItemScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<SaleItemWhereUniqueInput>>;
+  set?: InputMaybe<Array<SaleItemWhereUniqueInput>>;
   update?: InputMaybe<Array<SaleItemUpdateWithWhereUniqueWithoutSaleInput>>;
+  updateMany?: InputMaybe<Array<SaleItemUpdateManyWithWhereWithoutSaleInput>>;
+  upsert?: InputMaybe<Array<SaleItemUpsertWithWhereUniqueWithoutSaleInput>>;
 };
 
 export type SaleItemUpdateWithWhereUniqueWithoutBlameUserInput = {

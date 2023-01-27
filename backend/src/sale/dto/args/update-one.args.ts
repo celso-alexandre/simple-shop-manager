@@ -1,4 +1,4 @@
-import { ArgsType, Field, InputType, PickType } from '@nestjs/graphql';
+import { ArgsType, Field, InputType } from '@nestjs/graphql';
 import {
   UpdateOneSaleArgs as GeneratedUpdateOneSaleArgs,
   SaleUpdateInput as GeneratedSaleUpdateInput,
@@ -6,10 +6,7 @@ import {
 } from '@Prisma/index';
 
 @InputType()
-export class SaleItemUpdateManyWithoutSaleNestedInputCustom extends PickType(
-  GeneratedSaleItemUpdateManyWithoutSaleNestedInput,
-  ['create', 'update'],
-) {}
+export class SaleItemUpdateManyWithoutSaleNestedInputCustom extends GeneratedSaleItemUpdateManyWithoutSaleNestedInput {}
 
 @InputType()
 export class SaleUpdateInputCustom extends GeneratedSaleUpdateInput {

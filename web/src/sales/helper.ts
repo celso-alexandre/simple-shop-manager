@@ -1,5 +1,10 @@
 import { SalesFormNode } from '.';
 
+// eslint-disable-next-line no-use-before-define
+export function filterValidSaleItem(item: ReturnType<typeof saleDto>['saleItems']['nodes'][number]) {
+  return typeof item.costIsPostPaid === 'boolean' && item.productId && item.quantity && item.totalValue;
+}
+
 export function saleDto(sale: SalesFormNode): Omit<SalesFormNode, 'saleItems'> & {
   saleItems: {
     nodes: Omit<SalesFormNode['saleItems']['nodes'][0], 'netMarginPercent' | 'totalCostValue'>[];
@@ -9,7 +14,7 @@ export function saleDto(sale: SalesFormNode): Omit<SalesFormNode, 'saleItems'> &
     id: sale.id,
     date: sale.date,
     saleItems: {
-      nodes: sale.saleItems.nodes.map(item => ({
+      nodes: sale.saleItems.nodes.filter(filterValidSaleItem).map(item => ({
         id: item.id,
         costIsPostPaid: item.costIsPostPaid,
         productId: item.productId,
@@ -19,14 +24,4 @@ export function saleDto(sale: SalesFormNode): Omit<SalesFormNode, 'saleItems'> &
       })),
     },
   };
-}
-
-export function filterValidSaleItem(item: ReturnType<typeof saleDto>['saleItems']['nodes'][number]) {
-  return (
-    typeof item.costIsPostPaid === 'boolean' &&
-    item.productId &&
-    item.providerId &&
-    item.quantity &&
-    typeof item.totalValue === 'number'
-  );
 }

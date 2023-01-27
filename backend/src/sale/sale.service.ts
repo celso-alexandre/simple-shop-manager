@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
 import { FindManySaleItemArgs, SaleItem } from '../sale-item/dto';
 import type {
@@ -51,6 +51,11 @@ export class SaleService {
     };
   }
 
+  validateSale(sale: Sale) {
+    if (!sale?.saleItems?.length)
+      throw new BadRequestException('Sale must contain at least 1 sale item');
+  }
+
   createOne({ data }: CreateOneSaleArgsCustom) {
     return this.prisma.$transaction(async (prisma) => {
       const sale = await prisma.sale.create({
@@ -67,6 +72,7 @@ export class SaleService {
         },
         include: { saleItems: { include: { product: true } } },
       });
+      this.validateSale(sale);
 
       const saleItems = {
         update: sale.saleItems.map((item) => ({
@@ -93,8 +99,26 @@ export class SaleService {
     return this.prisma.$transaction(async (prisma) => {
       const sale = await prisma.sale.update({
         ...args,
+        data: {
+          ...args.data,
+          saleItems: {
+            ...args.data.saleItems,
+            create: args.data.saleItems?.create?.map((item) => ({
+              ...item,
+              totalCostValue: 0,
+            })),
+            update: args.data.saleItems?.update?.map((item) => ({
+              ...item,
+              data: {
+                ...item.data,
+                totalCostValue: 0,
+              },
+            })),
+          },
+        },
         include: { saleItems: { include: { product: true } } },
       });
+      this.validateSale(sale);
 
       const saleItems = {
         update: sale.saleItems.map((item) => ({
