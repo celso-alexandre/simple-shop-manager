@@ -11,16 +11,22 @@ import {
   SalesDocument,
   SaleDocument,
   useSaleQuery,
+  SaleQuery,
 } from '../graphql/__generated__/sales.gql.generated';
 import { objectPropertiesSet, serializeDecimalAsInt, serializeIntAsDecimal } from '../helpers';
 import { SaleItemUpdateWithWhereUniqueWithoutSaleInput } from '../types';
 import { SalesForm } from './form';
 import { saleDto } from './helper';
 
-async function onSubmit(sale: SalesFormNode, update: ReturnType<typeof useUpdateSaleMutation>[0]) {
+async function onSubmit(sale: SalesFormNode, update: ReturnType<typeof useUpdateSaleMutation>[0], data?: SaleQuery) {
   const { id, date, saleItems } = saleDto(sale);
   const createMany = saleItems.nodes.filter(item => !item.id);
   const updateMany = saleItems.nodes.filter(item => item.id);
+  const disconnect =
+    data?.sale?.saleItems?.nodes?.filter(item => {
+      return !updateMany.find(x => x.id === item.id);
+    }) ?? [];
+
   await update({
     refetchQueries: [SaleDocument, SalesDocument],
     variables: {
@@ -28,6 +34,7 @@ async function onSubmit(sale: SalesFormNode, update: ReturnType<typeof useUpdate
       data: {
         date: { set: date },
         saleItems: {
+          deleteMany: !disconnect?.length ? undefined : [{ id: { in: disconnect.map(item => item.id) } }],
           create: !createMany?.length
             ? undefined
             : createMany.map(item => {
@@ -37,7 +44,7 @@ async function onSubmit(sale: SalesFormNode, update: ReturnType<typeof useUpdate
                   ...rest,
                   totalValue: serializeDecimalAsInt(totalValue),
                   product: { connect: { id: productId } },
-                  provider: { connect: { id: providerId } },
+                  provider: !providerId ? undefined : { connect: { id: providerId } },
                 };
               }),
           update: !updateMany?.length
@@ -50,8 +57,8 @@ async function onSubmit(sale: SalesFormNode, update: ReturnType<typeof useUpdate
                   data: {
                     ...objectPropertiesSet(rest),
                     totalValue: { set: serializeDecimalAsInt(totalValue) },
-                    product: !productId ? undefined : { connect: { id: productId } },
-                    provider: !providerId ? undefined : { connect: { id: providerId } },
+                    product: { connect: { id: productId } },
+                    provider: !providerId ? { disconnect: true } : { connect: { id: providerId } },
                   },
                 };
                 return res;
@@ -96,7 +103,7 @@ export function SaleEdit() {
     <>
       <Title title={data?.sale?.id ?? 'Venda não encontrada'} />
 
-      <SalesForm initialValues={initialValues} form={form} onFinish={values => onSubmit(values, update)} />
+      <SalesForm initialValues={initialValues} form={form} onFinish={values => onSubmit(values, update, data)} />
 
       <Row style={{ marginTop: '20px' }}>
         <Button size="large" type="primary" onClick={() => form.submit()}>

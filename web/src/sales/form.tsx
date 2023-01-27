@@ -216,7 +216,7 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
                       <FiPlus />
                     </Button>
                   </div>
-                  {field.name !== 0 && (
+                  {fields.length > 1 && (
                     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                       <Button onClick={() => remove(field.name)}>
                         <BiTrashAlt />

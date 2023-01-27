@@ -5,7 +5,7 @@ import { Title } from '../components/title';
 import { useCreateSaleMutation, SalesDocument, SaleDocument } from '../graphql/__generated__/sales.gql.generated';
 import { serializeDecimalAsInt } from '../helpers';
 import { SalesForm } from './form';
-import { filterValidSaleItem, saleDto } from './helper';
+import { saleDto } from './helper';
 
 async function onSubmit(data: SalesFormNode, create: ReturnType<typeof useCreateSaleMutation>[0]) {
   const { date, saleItems } = saleDto(data);
@@ -15,7 +15,7 @@ async function onSubmit(data: SalesFormNode, create: ReturnType<typeof useCreate
       data: {
         date,
         saleItems: {
-          create: saleItems.nodes.filter(filterValidSaleItem).map(item => {
+          create: saleItems.nodes.map(item => {
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { productId, providerId, totalValue, ...rest } = item;
             return {
