@@ -25,13 +25,7 @@ export class SaleService {
   generateTotals(
     saleItems: Pick<SaleItem, 'totalValue' | 'totalCostValue'>[],
   ): Pick<Sale, 'totalCostValue' | 'totalValue'> {
-    // console.log(
-    //   'stotals',
-    //   saleItems,
-    //   saleItems.map((x) => x?.totalCostValue),
-    //   saleItems.map((x) => x?.totalValue),
-    // );
-    const res = saleItems.reduce(
+    return saleItems.reduce(
       (prev, cur) => {
         prev = {
           totalCostValue: prev.totalCostValue + cur.totalCostValue,
@@ -41,8 +35,6 @@ export class SaleService {
       },
       { totalCostValue: 0, totalValue: 0 },
     );
-    console.log('sTotals', res);
-    return res;
   }
 
   generateSaleItemTotals({
@@ -53,7 +45,6 @@ export class SaleService {
     SaleItem,
     'totalCostValue' | 'totalValue'
   > {
-    // console.log('sitotals', quantity, product?.costValue);
     return {
       totalValue,
       totalCostValue: quantity * product.costValue,
@@ -77,14 +68,12 @@ export class SaleService {
         include: { saleItems: { include: { product: true } } },
       });
 
-      console.log('sale', JSON.stringify(sale, null, 2));
       const saleItems = {
         update: sale.saleItems.map((item) => ({
           where: { id: item.id },
           data: this.generateSaleItemTotals(item),
         })),
       };
-      console.log('saleItems', JSON.stringify(saleItems, null, 2));
       return prisma.sale.update({
         where: { id: sale.id },
         data: {
