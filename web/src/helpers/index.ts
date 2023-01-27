@@ -19,7 +19,7 @@ export function formatMoneyFromDecimal<T extends number | undefined>(value: T) {
 
 export function formatMoneyFromInt<T extends number | undefined>(value: T) {
   if (!value) return value;
-  const val = value / 100;
+  const val = value / decimalToIntMultiplier;
   return formatMoneyFromDecimal(val);
 }
 
@@ -51,6 +51,6 @@ export function getNetMargin(price: number, cost: number, infinityToDecimal?: nu
   return {
     value,
     decimal: infinity ? infinityToDecimal : decimal,
-    percent: infinity ? infinityToDecimal : decimal * 100,
+    percent: infinity ? infinityToDecimal : decimal * decimalToIntMultiplier,
   };
 }

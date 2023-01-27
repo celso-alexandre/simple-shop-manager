@@ -12,11 +12,10 @@ import {
 } from '../graphql/__generated__/products.gql.generated';
 import { objectPropertiesSet, serializeDecimalAsInt, serializeIntAsDecimal } from '../helpers';
 import { ProductsForm } from './form';
+import { productDto } from './helpers';
 
-async function onSubmit(
-  { id, providerId, ...data }: ProductsFormNode,
-  update: ReturnType<typeof useUpdateProductMutation>[0]
-) {
+async function onSubmit(product: ProductsFormNode, update: ReturnType<typeof useUpdateProductMutation>[0]) {
+  const { id, providerId, ...data } = productDto(product);
   await update({
     refetchQueries: [ProductDocument, ProductsDocument],
     variables: {

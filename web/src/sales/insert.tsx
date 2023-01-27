@@ -3,24 +3,28 @@ import { useForm } from 'antd/es/form/Form';
 import { SalesFormNode } from '.';
 import { Title } from '../components/title';
 import { useCreateSaleMutation, SalesDocument, SaleDocument } from '../graphql/__generated__/sales.gql.generated';
+import { serializeDecimalAsInt } from '../helpers';
 import { SalesForm } from './form';
-import { filterValidSaleItem } from './helper';
+import { filterValidSaleItem, saleDto } from './helper';
 
 async function onSubmit(data: SalesFormNode, create: ReturnType<typeof useCreateSaleMutation>[0]) {
-  const { date, saleItems } = data;
+  const { date, saleItems } = saleDto(data);
   await create({
     refetchQueries: [SaleDocument, SalesDocument],
     variables: {
       data: {
         date,
         saleItems: {
-          createMany: {
-            data: saleItems.nodes.filter(filterValidSaleItem).map(item => {
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              const { id, netMarginPercent, ...rest } = item;
-              return rest;
-            }),
-          },
+          create: saleItems.nodes.filter(filterValidSaleItem).map(item => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { productId, providerId, totalValue, ...rest } = item;
+            return {
+              ...rest,
+              totalValue: serializeDecimalAsInt(totalValue),
+              product: { connect: { id: productId } },
+              provider: { connect: { id: providerId } },
+            };
+          }),
         },
       },
     },

@@ -4,14 +4,14 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
 export type CreateSaleMutationVariables = Types.Exact<{
-  data: Types.SaleCreateInput;
+  data: Types.SaleCreateInputCustom;
 }>;
 
 
 export type CreateSaleMutation = { __typename?: 'Mutation', createSale: { __typename?: 'Sale', id: string } };
 
 export type UpdateSaleMutationVariables = Types.Exact<{
-  data: Types.SaleUpdateInput;
+  data: Types.SaleUpdateInputCustom;
   where: Types.SaleWhereUniqueInput;
 }>;
 
@@ -37,7 +37,7 @@ export type SalesQuery = { __typename?: 'Query', sales: { __typename?: 'SalesOut
 
 
 export const CreateSaleDocument = gql`
-    mutation CreateSale($data: SaleCreateInput!) {
+    mutation CreateSale($data: SaleCreateInputCustom!) {
   createSale(data: $data) {
     id
   }
@@ -70,7 +70,7 @@ export type CreateSaleMutationHookResult = ReturnType<typeof useCreateSaleMutati
 export type CreateSaleMutationResult = Apollo.MutationResult<CreateSaleMutation>;
 export type CreateSaleMutationOptions = Apollo.BaseMutationOptions<CreateSaleMutation, CreateSaleMutationVariables>;
 export const UpdateSaleDocument = gql`
-    mutation UpdateSale($data: SaleUpdateInput!, $where: SaleWhereUniqueInput!) {
+    mutation UpdateSale($data: SaleUpdateInputCustom!, $where: SaleWhereUniqueInput!) {
   updateSale(data: $data, where: $where) {
     id
   }

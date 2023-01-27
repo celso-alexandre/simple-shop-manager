@@ -11,7 +11,7 @@ import { InputNumberPercent } from '../components/input-number-percent';
 import { ProductAsyncSelect } from '../components/product-async-select.component';
 import { ProviderAsyncSelect } from '../components/provider-async-select.component';
 import { ProductQuery, useProductLazyQuery } from '../graphql/__generated__/products.gql.generated';
-import { formatMoneyFromDecimal, getNetMargin, serializeIntAsDecimal, serializeDecimalAsInt } from '../helpers';
+import { formatMoneyFromDecimal, getNetMargin, serializeIntAsDecimal } from '../helpers';
 
 const defaultInitialValues: SalesFormNode = {
   date: dayjs(),

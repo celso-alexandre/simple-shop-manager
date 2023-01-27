@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 gql`
-  mutation CreateSale($data: SaleCreateInput!) {
+  mutation CreateSale($data: SaleCreateInputCustom!) {
     createSale(data: $data) {
       id
     }
@@ -9,7 +9,7 @@ gql`
 `;
 
 gql`
-  mutation UpdateSale($data: SaleUpdateInput!, $where: SaleWhereUniqueInput!) {
+  mutation UpdateSale($data: SaleUpdateInputCustom!, $where: SaleWhereUniqueInput!) {
     updateSale(data: $data, where: $where) {
       id
     }

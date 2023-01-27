@@ -12,11 +12,13 @@ import {
   SaleDocument,
   useSaleQuery,
 } from '../graphql/__generated__/sales.gql.generated';
-import { objectPropertiesSet } from '../helpers';
+import { objectPropertiesSet, serializeDecimalAsInt, serializeIntAsDecimal } from '../helpers';
 import { SaleItemUpdateWithWhereUniqueWithoutSaleInput } from '../types';
 import { SalesForm } from './form';
+import { saleDto } from './helper';
 
-async function onSubmit({ id, date, saleItems }: SalesFormNode, update: ReturnType<typeof useUpdateSaleMutation>[0]) {
+async function onSubmit(sale: SalesFormNode, update: ReturnType<typeof useUpdateSaleMutation>[0]) {
+  const { id, date, saleItems } = saleDto(sale);
   const createMany = saleItems.nodes.filter(item => !item.id);
   const updateMany = saleItems.nodes.filter(item => item.id);
   await update({
@@ -26,25 +28,34 @@ async function onSubmit({ id, date, saleItems }: SalesFormNode, update: ReturnTy
       data: {
         date: { set: date },
         saleItems: {
-          createMany: !createMany.length
+          create: !createMany?.length
             ? undefined
-            : {
-                data: createMany,
-              },
-          update: updateMany.map(item => {
-            const { id: itemId, productId, providerId, ...rest } = item;
-            const res: SaleItemUpdateWithWhereUniqueWithoutSaleInput = {
-              where: { id: itemId },
-              data: {
-                ...objectPropertiesSet(
-                  _.pick(rest, ['costIsPostPaid', 'quantity', 'totalCostValue', 'totalValue'] as (keyof typeof rest)[])
-                ),
-                product: !productId ? undefined : { connect: { id: productId } },
-                provider: !providerId ? undefined : { connect: { id: providerId } },
-              },
-            };
-            return res;
-          }),
+            : createMany.map(item => {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const { id: saleItemId, productId, providerId, totalValue, ...rest } = item;
+                return {
+                  ...rest,
+                  totalValue: serializeDecimalAsInt(totalValue),
+                  product: { connect: { id: productId } },
+                  provider: { connect: { id: providerId } },
+                };
+              }),
+          update: !updateMany?.length
+            ? undefined
+            : updateMany.map(item => {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const { id: saleItemId, productId, providerId, totalValue, ...rest } = item;
+                const res: SaleItemUpdateWithWhereUniqueWithoutSaleInput = {
+                  where: { id: saleItemId },
+                  data: {
+                    ...objectPropertiesSet(rest),
+                    totalValue: { set: serializeDecimalAsInt(totalValue) },
+                    product: !productId ? undefined : { connect: { id: productId } },
+                    provider: !providerId ? undefined : { connect: { id: providerId } },
+                  },
+                };
+                return res;
+              }),
         },
       },
     },
@@ -63,13 +74,21 @@ export function SaleEdit() {
     },
   });
 
-  const initialValues = useMemo(
-    () => ({
-      ...data?.sale,
-      date: !data?.sale?.date ? undefined : dayjs(data?.sale?.date),
-    }),
-    [data]
-  );
+  const initialValues = useMemo<SalesFormNode | undefined>(() => {
+    if (!data?.sale) return undefined;
+    const { sale } = data;
+    return {
+      ...sale,
+      date: dayjs(sale.date),
+      saleItems: {
+        nodes: sale.saleItems.nodes.map(item => ({
+          ...item,
+          totalValue: item.totalValueDecimal,
+          netMarginPercent: serializeIntAsDecimal(item.netMarginPercent),
+        })),
+      },
+    };
+  }, [data]);
 
   if (loading) return <Skeleton />;
 

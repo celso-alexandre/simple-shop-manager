@@ -54,6 +54,26 @@ export class ProductResolver {
     return this.service.deleteOne(args);
   }
 
+  @ResolveField(() => Number, { name: 'netMarginValue' })
+  forNetMarginValue(@Parent() { priceValue, costValue }: Product) {
+    return priceValue - costValue;
+  }
+
+  @ResolveField(() => Number, { name: 'netMarginPercent' })
+  forNetMarginPercent(@Parent() { priceValue, costValue }: Product) {
+    return (priceValue - costValue) / priceValue;
+  }
+
+  @ResolveField(() => Number, { name: 'costValueDecimal' })
+  forCostValueDecimal(@Parent() { costValue }: Product) {
+    return costValue / 100;
+  }
+
+  @ResolveField(() => Number, { name: 'priceValueDecimal' })
+  forPriceValueDecimal(@Parent() { priceValue }: Product) {
+    return priceValue / 100;
+  }
+
   @ResolveField(() => User, { name: 'blameUser', nullable: true })
   forBlameUser(@Parent() parent: Product) {
     return this.service.forBlameUser(parent);
