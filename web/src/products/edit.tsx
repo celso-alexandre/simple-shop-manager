@@ -27,7 +27,7 @@ async function onSubmit(product: ProductsFormNode, update: ReturnType<typeof use
           costValue: serializeDecimalAsInt(data.costValue),
           priceValue: serializeDecimalAsInt(data.priceValue),
         }),
-        provider: { connect: { id: providerId } },
+        provider: !providerId ? { disconnect: true } : { connect: { id: providerId } },
       },
     },
   });
