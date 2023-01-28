@@ -166,5 +166,5 @@ model SaleItem {
   /// @HideField({ output: true })
   product   Product   @relation(fields: [productId], references: [id])
 
-  @@unique([saleId, productId, costIsPostPaid])
+  @@unique([costIsPostPaid, productId, saleId])
 }

@@ -7,6 +7,7 @@ import { notification } from 'antd';
 import { AiFillWarning, AiOutlineClose } from 'react-icons/ai';
 import { createUseStyles } from 'react-jss';
 import { App } from './App';
+import { MainExceptionKeys } from './types';
 
 const useStyles = createUseStyles({
   errorToast: {
@@ -34,6 +35,16 @@ const useStyles = createUseStyles({
   },
 });
 
+const errors: { [key in MainExceptionKeys]: string } = {
+  Provider_UQ_document_conflict: 'Fornecedor já cadastrado (documento já utilizado)',
+  Provider_UQ_email_conflict: 'Fornecedor já cadastrado (e-mail já utilizado)',
+  Provider_UQ_name_conflict: 'Fornecedor já cadastrado (nome já utilizado)',
+
+  User_UQ_email_conflict: 'Usuário já cadastrado (e-mail já utilizado)',
+
+  SaleItem_UQ_costIsPostPaid_productId_saleId: 'Há produtos repetidos na venda',
+  Sale_SaleItem_zero_length_badRequest: 'Não é permitido gravar uma venda sem itens',
+};
 function Main() {
   const { errorToast } = useStyles();
 
@@ -56,31 +67,33 @@ function Main() {
       const [_domain, errorKey, _params] = (e.message || '').split('|');
       const httpStatus = parseInt((e as any).extensions?.response?.statusCode, 10) || undefined;
 
-      // let parsedParams = {};
-      // try {
-      //   parsedParams = JSON.parse(params || '{}');
-      // } catch (err) {
-      //   console.error('error parsing api error params', (err as any)?.stack);
-      // }
+      let parsedParams = {};
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        parsedParams = JSON.parse(_params || '{}');
+      } catch (err) {
+        console.error('error parsing api error params', (err as any)?.stack);
+      }
 
       if (!errorKey && httpStatus === 404) return; // history.push('/404');
 
-      // if (errorKey && [400, 409, 404].includes(httpStatus)) {
-      //   notification.error({
-      //     message: t(`error.${errorKey}` as any, { ...parsedParams, ns: domain }),
-      //     duration: 10,
-      //     description: mode === 'development' ? errorKey : '',
-      //     key: 'graphql_error_key',
-      //     icon: <AiFillWarning color="#f2f2f2" />,
-      //     className: errorToast,
-      //     closeIcon: <AiOutlineClose color="#da6969" style={{ width: '100%', height: '100%', margin: 0, padding: 0 }} />,
-      //     ...(mode === 'development' && { onClose: () => navigator.clipboard.writeText(errorKey) }),
-      //   });
-      //   return;
-      // }
+      if (errorKey && [400, 409, 404].includes(httpStatus ?? 500)) {
+        const message = errors[errorKey as keyof typeof errors];
+        notification.error({
+          message,
+          duration: 10,
+          key: 'graphql_error_key',
+          icon: <AiFillWarning color="#f2f2f2" />,
+          className: errorToast,
+          closeIcon: (
+            <AiOutlineClose color="#da6969" style={{ width: '100%', height: '100%', margin: 0, padding: 0 }} />
+          ),
+          onClose: () => navigator.clipboard.writeText(errorKey),
+        });
+        return;
+      }
 
       notification.error({
-        // message: t('home.error'),
         message: 'Server Error',
         duration: 10,
         key: 'graphql_error_key',

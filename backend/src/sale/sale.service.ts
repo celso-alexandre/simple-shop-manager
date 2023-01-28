@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { buildNestException } from '../common/build-nest-exception';
 import { PrismaService } from '../common/prisma.service';
 import { FindManySaleItemArgs, SaleItem } from '../sale-item/dto';
 import type {
@@ -53,7 +54,10 @@ export class SaleService {
 
   validateSale(sale: Sale) {
     if (!sale?.saleItems?.length)
-      throw new BadRequestException('Sale must contain at least 1 sale item');
+      throw buildNestException(
+        'Sale_SaleItem_zero_length_badRequest',
+        BadRequestException,
+      );
   }
 
   createOne({ data }: CreateOneSaleArgsCustom) {
@@ -89,11 +93,6 @@ export class SaleService {
       });
     });
   }
-
-  // async createMany(args: CreateManySaleArgs) {
-  //   await this.prisma.sale.createMany(args);
-  //   return true;
-  // }
 
   updateOne(args: UpdateOneSaleArgs) {
     return this.prisma.$transaction(async (prisma) => {

@@ -58,6 +58,15 @@ export type IntFilter = {
   notIn?: InputMaybe<Array<Scalars['Int']>>;
 };
 
+export enum MainExceptionKeys {
+  ProviderUqDocumentConflict = 'Provider_UQ_document_conflict',
+  ProviderUqEmailConflict = 'Provider_UQ_email_conflict',
+  ProviderUqNameConflict = 'Provider_UQ_name_conflict',
+  SaleItemUqCostIsPostPaidProductIdSaleId = 'SaleItem_UQ_costIsPostPaid_productId_saleId',
+  SaleSaleItemZeroLengthBadRequest = 'Sale_SaleItem_zero_length_badRequest',
+  UserUqEmailConflict = 'User_UQ_email_conflict'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   createProduct: Product;
@@ -229,6 +238,7 @@ export type Product = {
   costValue: Scalars['Int'];
   costValueDecimal: Scalars['Float'];
   createdAt: Scalars['DateTime'];
+  errors?: Maybe<MainExceptionKeys>;
   /** ID */
   id: Scalars['ID'];
   /** Cost is post paid? (consigned) */
@@ -1262,6 +1272,12 @@ export type SaleItemAvgAggregate = {
   totalValue?: Maybe<Scalars['Float']>;
 };
 
+export type SaleItemCostIsPostPaidProductIdSaleIdCompoundUniqueInput = {
+  costIsPostPaid: Scalars['Boolean'];
+  productId: Scalars['String'];
+  saleId: Scalars['String'];
+};
+
 export type SaleItemCountAggregate = {
   __typename?: 'SaleItemCountAggregate';
   _all: Scalars['Int'];
@@ -1495,12 +1511,6 @@ export type SaleItemPaginated = {
   nextCursor?: Maybe<Scalars['Int']>;
   /** Count for query results without skip, take and cursor */
   total?: Maybe<Scalars['Int']>;
-};
-
-export type SaleItemSaleIdProductIdCostIsPostPaidCompoundUniqueInput = {
-  costIsPostPaid: Scalars['Boolean'];
-  productId: Scalars['String'];
-  saleId: Scalars['String'];
 };
 
 export enum SaleItemScalarFieldEnum {
@@ -1739,8 +1749,8 @@ export type SaleItemWhereInput = {
 };
 
 export type SaleItemWhereUniqueInput = {
+  costIsPostPaid_productId_saleId?: InputMaybe<SaleItemCostIsPostPaidProductIdSaleIdCompoundUniqueInput>;
   id?: InputMaybe<Scalars['String']>;
-  saleId_productId_costIsPostPaid?: InputMaybe<SaleItemSaleIdProductIdCostIsPostPaidCompoundUniqueInput>;
 };
 
 export type SaleItemsOutput = {
@@ -2365,6 +2375,7 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>;
   IntFieldUpdateOperationsInput: IntFieldUpdateOperationsInput;
   IntFilter: IntFilter;
+  MainExceptionKeys: MainExceptionKeys;
   Mutation: ResolverTypeWrapper<{}>;
   NestedBoolFilter: NestedBoolFilter;
   NestedDateTimeFilter: NestedDateTimeFilter;
@@ -2477,6 +2488,7 @@ export type ResolversTypes = {
   SaleCreateWithoutSaleItemsInput: SaleCreateWithoutSaleItemsInput;
   SaleItem: ResolverTypeWrapper<SaleItem>;
   SaleItemAvgAggregate: ResolverTypeWrapper<SaleItemAvgAggregate>;
+  SaleItemCostIsPostPaidProductIdSaleIdCompoundUniqueInput: SaleItemCostIsPostPaidProductIdSaleIdCompoundUniqueInput;
   SaleItemCountAggregate: ResolverTypeWrapper<SaleItemCountAggregate>;
   SaleItemCreateManyBlameUserInput: SaleItemCreateManyBlameUserInput;
   SaleItemCreateManyBlameUserInputEnvelope: SaleItemCreateManyBlameUserInputEnvelope;
@@ -2505,7 +2517,6 @@ export type ResolversTypes = {
   SaleItemOrderByRelationAggregateInput: SaleItemOrderByRelationAggregateInput;
   SaleItemOrderByWithRelationInput: SaleItemOrderByWithRelationInput;
   SaleItemPaginated: ResolverTypeWrapper<SaleItemPaginated>;
-  SaleItemSaleIdProductIdCostIsPostPaidCompoundUniqueInput: SaleItemSaleIdProductIdCostIsPostPaidCompoundUniqueInput;
   SaleItemScalarFieldEnum: SaleItemScalarFieldEnum;
   SaleItemScalarWhereInput: SaleItemScalarWhereInput;
   SaleItemSumAggregate: ResolverTypeWrapper<SaleItemSumAggregate>;
@@ -2725,6 +2736,7 @@ export type ResolversParentTypes = {
   SaleCreateWithoutSaleItemsInput: SaleCreateWithoutSaleItemsInput;
   SaleItem: SaleItem;
   SaleItemAvgAggregate: SaleItemAvgAggregate;
+  SaleItemCostIsPostPaidProductIdSaleIdCompoundUniqueInput: SaleItemCostIsPostPaidProductIdSaleIdCompoundUniqueInput;
   SaleItemCountAggregate: SaleItemCountAggregate;
   SaleItemCreateManyBlameUserInput: SaleItemCreateManyBlameUserInput;
   SaleItemCreateManyBlameUserInputEnvelope: SaleItemCreateManyBlameUserInputEnvelope;
@@ -2753,7 +2765,6 @@ export type ResolversParentTypes = {
   SaleItemOrderByRelationAggregateInput: SaleItemOrderByRelationAggregateInput;
   SaleItemOrderByWithRelationInput: SaleItemOrderByWithRelationInput;
   SaleItemPaginated: SaleItemPaginated;
-  SaleItemSaleIdProductIdCostIsPostPaidCompoundUniqueInput: SaleItemSaleIdProductIdCostIsPostPaidCompoundUniqueInput;
   SaleItemScalarWhereInput: SaleItemScalarWhereInput;
   SaleItemSumAggregate: SaleItemSumAggregate;
   SaleItemUpdateManyMutationInput: SaleItemUpdateManyMutationInput;
@@ -2877,6 +2888,7 @@ export type ProductResolvers<ContextType = any, ParentType extends ResolversPare
   costValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   costValueDecimal?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  errors?: Resolver<Maybe<ResolversTypes['MainExceptionKeys']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   isPostPaid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
