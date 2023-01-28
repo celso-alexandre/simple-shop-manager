@@ -1,4 +1,4 @@
-import { Col, Skeleton } from 'antd';
+import { Col } from 'antd';
 import { QueryParamConfig, StringParam } from 'use-query-params';
 import { Filter } from '../components/filter';
 import { Title } from '../components/title';
@@ -13,21 +13,24 @@ export type ProductsFormNode = Pick<
   'id' | 'name' | 'brandName' | 'priceValue' | 'isPostPaid' | 'costValue' | 'providerId'
 >;
 export type ProductsQueryParams = {
-  // take: QueryParamConfig<number>;
-  // skip: QueryParamConfig<number>;
   search: QueryParamConfig<string | null | undefined>;
 };
 export function Products() {
   const [query, , queryObj, setQueryDebounced] = useQueryParamsWithDebounce<ProductsQueryParams>({
-    // take: withDefault(NumberParam, 10),
-    // skip: withDefault(NumberParam, 0),
     search: StringParam,
   });
+  const { search } = query;
   const { data, loading, refetch } = useProductsQuery({
     variables: {
       orderBy: { id: SortOrder.Desc },
       where: {
-        name: { contains: query.search, mode: QueryMode.Insensitive },
+        OR: !search
+          ? undefined
+          : [
+              { name: { contains: search, mode: QueryMode.Insensitive } },
+              { brandName: { contains: search, mode: QueryMode.Insensitive } },
+              { provider: { is: { name: { contains: search, mode: QueryMode.Insensitive } } } },
+            ],
       },
     },
   });
@@ -41,7 +44,7 @@ export function Products() {
 
         <Col span={24} style={{ height: 20 }} />
 
-        {loading ? <Skeleton /> : <ProductsTable dataSource={data?.products.nodes} />}
+        <ProductsTable loading={loading} dataSource={data?.products.nodes} />
       </div>
     </>
   );
