@@ -44,6 +44,7 @@ const errors: { [key in MainExceptionKeys]: string } = {
 
   SaleItem_UQ_costIsPostPaid_productId_saleId: 'Há produtos repetidos na venda',
   Sale_SaleItem_zero_length_badRequest: 'Não é permitido gravar uma venda sem itens',
+  SalePaidCost_zero_paidValue_badRequest: 'Não há nenhum valor a ser pago para a seleção',
 };
 function Main() {
   const { errorToast } = useStyles();

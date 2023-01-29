@@ -100,6 +100,7 @@ gql`
       nodes {
         value: id
         label: name
+        label2: brandName
       }
       pageInfo {
         currentPage

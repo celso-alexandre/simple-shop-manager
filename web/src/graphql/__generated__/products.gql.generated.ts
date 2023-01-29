@@ -43,7 +43,7 @@ export type ProductsSelectQueryVariables = Types.Exact<{
 }>;
 
 
-export type ProductsSelectQuery = { __typename?: 'Query', products: { __typename?: 'ProductsOutput', nodes: Array<{ __typename?: 'Product', value: string, label: string }>, pageInfo?: { __typename?: 'ProductPaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
+export type ProductsSelectQuery = { __typename?: 'Query', products: { __typename?: 'ProductsOutput', nodes: Array<{ __typename?: 'Product', value: string, label: string, label2?: string | null }>, pageInfo?: { __typename?: 'ProductPaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
 
 
 export const CreateProductDocument = gql`
@@ -247,6 +247,7 @@ export const ProductsSelectDocument = gql`
     nodes {
       value: id
       label: name
+      label2: brandName
     }
     pageInfo {
       currentPage

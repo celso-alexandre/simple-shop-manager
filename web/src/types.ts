@@ -63,27 +63,37 @@ export enum MainExceptionKeys {
   ProviderUqEmailConflict = 'Provider_UQ_email_conflict',
   ProviderUqNameConflict = 'Provider_UQ_name_conflict',
   SaleItemUqCostIsPostPaidProductIdSaleId = 'SaleItem_UQ_costIsPostPaid_productId_saleId',
+  SalePaidCostZeroPaidValueBadRequest = 'SalePaidCost_zero_paidValue_badRequest',
   SaleSaleItemZeroLengthBadRequest = 'Sale_SaleItem_zero_length_badRequest',
   UserUqEmailConflict = 'User_UQ_email_conflict'
 }
 
 export type Mutation = {
   __typename?: 'Mutation';
+  confirmSalePaidCost: SalePaidCost;
   createProduct: Product;
   createProducts: Scalars['Boolean'];
   createProvider: Provider;
   createProviders: Scalars['Boolean'];
   createSale: Sale;
+  createSalePaidCost: SalePaidCost;
   createUser: User;
   createUsers: Scalars['Boolean'];
   deleteProduct: Product;
   deleteProvider: Provider;
   deleteSale: Sale;
+  deleteSalePaidCost: SalePaidCost;
   deleteUser: User;
   updateProduct: Product;
   updateProvider: Provider;
   updateSale: Sale;
   updateUser: User;
+};
+
+
+export type MutationConfirmSalePaidCostArgs = {
+  data: SalePaidCostUpdateInput;
+  where: SalePaidCostWhereUniqueInput;
 };
 
 
@@ -112,6 +122,11 @@ export type MutationCreateSaleArgs = {
 };
 
 
+export type MutationCreateSalePaidCostArgs = {
+  data: SalePaidCostCreateInput;
+};
+
+
 export type MutationCreateUserArgs = {
   data: UserCreateInput;
 };
@@ -134,6 +149,11 @@ export type MutationDeleteProviderArgs = {
 
 export type MutationDeleteSaleArgs = {
   where: SaleWhereUniqueInput;
+};
+
+
+export type MutationDeleteSalePaidCostArgs = {
+  where: SalePaidCostWhereUniqueInput;
 };
 
 
@@ -1042,6 +1062,7 @@ export type Query = {
   sale: Sale;
   saleItem: SaleItem;
   saleItems: SaleItemsOutput;
+  salePaidCost: SalePaidCostOutput;
   sales: SalesOutput;
   user: User;
   users: UsersOutput;
@@ -1095,6 +1116,16 @@ export type QuerySaleItemsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
   where?: InputMaybe<SaleItemWhereInput>;
+};
+
+
+export type QuerySalePaidCostArgs = {
+  cursor?: InputMaybe<SalePaidCostWhereUniqueInput>;
+  distinct?: InputMaybe<Array<SalePaidCostScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<SalePaidCostOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']>;
+  take?: InputMaybe<Scalars['Int']>;
+  where?: InputMaybe<SalePaidCostWhereInput>;
 };
 
 
@@ -1254,8 +1285,14 @@ export type SaleItem = {
   providerId?: Maybe<Scalars['String']>;
   /** Quantity */
   quantity: Scalars['Int'];
+  /** Related salePaidCostId payment were made */
+  saleCostIsPaid: Scalars['Boolean'];
+  /** Related salePaidCostId payment marked this one to be paid */
+  saleCostIsSelected: Scalars['Boolean'];
   /** FK: Sale.id */
   saleId: Scalars['String'];
+  /** FK: SalePaidCost.id */
+  salePaidCostId?: Maybe<Scalars['String']>;
   /** Cost value (the same from Product.costValue) */
   totalCostValue: Scalars['Int'];
   totalCostValueDecimal: Scalars['Float'];
@@ -1288,7 +1325,10 @@ export type SaleItemCountAggregate = {
   productId: Scalars['Int'];
   providerId: Scalars['Int'];
   quantity: Scalars['Int'];
+  saleCostIsPaid: Scalars['Int'];
+  saleCostIsSelected: Scalars['Int'];
   saleId: Scalars['Int'];
+  salePaidCostId: Scalars['Int'];
   totalCostValue: Scalars['Int'];
   totalValue: Scalars['Int'];
   updatedAt: Scalars['Int'];
@@ -1300,7 +1340,10 @@ export type SaleItemCreateManyBlameUserInput = {
   productId: Scalars['String'];
   providerId?: InputMaybe<Scalars['String']>;
   quantity: Scalars['Int'];
+  saleCostIsPaid?: InputMaybe<Scalars['Boolean']>;
+  saleCostIsSelected?: InputMaybe<Scalars['Boolean']>;
   saleId: Scalars['String'];
+  salePaidCostId?: InputMaybe<Scalars['String']>;
   totalValue: Scalars['Int'];
 };
 
@@ -1314,7 +1357,10 @@ export type SaleItemCreateManyProductInput = {
   id?: InputMaybe<Scalars['String']>;
   providerId?: InputMaybe<Scalars['String']>;
   quantity: Scalars['Int'];
+  saleCostIsPaid?: InputMaybe<Scalars['Boolean']>;
+  saleCostIsSelected?: InputMaybe<Scalars['Boolean']>;
   saleId: Scalars['String'];
+  salePaidCostId?: InputMaybe<Scalars['String']>;
   totalValue: Scalars['Int'];
 };
 
@@ -1328,7 +1374,10 @@ export type SaleItemCreateManyProviderInput = {
   id?: InputMaybe<Scalars['String']>;
   productId: Scalars['String'];
   quantity: Scalars['Int'];
+  saleCostIsPaid?: InputMaybe<Scalars['Boolean']>;
+  saleCostIsSelected?: InputMaybe<Scalars['Boolean']>;
   saleId: Scalars['String'];
+  salePaidCostId?: InputMaybe<Scalars['String']>;
   totalValue: Scalars['Int'];
 };
 
@@ -1343,11 +1392,31 @@ export type SaleItemCreateManySaleInput = {
   productId: Scalars['String'];
   providerId?: InputMaybe<Scalars['String']>;
   quantity: Scalars['Int'];
+  saleCostIsPaid?: InputMaybe<Scalars['Boolean']>;
+  saleCostIsSelected?: InputMaybe<Scalars['Boolean']>;
+  salePaidCostId?: InputMaybe<Scalars['String']>;
   totalValue: Scalars['Int'];
 };
 
 export type SaleItemCreateManySaleInputEnvelope = {
   data: Array<SaleItemCreateManySaleInput>;
+};
+
+export type SaleItemCreateManySalePaidCostInput = {
+  blameUserId?: InputMaybe<Scalars['String']>;
+  costIsPostPaid: Scalars['Boolean'];
+  id?: InputMaybe<Scalars['String']>;
+  productId: Scalars['String'];
+  providerId?: InputMaybe<Scalars['String']>;
+  quantity: Scalars['Int'];
+  saleCostIsPaid?: InputMaybe<Scalars['Boolean']>;
+  saleCostIsSelected?: InputMaybe<Scalars['Boolean']>;
+  saleId: Scalars['String'];
+  totalValue: Scalars['Int'];
+};
+
+export type SaleItemCreateManySalePaidCostInputEnvelope = {
+  data: Array<SaleItemCreateManySalePaidCostInput>;
 };
 
 export type SaleItemCreateNestedManyWithoutBlameUserInput = {
@@ -1382,6 +1451,13 @@ export type SaleItemCreateNestedManyWithoutSaleInputCustom = {
   create?: InputMaybe<Array<SaleItemCreateWithoutSaleInput>>;
 };
 
+export type SaleItemCreateNestedManyWithoutSalePaidCostInput = {
+  connect?: InputMaybe<Array<SaleItemWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<SaleItemCreateOrConnectWithoutSalePaidCostInput>>;
+  create?: InputMaybe<Array<SaleItemCreateWithoutSalePaidCostInput>>;
+  createMany?: InputMaybe<SaleItemCreateManySalePaidCostInputEnvelope>;
+};
+
 export type SaleItemCreateOrConnectWithoutBlameUserInput = {
   create: SaleItemCreateWithoutBlameUserInput;
   where: SaleItemWhereUniqueInput;
@@ -1402,6 +1478,11 @@ export type SaleItemCreateOrConnectWithoutSaleInput = {
   where: SaleItemWhereUniqueInput;
 };
 
+export type SaleItemCreateOrConnectWithoutSalePaidCostInput = {
+  create: SaleItemCreateWithoutSalePaidCostInput;
+  where: SaleItemWhereUniqueInput;
+};
+
 export type SaleItemCreateWithoutBlameUserInput = {
   costIsPostPaid: Scalars['Boolean'];
   id?: InputMaybe<Scalars['String']>;
@@ -1409,6 +1490,9 @@ export type SaleItemCreateWithoutBlameUserInput = {
   provider?: InputMaybe<ProviderCreateNestedOneWithoutSaleItemsInput>;
   quantity: Scalars['Int'];
   sale?: InputMaybe<SaleCreateNestedOneWithoutSaleItemsInput>;
+  saleCostIsPaid?: InputMaybe<Scalars['Boolean']>;
+  saleCostIsSelected?: InputMaybe<Scalars['Boolean']>;
+  salePaidCost?: InputMaybe<SalePaidCostCreateNestedOneWithoutSaleItemInput>;
   totalValue: Scalars['Int'];
 };
 
@@ -1419,6 +1503,9 @@ export type SaleItemCreateWithoutProductInput = {
   provider?: InputMaybe<ProviderCreateNestedOneWithoutSaleItemsInput>;
   quantity: Scalars['Int'];
   sale?: InputMaybe<SaleCreateNestedOneWithoutSaleItemsInput>;
+  saleCostIsPaid?: InputMaybe<Scalars['Boolean']>;
+  saleCostIsSelected?: InputMaybe<Scalars['Boolean']>;
+  salePaidCost?: InputMaybe<SalePaidCostCreateNestedOneWithoutSaleItemInput>;
   totalValue: Scalars['Int'];
 };
 
@@ -1429,6 +1516,9 @@ export type SaleItemCreateWithoutProviderInput = {
   product: ProductCreateNestedOneWithoutSaleItemsInput;
   quantity: Scalars['Int'];
   sale?: InputMaybe<SaleCreateNestedOneWithoutSaleItemsInput>;
+  saleCostIsPaid?: InputMaybe<Scalars['Boolean']>;
+  saleCostIsSelected?: InputMaybe<Scalars['Boolean']>;
+  salePaidCost?: InputMaybe<SalePaidCostCreateNestedOneWithoutSaleItemInput>;
   totalValue: Scalars['Int'];
 };
 
@@ -1439,6 +1529,22 @@ export type SaleItemCreateWithoutSaleInput = {
   product: ProductCreateNestedOneWithoutSaleItemsInput;
   provider?: InputMaybe<ProviderCreateNestedOneWithoutSaleItemsInput>;
   quantity: Scalars['Int'];
+  saleCostIsPaid?: InputMaybe<Scalars['Boolean']>;
+  saleCostIsSelected?: InputMaybe<Scalars['Boolean']>;
+  salePaidCost?: InputMaybe<SalePaidCostCreateNestedOneWithoutSaleItemInput>;
+  totalValue: Scalars['Int'];
+};
+
+export type SaleItemCreateWithoutSalePaidCostInput = {
+  blameUser?: InputMaybe<UserCreateNestedOneWithoutSaleItemsInput>;
+  costIsPostPaid: Scalars['Boolean'];
+  id?: InputMaybe<Scalars['String']>;
+  product: ProductCreateNestedOneWithoutSaleItemsInput;
+  provider?: InputMaybe<ProviderCreateNestedOneWithoutSaleItemsInput>;
+  quantity: Scalars['Int'];
+  sale?: InputMaybe<SaleCreateNestedOneWithoutSaleItemsInput>;
+  saleCostIsPaid?: InputMaybe<Scalars['Boolean']>;
+  saleCostIsSelected?: InputMaybe<Scalars['Boolean']>;
   totalValue: Scalars['Int'];
 };
 
@@ -1457,7 +1563,10 @@ export type SaleItemMaxAggregate = {
   productId?: Maybe<Scalars['String']>;
   providerId?: Maybe<Scalars['String']>;
   quantity?: Maybe<Scalars['Int']>;
+  saleCostIsPaid?: Maybe<Scalars['Boolean']>;
+  saleCostIsSelected?: Maybe<Scalars['Boolean']>;
   saleId?: Maybe<Scalars['String']>;
+  salePaidCostId?: Maybe<Scalars['String']>;
   totalCostValue?: Maybe<Scalars['Int']>;
   totalValue?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -1472,7 +1581,10 @@ export type SaleItemMinAggregate = {
   productId?: Maybe<Scalars['String']>;
   providerId?: Maybe<Scalars['String']>;
   quantity?: Maybe<Scalars['Int']>;
+  saleCostIsPaid?: Maybe<Scalars['Boolean']>;
+  saleCostIsSelected?: Maybe<Scalars['Boolean']>;
   saleId?: Maybe<Scalars['String']>;
+  salePaidCostId?: Maybe<Scalars['String']>;
   totalCostValue?: Maybe<Scalars['Int']>;
   totalValue?: Maybe<Scalars['Int']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
@@ -1494,7 +1606,11 @@ export type SaleItemOrderByWithRelationInput = {
   providerId?: InputMaybe<SortOrder>;
   quantity?: InputMaybe<SortOrder>;
   sale?: InputMaybe<SaleOrderByWithRelationInput>;
+  saleCostIsPaid?: InputMaybe<SortOrder>;
+  saleCostIsSelected?: InputMaybe<SortOrder>;
   saleId?: InputMaybe<SortOrder>;
+  salePaidCost?: InputMaybe<SalePaidCostOrderByWithRelationInput>;
+  salePaidCostId?: InputMaybe<SortOrder>;
   totalCostValue?: InputMaybe<SortOrder>;
   totalValue?: InputMaybe<SortOrder>;
   updatedAt?: InputMaybe<SortOrder>;
@@ -1521,7 +1637,10 @@ export enum SaleItemScalarFieldEnum {
   ProductId = 'productId',
   ProviderId = 'providerId',
   Quantity = 'quantity',
+  SaleCostIsPaid = 'saleCostIsPaid',
+  SaleCostIsSelected = 'saleCostIsSelected',
   SaleId = 'saleId',
+  SalePaidCostId = 'salePaidCostId',
   TotalCostValue = 'totalCostValue',
   TotalValue = 'totalValue',
   UpdatedAt = 'updatedAt'
@@ -1538,7 +1657,10 @@ export type SaleItemScalarWhereInput = {
   productId?: InputMaybe<StringFilter>;
   providerId?: InputMaybe<StringNullableFilter>;
   quantity?: InputMaybe<IntFilter>;
+  saleCostIsPaid?: InputMaybe<BoolFilter>;
+  saleCostIsSelected?: InputMaybe<BoolFilter>;
   saleId?: InputMaybe<StringFilter>;
+  salePaidCostId?: InputMaybe<StringNullableFilter>;
   totalCostValue?: InputMaybe<IntFilter>;
   totalValue?: InputMaybe<IntFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -1554,6 +1676,8 @@ export type SaleItemSumAggregate = {
 export type SaleItemUpdateManyMutationInput = {
   costIsPostPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
   quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
+  saleCostIsPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  saleCostIsSelected?: InputMaybe<BoolFieldUpdateOperationsInput>;
   totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
 };
 
@@ -1573,6 +1697,11 @@ export type SaleItemUpdateManyWithWhereWithoutProviderInput = {
 };
 
 export type SaleItemUpdateManyWithWhereWithoutSaleInput = {
+  data: SaleItemUpdateManyMutationInput;
+  where: SaleItemScalarWhereInput;
+};
+
+export type SaleItemUpdateManyWithWhereWithoutSalePaidCostInput = {
   data: SaleItemUpdateManyMutationInput;
   where: SaleItemScalarWhereInput;
 };
@@ -1647,6 +1776,20 @@ export type SaleItemUpdateManyWithoutSaleNestedInputCustom = {
   upsert?: InputMaybe<Array<SaleItemUpsertWithWhereUniqueWithoutSaleInput>>;
 };
 
+export type SaleItemUpdateManyWithoutSalePaidCostNestedInput = {
+  connect?: InputMaybe<Array<SaleItemWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<SaleItemCreateOrConnectWithoutSalePaidCostInput>>;
+  create?: InputMaybe<Array<SaleItemCreateWithoutSalePaidCostInput>>;
+  createMany?: InputMaybe<SaleItemCreateManySalePaidCostInputEnvelope>;
+  delete?: InputMaybe<Array<SaleItemWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<SaleItemScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<SaleItemWhereUniqueInput>>;
+  set?: InputMaybe<Array<SaleItemWhereUniqueInput>>;
+  update?: InputMaybe<Array<SaleItemUpdateWithWhereUniqueWithoutSalePaidCostInput>>;
+  updateMany?: InputMaybe<Array<SaleItemUpdateManyWithWhereWithoutSalePaidCostInput>>;
+  upsert?: InputMaybe<Array<SaleItemUpsertWithWhereUniqueWithoutSalePaidCostInput>>;
+};
+
 export type SaleItemUpdateWithWhereUniqueWithoutBlameUserInput = {
   data: SaleItemUpdateWithoutBlameUserInput;
   where: SaleItemWhereUniqueInput;
@@ -1667,12 +1810,20 @@ export type SaleItemUpdateWithWhereUniqueWithoutSaleInput = {
   where: SaleItemWhereUniqueInput;
 };
 
+export type SaleItemUpdateWithWhereUniqueWithoutSalePaidCostInput = {
+  data: SaleItemUpdateWithoutSalePaidCostInput;
+  where: SaleItemWhereUniqueInput;
+};
+
 export type SaleItemUpdateWithoutBlameUserInput = {
   costIsPostPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
   product?: InputMaybe<ProductUpdateOneRequiredWithoutSaleItemsNestedInput>;
   provider?: InputMaybe<ProviderUpdateOneWithoutSaleItemsNestedInput>;
   quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
   sale?: InputMaybe<SaleUpdateOneWithoutSaleItemsNestedInput>;
+  saleCostIsPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  saleCostIsSelected?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  salePaidCost?: InputMaybe<SalePaidCostUpdateOneWithoutSaleItemNestedInput>;
   totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
 };
 
@@ -1682,6 +1833,9 @@ export type SaleItemUpdateWithoutProductInput = {
   provider?: InputMaybe<ProviderUpdateOneWithoutSaleItemsNestedInput>;
   quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
   sale?: InputMaybe<SaleUpdateOneWithoutSaleItemsNestedInput>;
+  saleCostIsPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  saleCostIsSelected?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  salePaidCost?: InputMaybe<SalePaidCostUpdateOneWithoutSaleItemNestedInput>;
   totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
 };
 
@@ -1691,6 +1845,9 @@ export type SaleItemUpdateWithoutProviderInput = {
   product?: InputMaybe<ProductUpdateOneRequiredWithoutSaleItemsNestedInput>;
   quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
   sale?: InputMaybe<SaleUpdateOneWithoutSaleItemsNestedInput>;
+  saleCostIsPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  saleCostIsSelected?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  salePaidCost?: InputMaybe<SalePaidCostUpdateOneWithoutSaleItemNestedInput>;
   totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
 };
 
@@ -1700,6 +1857,21 @@ export type SaleItemUpdateWithoutSaleInput = {
   product?: InputMaybe<ProductUpdateOneRequiredWithoutSaleItemsNestedInput>;
   provider?: InputMaybe<ProviderUpdateOneWithoutSaleItemsNestedInput>;
   quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
+  saleCostIsPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  saleCostIsSelected?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  salePaidCost?: InputMaybe<SalePaidCostUpdateOneWithoutSaleItemNestedInput>;
+  totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
+};
+
+export type SaleItemUpdateWithoutSalePaidCostInput = {
+  blameUser?: InputMaybe<UserUpdateOneWithoutSaleItemsNestedInput>;
+  costIsPostPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  product?: InputMaybe<ProductUpdateOneRequiredWithoutSaleItemsNestedInput>;
+  provider?: InputMaybe<ProviderUpdateOneWithoutSaleItemsNestedInput>;
+  quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
+  sale?: InputMaybe<SaleUpdateOneWithoutSaleItemsNestedInput>;
+  saleCostIsPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  saleCostIsSelected?: InputMaybe<BoolFieldUpdateOperationsInput>;
   totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
 };
 
@@ -1727,6 +1899,12 @@ export type SaleItemUpsertWithWhereUniqueWithoutSaleInput = {
   where: SaleItemWhereUniqueInput;
 };
 
+export type SaleItemUpsertWithWhereUniqueWithoutSalePaidCostInput = {
+  create: SaleItemCreateWithoutSalePaidCostInput;
+  update: SaleItemUpdateWithoutSalePaidCostInput;
+  where: SaleItemWhereUniqueInput;
+};
+
 export type SaleItemWhereInput = {
   AND?: InputMaybe<Array<SaleItemWhereInput>>;
   NOT?: InputMaybe<Array<SaleItemWhereInput>>;
@@ -1742,7 +1920,11 @@ export type SaleItemWhereInput = {
   providerId?: InputMaybe<StringNullableFilter>;
   quantity?: InputMaybe<IntFilter>;
   sale?: InputMaybe<SaleRelationFilter>;
+  saleCostIsPaid?: InputMaybe<BoolFilter>;
+  saleCostIsSelected?: InputMaybe<BoolFilter>;
   saleId?: InputMaybe<StringFilter>;
+  salePaidCost?: InputMaybe<SalePaidCostRelationFilter>;
+  salePaidCostId?: InputMaybe<StringNullableFilter>;
   totalCostValue?: InputMaybe<IntFilter>;
   totalValue?: InputMaybe<IntFilter>;
   updatedAt?: InputMaybe<DateTimeFilter>;
@@ -1816,6 +1998,296 @@ export type SalePaginated = {
   nextCursor?: Maybe<Scalars['Int']>;
   /** Count for query results without skip, take and cursor */
   total?: Maybe<Scalars['Int']>;
+};
+
+export type SalePaidCost = {
+  __typename?: 'SalePaidCost';
+  _count: SalePaidCostCount;
+  /** FK: User.id - User to blame for */
+  blameUserId?: Maybe<Scalars['String']>;
+  createdAt: Scalars['DateTime'];
+  /** Sales from that date and backward */
+  endDate: Scalars['DateTime'];
+  /** ID */
+  id: Scalars['ID'];
+  /** Paid Value */
+  paidValue: Scalars['Int'];
+  updatedAt: Scalars['DateTime'];
+  /** Value */
+  value: Scalars['Int'];
+};
+
+export type SalePaidCostAvgAggregate = {
+  __typename?: 'SalePaidCostAvgAggregate';
+  paidValue?: Maybe<Scalars['Float']>;
+  value?: Maybe<Scalars['Float']>;
+};
+
+export type SalePaidCostCount = {
+  __typename?: 'SalePaidCostCount';
+  SaleItem: Scalars['Int'];
+};
+
+export type SalePaidCostCountAggregate = {
+  __typename?: 'SalePaidCostCountAggregate';
+  _all: Scalars['Int'];
+  blameUserId: Scalars['Int'];
+  createdAt: Scalars['Int'];
+  endDate: Scalars['Int'];
+  id: Scalars['Int'];
+  paidValue: Scalars['Int'];
+  updatedAt: Scalars['Int'];
+  value: Scalars['Int'];
+};
+
+export type SalePaidCostCreateInput = {
+  SaleItem?: InputMaybe<SaleItemCreateNestedManyWithoutSalePaidCostInput>;
+  blameUser?: InputMaybe<UserCreateNestedOneWithoutSalePaidCostInput>;
+  endDate: Scalars['DateTime'];
+  id?: InputMaybe<Scalars['String']>;
+  paidValue: Scalars['Int'];
+  value: Scalars['Int'];
+};
+
+export type SalePaidCostCreateManyBlameUserInput = {
+  endDate: Scalars['DateTime'];
+  id?: InputMaybe<Scalars['String']>;
+  paidValue: Scalars['Int'];
+  value: Scalars['Int'];
+};
+
+export type SalePaidCostCreateManyBlameUserInputEnvelope = {
+  data: Array<SalePaidCostCreateManyBlameUserInput>;
+};
+
+export type SalePaidCostCreateNestedManyWithoutBlameUserInput = {
+  connect?: InputMaybe<Array<SalePaidCostWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<SalePaidCostCreateOrConnectWithoutBlameUserInput>>;
+  create?: InputMaybe<Array<SalePaidCostCreateWithoutBlameUserInput>>;
+  createMany?: InputMaybe<SalePaidCostCreateManyBlameUserInputEnvelope>;
+};
+
+export type SalePaidCostCreateNestedOneWithoutSaleItemInput = {
+  connect?: InputMaybe<SalePaidCostWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<SalePaidCostCreateOrConnectWithoutSaleItemInput>;
+  create?: InputMaybe<SalePaidCostCreateWithoutSaleItemInput>;
+};
+
+export type SalePaidCostCreateOrConnectWithoutBlameUserInput = {
+  create: SalePaidCostCreateWithoutBlameUserInput;
+  where: SalePaidCostWhereUniqueInput;
+};
+
+export type SalePaidCostCreateOrConnectWithoutSaleItemInput = {
+  create: SalePaidCostCreateWithoutSaleItemInput;
+  where: SalePaidCostWhereUniqueInput;
+};
+
+export type SalePaidCostCreateWithoutBlameUserInput = {
+  SaleItem?: InputMaybe<SaleItemCreateNestedManyWithoutSalePaidCostInput>;
+  endDate: Scalars['DateTime'];
+  id?: InputMaybe<Scalars['String']>;
+  paidValue: Scalars['Int'];
+  value: Scalars['Int'];
+};
+
+export type SalePaidCostCreateWithoutSaleItemInput = {
+  blameUser?: InputMaybe<UserCreateNestedOneWithoutSalePaidCostInput>;
+  endDate: Scalars['DateTime'];
+  id?: InputMaybe<Scalars['String']>;
+  paidValue: Scalars['Int'];
+  value: Scalars['Int'];
+};
+
+export type SalePaidCostListRelationFilter = {
+  every?: InputMaybe<SalePaidCostWhereInput>;
+  none?: InputMaybe<SalePaidCostWhereInput>;
+  some?: InputMaybe<SalePaidCostWhereInput>;
+};
+
+export type SalePaidCostMaxAggregate = {
+  __typename?: 'SalePaidCostMaxAggregate';
+  blameUserId?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  endDate?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['String']>;
+  paidValue?: Maybe<Scalars['Int']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  value?: Maybe<Scalars['Int']>;
+};
+
+export type SalePaidCostMinAggregate = {
+  __typename?: 'SalePaidCostMinAggregate';
+  blameUserId?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  endDate?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['String']>;
+  paidValue?: Maybe<Scalars['Int']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  value?: Maybe<Scalars['Int']>;
+};
+
+export type SalePaidCostOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type SalePaidCostOrderByWithRelationInput = {
+  SaleItem?: InputMaybe<SaleItemOrderByRelationAggregateInput>;
+  blameUser?: InputMaybe<UserOrderByWithRelationInput>;
+  blameUserId?: InputMaybe<SortOrder>;
+  createdAt?: InputMaybe<SortOrder>;
+  endDate?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  paidValue?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+  value?: InputMaybe<SortOrder>;
+};
+
+export type SalePaidCostOutput = {
+  __typename?: 'SalePaidCostOutput';
+  /** Grouped ObjectType for findManyrequests */
+  nodes: Array<SalePaidCost>;
+  /** Pagination info for findMany requests */
+  pageInfo?: Maybe<SalePaidCostPaginated>;
+};
+
+export type SalePaidCostPaginated = {
+  __typename?: 'SalePaidCostPaginated';
+  /** Number of current page */
+  currentPage?: Maybe<Scalars['Int']>;
+  /** Boolean to use on a cursor-based pagination. E.g: Mobile scroll */
+  hasNextPage?: Maybe<Scalars['Boolean']>;
+  /** Number of last page */
+  lastPage?: Maybe<Scalars['Int']>;
+  nextCursor?: Maybe<Scalars['Int']>;
+  /** Count for query results without skip, take and cursor */
+  total?: Maybe<Scalars['Int']>;
+};
+
+export type SalePaidCostRelationFilter = {
+  is?: InputMaybe<SalePaidCostWhereInput>;
+  isNot?: InputMaybe<SalePaidCostWhereInput>;
+};
+
+export enum SalePaidCostScalarFieldEnum {
+  BlameUserId = 'blameUserId',
+  CreatedAt = 'createdAt',
+  EndDate = 'endDate',
+  Id = 'id',
+  PaidValue = 'paidValue',
+  UpdatedAt = 'updatedAt',
+  Value = 'value'
+}
+
+export type SalePaidCostScalarWhereInput = {
+  AND?: InputMaybe<Array<SalePaidCostScalarWhereInput>>;
+  NOT?: InputMaybe<Array<SalePaidCostScalarWhereInput>>;
+  OR?: InputMaybe<Array<SalePaidCostScalarWhereInput>>;
+  blameUserId?: InputMaybe<StringNullableFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  endDate?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  paidValue?: InputMaybe<IntFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+  value?: InputMaybe<IntFilter>;
+};
+
+export type SalePaidCostSumAggregate = {
+  __typename?: 'SalePaidCostSumAggregate';
+  paidValue?: Maybe<Scalars['Int']>;
+  value?: Maybe<Scalars['Int']>;
+};
+
+export type SalePaidCostUpdateInput = {
+  SaleItem?: InputMaybe<SaleItemUpdateManyWithoutSalePaidCostNestedInput>;
+  blameUser?: InputMaybe<UserUpdateOneWithoutSalePaidCostNestedInput>;
+  endDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  paidValue?: InputMaybe<IntFieldUpdateOperationsInput>;
+  value?: InputMaybe<IntFieldUpdateOperationsInput>;
+};
+
+export type SalePaidCostUpdateManyMutationInput = {
+  endDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  paidValue?: InputMaybe<IntFieldUpdateOperationsInput>;
+  value?: InputMaybe<IntFieldUpdateOperationsInput>;
+};
+
+export type SalePaidCostUpdateManyWithWhereWithoutBlameUserInput = {
+  data: SalePaidCostUpdateManyMutationInput;
+  where: SalePaidCostScalarWhereInput;
+};
+
+export type SalePaidCostUpdateManyWithoutBlameUserNestedInput = {
+  connect?: InputMaybe<Array<SalePaidCostWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<SalePaidCostCreateOrConnectWithoutBlameUserInput>>;
+  create?: InputMaybe<Array<SalePaidCostCreateWithoutBlameUserInput>>;
+  createMany?: InputMaybe<SalePaidCostCreateManyBlameUserInputEnvelope>;
+  delete?: InputMaybe<Array<SalePaidCostWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<SalePaidCostScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<SalePaidCostWhereUniqueInput>>;
+  set?: InputMaybe<Array<SalePaidCostWhereUniqueInput>>;
+  update?: InputMaybe<Array<SalePaidCostUpdateWithWhereUniqueWithoutBlameUserInput>>;
+  updateMany?: InputMaybe<Array<SalePaidCostUpdateManyWithWhereWithoutBlameUserInput>>;
+  upsert?: InputMaybe<Array<SalePaidCostUpsertWithWhereUniqueWithoutBlameUserInput>>;
+};
+
+export type SalePaidCostUpdateOneWithoutSaleItemNestedInput = {
+  connect?: InputMaybe<SalePaidCostWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<SalePaidCostCreateOrConnectWithoutSaleItemInput>;
+  create?: InputMaybe<SalePaidCostCreateWithoutSaleItemInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<SalePaidCostUpdateWithoutSaleItemInput>;
+  upsert?: InputMaybe<SalePaidCostUpsertWithoutSaleItemInput>;
+};
+
+export type SalePaidCostUpdateWithWhereUniqueWithoutBlameUserInput = {
+  data: SalePaidCostUpdateWithoutBlameUserInput;
+  where: SalePaidCostWhereUniqueInput;
+};
+
+export type SalePaidCostUpdateWithoutBlameUserInput = {
+  SaleItem?: InputMaybe<SaleItemUpdateManyWithoutSalePaidCostNestedInput>;
+  endDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  paidValue?: InputMaybe<IntFieldUpdateOperationsInput>;
+  value?: InputMaybe<IntFieldUpdateOperationsInput>;
+};
+
+export type SalePaidCostUpdateWithoutSaleItemInput = {
+  blameUser?: InputMaybe<UserUpdateOneWithoutSalePaidCostNestedInput>;
+  endDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  paidValue?: InputMaybe<IntFieldUpdateOperationsInput>;
+  value?: InputMaybe<IntFieldUpdateOperationsInput>;
+};
+
+export type SalePaidCostUpsertWithWhereUniqueWithoutBlameUserInput = {
+  create: SalePaidCostCreateWithoutBlameUserInput;
+  update: SalePaidCostUpdateWithoutBlameUserInput;
+  where: SalePaidCostWhereUniqueInput;
+};
+
+export type SalePaidCostUpsertWithoutSaleItemInput = {
+  create: SalePaidCostCreateWithoutSaleItemInput;
+  update: SalePaidCostUpdateWithoutSaleItemInput;
+};
+
+export type SalePaidCostWhereInput = {
+  AND?: InputMaybe<Array<SalePaidCostWhereInput>>;
+  NOT?: InputMaybe<Array<SalePaidCostWhereInput>>;
+  OR?: InputMaybe<Array<SalePaidCostWhereInput>>;
+  SaleItem?: InputMaybe<SaleItemListRelationFilter>;
+  blameUser?: InputMaybe<UserRelationFilter>;
+  blameUserId?: InputMaybe<StringNullableFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  endDate?: InputMaybe<DateTimeFilter>;
+  id?: InputMaybe<StringFilter>;
+  paidValue?: InputMaybe<IntFilter>;
+  updatedAt?: InputMaybe<DateTimeFilter>;
+  value?: InputMaybe<IntFilter>;
+};
+
+export type SalePaidCostWhereUniqueInput = {
+  id?: InputMaybe<Scalars['String']>;
 };
 
 export type SaleRelationFilter = {
@@ -1998,6 +2470,7 @@ export type User = {
 
 export type UserCount = {
   __typename?: 'UserCount';
+  SalePaidCost: Scalars['Int'];
   products: Scalars['Int'];
   providers: Scalars['Int'];
   saleItems: Scalars['Int'];
@@ -2015,6 +2488,7 @@ export type UserCountAggregate = {
 };
 
 export type UserCreateInput = {
+  SalePaidCost?: InputMaybe<SalePaidCostCreateNestedManyWithoutBlameUserInput>;
   email: Scalars['String'];
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
@@ -2048,6 +2522,12 @@ export type UserCreateNestedOneWithoutSaleItemsInput = {
   create?: InputMaybe<UserCreateWithoutSaleItemsInput>;
 };
 
+export type UserCreateNestedOneWithoutSalePaidCostInput = {
+  connect?: InputMaybe<UserWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutSalePaidCostInput>;
+  create?: InputMaybe<UserCreateWithoutSalePaidCostInput>;
+};
+
 export type UserCreateNestedOneWithoutSalesInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
   connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutSalesInput>;
@@ -2069,12 +2549,18 @@ export type UserCreateOrConnectWithoutSaleItemsInput = {
   where: UserWhereUniqueInput;
 };
 
+export type UserCreateOrConnectWithoutSalePaidCostInput = {
+  create: UserCreateWithoutSalePaidCostInput;
+  where: UserWhereUniqueInput;
+};
+
 export type UserCreateOrConnectWithoutSalesInput = {
   create: UserCreateWithoutSalesInput;
   where: UserWhereUniqueInput;
 };
 
 export type UserCreateWithoutProductsInput = {
+  SalePaidCost?: InputMaybe<SalePaidCostCreateNestedManyWithoutBlameUserInput>;
   email: Scalars['String'];
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
@@ -2084,6 +2570,7 @@ export type UserCreateWithoutProductsInput = {
 };
 
 export type UserCreateWithoutProvidersInput = {
+  SalePaidCost?: InputMaybe<SalePaidCostCreateNestedManyWithoutBlameUserInput>;
   email: Scalars['String'];
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
@@ -2093,6 +2580,7 @@ export type UserCreateWithoutProvidersInput = {
 };
 
 export type UserCreateWithoutSaleItemsInput = {
+  SalePaidCost?: InputMaybe<SalePaidCostCreateNestedManyWithoutBlameUserInput>;
   email: Scalars['String'];
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
@@ -2101,7 +2589,18 @@ export type UserCreateWithoutSaleItemsInput = {
   sales?: InputMaybe<SaleCreateNestedManyWithoutBlameUserInput>;
 };
 
+export type UserCreateWithoutSalePaidCostInput = {
+  email: Scalars['String'];
+  id?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  products?: InputMaybe<ProductCreateNestedManyWithoutBlameUserInput>;
+  providers?: InputMaybe<ProviderCreateNestedManyWithoutBlameUserInput>;
+  saleItems?: InputMaybe<SaleItemCreateNestedManyWithoutBlameUserInput>;
+  sales?: InputMaybe<SaleCreateNestedManyWithoutBlameUserInput>;
+};
+
 export type UserCreateWithoutSalesInput = {
+  SalePaidCost?: InputMaybe<SalePaidCostCreateNestedManyWithoutBlameUserInput>;
   email: Scalars['String'];
   id?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
@@ -2129,6 +2628,7 @@ export type UserMinAggregate = {
 };
 
 export type UserOrderByWithRelationInput = {
+  SalePaidCost?: InputMaybe<SalePaidCostOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   email?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
@@ -2167,6 +2667,7 @@ export enum UserScalarFieldEnum {
 }
 
 export type UserUpdateInput = {
+  SalePaidCost?: InputMaybe<SalePaidCostUpdateManyWithoutBlameUserNestedInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   products?: InputMaybe<ProductUpdateManyWithoutBlameUserNestedInput>;
@@ -2205,6 +2706,16 @@ export type UserUpdateOneWithoutSaleItemsNestedInput = {
   upsert?: InputMaybe<UserUpsertWithoutSaleItemsInput>;
 };
 
+export type UserUpdateOneWithoutSalePaidCostNestedInput = {
+  connect?: InputMaybe<UserWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutSalePaidCostInput>;
+  create?: InputMaybe<UserCreateWithoutSalePaidCostInput>;
+  delete?: InputMaybe<Scalars['Boolean']>;
+  disconnect?: InputMaybe<Scalars['Boolean']>;
+  update?: InputMaybe<UserUpdateWithoutSalePaidCostInput>;
+  upsert?: InputMaybe<UserUpsertWithoutSalePaidCostInput>;
+};
+
 export type UserUpdateOneWithoutSalesNestedInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
   connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutSalesInput>;
@@ -2216,6 +2727,7 @@ export type UserUpdateOneWithoutSalesNestedInput = {
 };
 
 export type UserUpdateWithoutProductsInput = {
+  SalePaidCost?: InputMaybe<SalePaidCostUpdateManyWithoutBlameUserNestedInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   providers?: InputMaybe<ProviderUpdateManyWithoutBlameUserNestedInput>;
@@ -2224,6 +2736,7 @@ export type UserUpdateWithoutProductsInput = {
 };
 
 export type UserUpdateWithoutProvidersInput = {
+  SalePaidCost?: InputMaybe<SalePaidCostUpdateManyWithoutBlameUserNestedInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   products?: InputMaybe<ProductUpdateManyWithoutBlameUserNestedInput>;
@@ -2232,6 +2745,7 @@ export type UserUpdateWithoutProvidersInput = {
 };
 
 export type UserUpdateWithoutSaleItemsInput = {
+  SalePaidCost?: InputMaybe<SalePaidCostUpdateManyWithoutBlameUserNestedInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   products?: InputMaybe<ProductUpdateManyWithoutBlameUserNestedInput>;
@@ -2239,7 +2753,17 @@ export type UserUpdateWithoutSaleItemsInput = {
   sales?: InputMaybe<SaleUpdateManyWithoutBlameUserNestedInput>;
 };
 
+export type UserUpdateWithoutSalePaidCostInput = {
+  email?: InputMaybe<StringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  products?: InputMaybe<ProductUpdateManyWithoutBlameUserNestedInput>;
+  providers?: InputMaybe<ProviderUpdateManyWithoutBlameUserNestedInput>;
+  saleItems?: InputMaybe<SaleItemUpdateManyWithoutBlameUserNestedInput>;
+  sales?: InputMaybe<SaleUpdateManyWithoutBlameUserNestedInput>;
+};
+
 export type UserUpdateWithoutSalesInput = {
+  SalePaidCost?: InputMaybe<SalePaidCostUpdateManyWithoutBlameUserNestedInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   products?: InputMaybe<ProductUpdateManyWithoutBlameUserNestedInput>;
@@ -2262,6 +2786,11 @@ export type UserUpsertWithoutSaleItemsInput = {
   update: UserUpdateWithoutSaleItemsInput;
 };
 
+export type UserUpsertWithoutSalePaidCostInput = {
+  create: UserCreateWithoutSalePaidCostInput;
+  update: UserUpdateWithoutSalePaidCostInput;
+};
+
 export type UserUpsertWithoutSalesInput = {
   create: UserCreateWithoutSalesInput;
   update: UserUpdateWithoutSalesInput;
@@ -2271,6 +2800,7 @@ export type UserWhereInput = {
   AND?: InputMaybe<Array<UserWhereInput>>;
   NOT?: InputMaybe<Array<UserWhereInput>>;
   OR?: InputMaybe<Array<UserWhereInput>>;
+  SalePaidCost?: InputMaybe<SalePaidCostListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   email?: InputMaybe<StringFilter>;
   id?: InputMaybe<StringFilter>;
@@ -2498,19 +3028,24 @@ export type ResolversTypes = {
   SaleItemCreateManyProviderInputEnvelope: SaleItemCreateManyProviderInputEnvelope;
   SaleItemCreateManySaleInput: SaleItemCreateManySaleInput;
   SaleItemCreateManySaleInputEnvelope: SaleItemCreateManySaleInputEnvelope;
+  SaleItemCreateManySalePaidCostInput: SaleItemCreateManySalePaidCostInput;
+  SaleItemCreateManySalePaidCostInputEnvelope: SaleItemCreateManySalePaidCostInputEnvelope;
   SaleItemCreateNestedManyWithoutBlameUserInput: SaleItemCreateNestedManyWithoutBlameUserInput;
   SaleItemCreateNestedManyWithoutProductInput: SaleItemCreateNestedManyWithoutProductInput;
   SaleItemCreateNestedManyWithoutProviderInput: SaleItemCreateNestedManyWithoutProviderInput;
   SaleItemCreateNestedManyWithoutSaleInput: SaleItemCreateNestedManyWithoutSaleInput;
   SaleItemCreateNestedManyWithoutSaleInputCustom: SaleItemCreateNestedManyWithoutSaleInputCustom;
+  SaleItemCreateNestedManyWithoutSalePaidCostInput: SaleItemCreateNestedManyWithoutSalePaidCostInput;
   SaleItemCreateOrConnectWithoutBlameUserInput: SaleItemCreateOrConnectWithoutBlameUserInput;
   SaleItemCreateOrConnectWithoutProductInput: SaleItemCreateOrConnectWithoutProductInput;
   SaleItemCreateOrConnectWithoutProviderInput: SaleItemCreateOrConnectWithoutProviderInput;
   SaleItemCreateOrConnectWithoutSaleInput: SaleItemCreateOrConnectWithoutSaleInput;
+  SaleItemCreateOrConnectWithoutSalePaidCostInput: SaleItemCreateOrConnectWithoutSalePaidCostInput;
   SaleItemCreateWithoutBlameUserInput: SaleItemCreateWithoutBlameUserInput;
   SaleItemCreateWithoutProductInput: SaleItemCreateWithoutProductInput;
   SaleItemCreateWithoutProviderInput: SaleItemCreateWithoutProviderInput;
   SaleItemCreateWithoutSaleInput: SaleItemCreateWithoutSaleInput;
+  SaleItemCreateWithoutSalePaidCostInput: SaleItemCreateWithoutSalePaidCostInput;
   SaleItemListRelationFilter: SaleItemListRelationFilter;
   SaleItemMaxAggregate: ResolverTypeWrapper<SaleItemMaxAggregate>;
   SaleItemMinAggregate: ResolverTypeWrapper<SaleItemMinAggregate>;
@@ -2525,23 +3060,28 @@ export type ResolversTypes = {
   SaleItemUpdateManyWithWhereWithoutProductInput: SaleItemUpdateManyWithWhereWithoutProductInput;
   SaleItemUpdateManyWithWhereWithoutProviderInput: SaleItemUpdateManyWithWhereWithoutProviderInput;
   SaleItemUpdateManyWithWhereWithoutSaleInput: SaleItemUpdateManyWithWhereWithoutSaleInput;
+  SaleItemUpdateManyWithWhereWithoutSalePaidCostInput: SaleItemUpdateManyWithWhereWithoutSalePaidCostInput;
   SaleItemUpdateManyWithoutBlameUserNestedInput: SaleItemUpdateManyWithoutBlameUserNestedInput;
   SaleItemUpdateManyWithoutProductNestedInput: SaleItemUpdateManyWithoutProductNestedInput;
   SaleItemUpdateManyWithoutProviderNestedInput: SaleItemUpdateManyWithoutProviderNestedInput;
   SaleItemUpdateManyWithoutSaleNestedInput: SaleItemUpdateManyWithoutSaleNestedInput;
   SaleItemUpdateManyWithoutSaleNestedInputCustom: SaleItemUpdateManyWithoutSaleNestedInputCustom;
+  SaleItemUpdateManyWithoutSalePaidCostNestedInput: SaleItemUpdateManyWithoutSalePaidCostNestedInput;
   SaleItemUpdateWithWhereUniqueWithoutBlameUserInput: SaleItemUpdateWithWhereUniqueWithoutBlameUserInput;
   SaleItemUpdateWithWhereUniqueWithoutProductInput: SaleItemUpdateWithWhereUniqueWithoutProductInput;
   SaleItemUpdateWithWhereUniqueWithoutProviderInput: SaleItemUpdateWithWhereUniqueWithoutProviderInput;
   SaleItemUpdateWithWhereUniqueWithoutSaleInput: SaleItemUpdateWithWhereUniqueWithoutSaleInput;
+  SaleItemUpdateWithWhereUniqueWithoutSalePaidCostInput: SaleItemUpdateWithWhereUniqueWithoutSalePaidCostInput;
   SaleItemUpdateWithoutBlameUserInput: SaleItemUpdateWithoutBlameUserInput;
   SaleItemUpdateWithoutProductInput: SaleItemUpdateWithoutProductInput;
   SaleItemUpdateWithoutProviderInput: SaleItemUpdateWithoutProviderInput;
   SaleItemUpdateWithoutSaleInput: SaleItemUpdateWithoutSaleInput;
+  SaleItemUpdateWithoutSalePaidCostInput: SaleItemUpdateWithoutSalePaidCostInput;
   SaleItemUpsertWithWhereUniqueWithoutBlameUserInput: SaleItemUpsertWithWhereUniqueWithoutBlameUserInput;
   SaleItemUpsertWithWhereUniqueWithoutProductInput: SaleItemUpsertWithWhereUniqueWithoutProductInput;
   SaleItemUpsertWithWhereUniqueWithoutProviderInput: SaleItemUpsertWithWhereUniqueWithoutProviderInput;
   SaleItemUpsertWithWhereUniqueWithoutSaleInput: SaleItemUpsertWithWhereUniqueWithoutSaleInput;
+  SaleItemUpsertWithWhereUniqueWithoutSalePaidCostInput: SaleItemUpsertWithWhereUniqueWithoutSalePaidCostInput;
   SaleItemWhereInput: SaleItemWhereInput;
   SaleItemWhereUniqueInput: SaleItemWhereUniqueInput;
   SaleItemsOutput: ResolverTypeWrapper<SaleItemsOutput>;
@@ -2551,6 +3091,42 @@ export type ResolversTypes = {
   SaleOrderByRelationAggregateInput: SaleOrderByRelationAggregateInput;
   SaleOrderByWithRelationInput: SaleOrderByWithRelationInput;
   SalePaginated: ResolverTypeWrapper<SalePaginated>;
+  SalePaidCost: ResolverTypeWrapper<SalePaidCost>;
+  SalePaidCostAvgAggregate: ResolverTypeWrapper<SalePaidCostAvgAggregate>;
+  SalePaidCostCount: ResolverTypeWrapper<SalePaidCostCount>;
+  SalePaidCostCountAggregate: ResolverTypeWrapper<SalePaidCostCountAggregate>;
+  SalePaidCostCreateInput: SalePaidCostCreateInput;
+  SalePaidCostCreateManyBlameUserInput: SalePaidCostCreateManyBlameUserInput;
+  SalePaidCostCreateManyBlameUserInputEnvelope: SalePaidCostCreateManyBlameUserInputEnvelope;
+  SalePaidCostCreateNestedManyWithoutBlameUserInput: SalePaidCostCreateNestedManyWithoutBlameUserInput;
+  SalePaidCostCreateNestedOneWithoutSaleItemInput: SalePaidCostCreateNestedOneWithoutSaleItemInput;
+  SalePaidCostCreateOrConnectWithoutBlameUserInput: SalePaidCostCreateOrConnectWithoutBlameUserInput;
+  SalePaidCostCreateOrConnectWithoutSaleItemInput: SalePaidCostCreateOrConnectWithoutSaleItemInput;
+  SalePaidCostCreateWithoutBlameUserInput: SalePaidCostCreateWithoutBlameUserInput;
+  SalePaidCostCreateWithoutSaleItemInput: SalePaidCostCreateWithoutSaleItemInput;
+  SalePaidCostListRelationFilter: SalePaidCostListRelationFilter;
+  SalePaidCostMaxAggregate: ResolverTypeWrapper<SalePaidCostMaxAggregate>;
+  SalePaidCostMinAggregate: ResolverTypeWrapper<SalePaidCostMinAggregate>;
+  SalePaidCostOrderByRelationAggregateInput: SalePaidCostOrderByRelationAggregateInput;
+  SalePaidCostOrderByWithRelationInput: SalePaidCostOrderByWithRelationInput;
+  SalePaidCostOutput: ResolverTypeWrapper<SalePaidCostOutput>;
+  SalePaidCostPaginated: ResolverTypeWrapper<SalePaidCostPaginated>;
+  SalePaidCostRelationFilter: SalePaidCostRelationFilter;
+  SalePaidCostScalarFieldEnum: SalePaidCostScalarFieldEnum;
+  SalePaidCostScalarWhereInput: SalePaidCostScalarWhereInput;
+  SalePaidCostSumAggregate: ResolverTypeWrapper<SalePaidCostSumAggregate>;
+  SalePaidCostUpdateInput: SalePaidCostUpdateInput;
+  SalePaidCostUpdateManyMutationInput: SalePaidCostUpdateManyMutationInput;
+  SalePaidCostUpdateManyWithWhereWithoutBlameUserInput: SalePaidCostUpdateManyWithWhereWithoutBlameUserInput;
+  SalePaidCostUpdateManyWithoutBlameUserNestedInput: SalePaidCostUpdateManyWithoutBlameUserNestedInput;
+  SalePaidCostUpdateOneWithoutSaleItemNestedInput: SalePaidCostUpdateOneWithoutSaleItemNestedInput;
+  SalePaidCostUpdateWithWhereUniqueWithoutBlameUserInput: SalePaidCostUpdateWithWhereUniqueWithoutBlameUserInput;
+  SalePaidCostUpdateWithoutBlameUserInput: SalePaidCostUpdateWithoutBlameUserInput;
+  SalePaidCostUpdateWithoutSaleItemInput: SalePaidCostUpdateWithoutSaleItemInput;
+  SalePaidCostUpsertWithWhereUniqueWithoutBlameUserInput: SalePaidCostUpsertWithWhereUniqueWithoutBlameUserInput;
+  SalePaidCostUpsertWithoutSaleItemInput: SalePaidCostUpsertWithoutSaleItemInput;
+  SalePaidCostWhereInput: SalePaidCostWhereInput;
+  SalePaidCostWhereUniqueInput: SalePaidCostWhereUniqueInput;
   SaleRelationFilter: SaleRelationFilter;
   SaleScalarFieldEnum: SaleScalarFieldEnum;
   SaleScalarWhereInput: SaleScalarWhereInput;
@@ -2581,14 +3157,17 @@ export type ResolversTypes = {
   UserCreateNestedOneWithoutProductsInput: UserCreateNestedOneWithoutProductsInput;
   UserCreateNestedOneWithoutProvidersInput: UserCreateNestedOneWithoutProvidersInput;
   UserCreateNestedOneWithoutSaleItemsInput: UserCreateNestedOneWithoutSaleItemsInput;
+  UserCreateNestedOneWithoutSalePaidCostInput: UserCreateNestedOneWithoutSalePaidCostInput;
   UserCreateNestedOneWithoutSalesInput: UserCreateNestedOneWithoutSalesInput;
   UserCreateOrConnectWithoutProductsInput: UserCreateOrConnectWithoutProductsInput;
   UserCreateOrConnectWithoutProvidersInput: UserCreateOrConnectWithoutProvidersInput;
   UserCreateOrConnectWithoutSaleItemsInput: UserCreateOrConnectWithoutSaleItemsInput;
+  UserCreateOrConnectWithoutSalePaidCostInput: UserCreateOrConnectWithoutSalePaidCostInput;
   UserCreateOrConnectWithoutSalesInput: UserCreateOrConnectWithoutSalesInput;
   UserCreateWithoutProductsInput: UserCreateWithoutProductsInput;
   UserCreateWithoutProvidersInput: UserCreateWithoutProvidersInput;
   UserCreateWithoutSaleItemsInput: UserCreateWithoutSaleItemsInput;
+  UserCreateWithoutSalePaidCostInput: UserCreateWithoutSalePaidCostInput;
   UserCreateWithoutSalesInput: UserCreateWithoutSalesInput;
   UserMaxAggregate: ResolverTypeWrapper<UserMaxAggregate>;
   UserMinAggregate: ResolverTypeWrapper<UserMinAggregate>;
@@ -2600,14 +3179,17 @@ export type ResolversTypes = {
   UserUpdateOneWithoutProductsNestedInput: UserUpdateOneWithoutProductsNestedInput;
   UserUpdateOneWithoutProvidersNestedInput: UserUpdateOneWithoutProvidersNestedInput;
   UserUpdateOneWithoutSaleItemsNestedInput: UserUpdateOneWithoutSaleItemsNestedInput;
+  UserUpdateOneWithoutSalePaidCostNestedInput: UserUpdateOneWithoutSalePaidCostNestedInput;
   UserUpdateOneWithoutSalesNestedInput: UserUpdateOneWithoutSalesNestedInput;
   UserUpdateWithoutProductsInput: UserUpdateWithoutProductsInput;
   UserUpdateWithoutProvidersInput: UserUpdateWithoutProvidersInput;
   UserUpdateWithoutSaleItemsInput: UserUpdateWithoutSaleItemsInput;
+  UserUpdateWithoutSalePaidCostInput: UserUpdateWithoutSalePaidCostInput;
   UserUpdateWithoutSalesInput: UserUpdateWithoutSalesInput;
   UserUpsertWithoutProductsInput: UserUpsertWithoutProductsInput;
   UserUpsertWithoutProvidersInput: UserUpsertWithoutProvidersInput;
   UserUpsertWithoutSaleItemsInput: UserUpsertWithoutSaleItemsInput;
+  UserUpsertWithoutSalePaidCostInput: UserUpsertWithoutSalePaidCostInput;
   UserUpsertWithoutSalesInput: UserUpsertWithoutSalesInput;
   UserWhereInput: UserWhereInput;
   UserWhereUniqueInput: UserWhereUniqueInput;
@@ -2746,19 +3328,24 @@ export type ResolversParentTypes = {
   SaleItemCreateManyProviderInputEnvelope: SaleItemCreateManyProviderInputEnvelope;
   SaleItemCreateManySaleInput: SaleItemCreateManySaleInput;
   SaleItemCreateManySaleInputEnvelope: SaleItemCreateManySaleInputEnvelope;
+  SaleItemCreateManySalePaidCostInput: SaleItemCreateManySalePaidCostInput;
+  SaleItemCreateManySalePaidCostInputEnvelope: SaleItemCreateManySalePaidCostInputEnvelope;
   SaleItemCreateNestedManyWithoutBlameUserInput: SaleItemCreateNestedManyWithoutBlameUserInput;
   SaleItemCreateNestedManyWithoutProductInput: SaleItemCreateNestedManyWithoutProductInput;
   SaleItemCreateNestedManyWithoutProviderInput: SaleItemCreateNestedManyWithoutProviderInput;
   SaleItemCreateNestedManyWithoutSaleInput: SaleItemCreateNestedManyWithoutSaleInput;
   SaleItemCreateNestedManyWithoutSaleInputCustom: SaleItemCreateNestedManyWithoutSaleInputCustom;
+  SaleItemCreateNestedManyWithoutSalePaidCostInput: SaleItemCreateNestedManyWithoutSalePaidCostInput;
   SaleItemCreateOrConnectWithoutBlameUserInput: SaleItemCreateOrConnectWithoutBlameUserInput;
   SaleItemCreateOrConnectWithoutProductInput: SaleItemCreateOrConnectWithoutProductInput;
   SaleItemCreateOrConnectWithoutProviderInput: SaleItemCreateOrConnectWithoutProviderInput;
   SaleItemCreateOrConnectWithoutSaleInput: SaleItemCreateOrConnectWithoutSaleInput;
+  SaleItemCreateOrConnectWithoutSalePaidCostInput: SaleItemCreateOrConnectWithoutSalePaidCostInput;
   SaleItemCreateWithoutBlameUserInput: SaleItemCreateWithoutBlameUserInput;
   SaleItemCreateWithoutProductInput: SaleItemCreateWithoutProductInput;
   SaleItemCreateWithoutProviderInput: SaleItemCreateWithoutProviderInput;
   SaleItemCreateWithoutSaleInput: SaleItemCreateWithoutSaleInput;
+  SaleItemCreateWithoutSalePaidCostInput: SaleItemCreateWithoutSalePaidCostInput;
   SaleItemListRelationFilter: SaleItemListRelationFilter;
   SaleItemMaxAggregate: SaleItemMaxAggregate;
   SaleItemMinAggregate: SaleItemMinAggregate;
@@ -2772,23 +3359,28 @@ export type ResolversParentTypes = {
   SaleItemUpdateManyWithWhereWithoutProductInput: SaleItemUpdateManyWithWhereWithoutProductInput;
   SaleItemUpdateManyWithWhereWithoutProviderInput: SaleItemUpdateManyWithWhereWithoutProviderInput;
   SaleItemUpdateManyWithWhereWithoutSaleInput: SaleItemUpdateManyWithWhereWithoutSaleInput;
+  SaleItemUpdateManyWithWhereWithoutSalePaidCostInput: SaleItemUpdateManyWithWhereWithoutSalePaidCostInput;
   SaleItemUpdateManyWithoutBlameUserNestedInput: SaleItemUpdateManyWithoutBlameUserNestedInput;
   SaleItemUpdateManyWithoutProductNestedInput: SaleItemUpdateManyWithoutProductNestedInput;
   SaleItemUpdateManyWithoutProviderNestedInput: SaleItemUpdateManyWithoutProviderNestedInput;
   SaleItemUpdateManyWithoutSaleNestedInput: SaleItemUpdateManyWithoutSaleNestedInput;
   SaleItemUpdateManyWithoutSaleNestedInputCustom: SaleItemUpdateManyWithoutSaleNestedInputCustom;
+  SaleItemUpdateManyWithoutSalePaidCostNestedInput: SaleItemUpdateManyWithoutSalePaidCostNestedInput;
   SaleItemUpdateWithWhereUniqueWithoutBlameUserInput: SaleItemUpdateWithWhereUniqueWithoutBlameUserInput;
   SaleItemUpdateWithWhereUniqueWithoutProductInput: SaleItemUpdateWithWhereUniqueWithoutProductInput;
   SaleItemUpdateWithWhereUniqueWithoutProviderInput: SaleItemUpdateWithWhereUniqueWithoutProviderInput;
   SaleItemUpdateWithWhereUniqueWithoutSaleInput: SaleItemUpdateWithWhereUniqueWithoutSaleInput;
+  SaleItemUpdateWithWhereUniqueWithoutSalePaidCostInput: SaleItemUpdateWithWhereUniqueWithoutSalePaidCostInput;
   SaleItemUpdateWithoutBlameUserInput: SaleItemUpdateWithoutBlameUserInput;
   SaleItemUpdateWithoutProductInput: SaleItemUpdateWithoutProductInput;
   SaleItemUpdateWithoutProviderInput: SaleItemUpdateWithoutProviderInput;
   SaleItemUpdateWithoutSaleInput: SaleItemUpdateWithoutSaleInput;
+  SaleItemUpdateWithoutSalePaidCostInput: SaleItemUpdateWithoutSalePaidCostInput;
   SaleItemUpsertWithWhereUniqueWithoutBlameUserInput: SaleItemUpsertWithWhereUniqueWithoutBlameUserInput;
   SaleItemUpsertWithWhereUniqueWithoutProductInput: SaleItemUpsertWithWhereUniqueWithoutProductInput;
   SaleItemUpsertWithWhereUniqueWithoutProviderInput: SaleItemUpsertWithWhereUniqueWithoutProviderInput;
   SaleItemUpsertWithWhereUniqueWithoutSaleInput: SaleItemUpsertWithWhereUniqueWithoutSaleInput;
+  SaleItemUpsertWithWhereUniqueWithoutSalePaidCostInput: SaleItemUpsertWithWhereUniqueWithoutSalePaidCostInput;
   SaleItemWhereInput: SaleItemWhereInput;
   SaleItemWhereUniqueInput: SaleItemWhereUniqueInput;
   SaleItemsOutput: SaleItemsOutput;
@@ -2798,6 +3390,41 @@ export type ResolversParentTypes = {
   SaleOrderByRelationAggregateInput: SaleOrderByRelationAggregateInput;
   SaleOrderByWithRelationInput: SaleOrderByWithRelationInput;
   SalePaginated: SalePaginated;
+  SalePaidCost: SalePaidCost;
+  SalePaidCostAvgAggregate: SalePaidCostAvgAggregate;
+  SalePaidCostCount: SalePaidCostCount;
+  SalePaidCostCountAggregate: SalePaidCostCountAggregate;
+  SalePaidCostCreateInput: SalePaidCostCreateInput;
+  SalePaidCostCreateManyBlameUserInput: SalePaidCostCreateManyBlameUserInput;
+  SalePaidCostCreateManyBlameUserInputEnvelope: SalePaidCostCreateManyBlameUserInputEnvelope;
+  SalePaidCostCreateNestedManyWithoutBlameUserInput: SalePaidCostCreateNestedManyWithoutBlameUserInput;
+  SalePaidCostCreateNestedOneWithoutSaleItemInput: SalePaidCostCreateNestedOneWithoutSaleItemInput;
+  SalePaidCostCreateOrConnectWithoutBlameUserInput: SalePaidCostCreateOrConnectWithoutBlameUserInput;
+  SalePaidCostCreateOrConnectWithoutSaleItemInput: SalePaidCostCreateOrConnectWithoutSaleItemInput;
+  SalePaidCostCreateWithoutBlameUserInput: SalePaidCostCreateWithoutBlameUserInput;
+  SalePaidCostCreateWithoutSaleItemInput: SalePaidCostCreateWithoutSaleItemInput;
+  SalePaidCostListRelationFilter: SalePaidCostListRelationFilter;
+  SalePaidCostMaxAggregate: SalePaidCostMaxAggregate;
+  SalePaidCostMinAggregate: SalePaidCostMinAggregate;
+  SalePaidCostOrderByRelationAggregateInput: SalePaidCostOrderByRelationAggregateInput;
+  SalePaidCostOrderByWithRelationInput: SalePaidCostOrderByWithRelationInput;
+  SalePaidCostOutput: SalePaidCostOutput;
+  SalePaidCostPaginated: SalePaidCostPaginated;
+  SalePaidCostRelationFilter: SalePaidCostRelationFilter;
+  SalePaidCostScalarWhereInput: SalePaidCostScalarWhereInput;
+  SalePaidCostSumAggregate: SalePaidCostSumAggregate;
+  SalePaidCostUpdateInput: SalePaidCostUpdateInput;
+  SalePaidCostUpdateManyMutationInput: SalePaidCostUpdateManyMutationInput;
+  SalePaidCostUpdateManyWithWhereWithoutBlameUserInput: SalePaidCostUpdateManyWithWhereWithoutBlameUserInput;
+  SalePaidCostUpdateManyWithoutBlameUserNestedInput: SalePaidCostUpdateManyWithoutBlameUserNestedInput;
+  SalePaidCostUpdateOneWithoutSaleItemNestedInput: SalePaidCostUpdateOneWithoutSaleItemNestedInput;
+  SalePaidCostUpdateWithWhereUniqueWithoutBlameUserInput: SalePaidCostUpdateWithWhereUniqueWithoutBlameUserInput;
+  SalePaidCostUpdateWithoutBlameUserInput: SalePaidCostUpdateWithoutBlameUserInput;
+  SalePaidCostUpdateWithoutSaleItemInput: SalePaidCostUpdateWithoutSaleItemInput;
+  SalePaidCostUpsertWithWhereUniqueWithoutBlameUserInput: SalePaidCostUpsertWithWhereUniqueWithoutBlameUserInput;
+  SalePaidCostUpsertWithoutSaleItemInput: SalePaidCostUpsertWithoutSaleItemInput;
+  SalePaidCostWhereInput: SalePaidCostWhereInput;
+  SalePaidCostWhereUniqueInput: SalePaidCostWhereUniqueInput;
   SaleRelationFilter: SaleRelationFilter;
   SaleScalarWhereInput: SaleScalarWhereInput;
   SaleSumAggregate: SaleSumAggregate;
@@ -2826,14 +3453,17 @@ export type ResolversParentTypes = {
   UserCreateNestedOneWithoutProductsInput: UserCreateNestedOneWithoutProductsInput;
   UserCreateNestedOneWithoutProvidersInput: UserCreateNestedOneWithoutProvidersInput;
   UserCreateNestedOneWithoutSaleItemsInput: UserCreateNestedOneWithoutSaleItemsInput;
+  UserCreateNestedOneWithoutSalePaidCostInput: UserCreateNestedOneWithoutSalePaidCostInput;
   UserCreateNestedOneWithoutSalesInput: UserCreateNestedOneWithoutSalesInput;
   UserCreateOrConnectWithoutProductsInput: UserCreateOrConnectWithoutProductsInput;
   UserCreateOrConnectWithoutProvidersInput: UserCreateOrConnectWithoutProvidersInput;
   UserCreateOrConnectWithoutSaleItemsInput: UserCreateOrConnectWithoutSaleItemsInput;
+  UserCreateOrConnectWithoutSalePaidCostInput: UserCreateOrConnectWithoutSalePaidCostInput;
   UserCreateOrConnectWithoutSalesInput: UserCreateOrConnectWithoutSalesInput;
   UserCreateWithoutProductsInput: UserCreateWithoutProductsInput;
   UserCreateWithoutProvidersInput: UserCreateWithoutProvidersInput;
   UserCreateWithoutSaleItemsInput: UserCreateWithoutSaleItemsInput;
+  UserCreateWithoutSalePaidCostInput: UserCreateWithoutSalePaidCostInput;
   UserCreateWithoutSalesInput: UserCreateWithoutSalesInput;
   UserMaxAggregate: UserMaxAggregate;
   UserMinAggregate: UserMinAggregate;
@@ -2844,14 +3474,17 @@ export type ResolversParentTypes = {
   UserUpdateOneWithoutProductsNestedInput: UserUpdateOneWithoutProductsNestedInput;
   UserUpdateOneWithoutProvidersNestedInput: UserUpdateOneWithoutProvidersNestedInput;
   UserUpdateOneWithoutSaleItemsNestedInput: UserUpdateOneWithoutSaleItemsNestedInput;
+  UserUpdateOneWithoutSalePaidCostNestedInput: UserUpdateOneWithoutSalePaidCostNestedInput;
   UserUpdateOneWithoutSalesNestedInput: UserUpdateOneWithoutSalesNestedInput;
   UserUpdateWithoutProductsInput: UserUpdateWithoutProductsInput;
   UserUpdateWithoutProvidersInput: UserUpdateWithoutProvidersInput;
   UserUpdateWithoutSaleItemsInput: UserUpdateWithoutSaleItemsInput;
+  UserUpdateWithoutSalePaidCostInput: UserUpdateWithoutSalePaidCostInput;
   UserUpdateWithoutSalesInput: UserUpdateWithoutSalesInput;
   UserUpsertWithoutProductsInput: UserUpsertWithoutProductsInput;
   UserUpsertWithoutProvidersInput: UserUpsertWithoutProvidersInput;
   UserUpsertWithoutSaleItemsInput: UserUpsertWithoutSaleItemsInput;
+  UserUpsertWithoutSalePaidCostInput: UserUpsertWithoutSalePaidCostInput;
   UserUpsertWithoutSalesInput: UserUpsertWithoutSalesInput;
   UserWhereInput: UserWhereInput;
   UserWhereUniqueInput: UserWhereUniqueInput;
@@ -2863,16 +3496,19 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 }
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  confirmSalePaidCost?: Resolver<ResolversTypes['SalePaidCost'], ParentType, ContextType, RequireFields<MutationConfirmSalePaidCostArgs, 'data' | 'where'>>;
   createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'data'>>;
   createProducts?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateProductsArgs, 'data'>>;
   createProvider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<MutationCreateProviderArgs, 'data'>>;
   createProviders?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateProvidersArgs, 'data'>>;
   createSale?: Resolver<ResolversTypes['Sale'], ParentType, ContextType, RequireFields<MutationCreateSaleArgs, 'data'>>;
+  createSalePaidCost?: Resolver<ResolversTypes['SalePaidCost'], ParentType, ContextType, RequireFields<MutationCreateSalePaidCostArgs, 'data'>>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'data'>>;
   createUsers?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateUsersArgs, 'data'>>;
   deleteProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationDeleteProductArgs, 'where'>>;
   deleteProvider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<MutationDeleteProviderArgs, 'where'>>;
   deleteSale?: Resolver<ResolversTypes['Sale'], ParentType, ContextType, RequireFields<MutationDeleteSaleArgs, 'where'>>;
+  deleteSalePaidCost?: Resolver<ResolversTypes['SalePaidCost'], ParentType, ContextType, RequireFields<MutationDeleteSalePaidCostArgs, 'where'>>;
   deleteUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'where'>>;
   updateProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationUpdateProductArgs, 'data' | 'where'>>;
   updateProvider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<MutationUpdateProviderArgs, 'data' | 'where'>>;
@@ -3058,6 +3694,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   sale?: Resolver<ResolversTypes['Sale'], ParentType, ContextType, RequireFields<QuerySaleArgs, 'where'>>;
   saleItem?: Resolver<ResolversTypes['SaleItem'], ParentType, ContextType, RequireFields<QuerySaleItemArgs, 'where'>>;
   saleItems?: Resolver<ResolversTypes['SaleItemsOutput'], ParentType, ContextType, Partial<QuerySaleItemsArgs>>;
+  salePaidCost?: Resolver<ResolversTypes['SalePaidCostOutput'], ParentType, ContextType, Partial<QuerySalePaidCostArgs>>;
   sales?: Resolver<ResolversTypes['SalesOutput'], ParentType, ContextType, Partial<QuerySalesArgs>>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'where'>>;
   users?: Resolver<ResolversTypes['UsersOutput'], ParentType, ContextType, Partial<QueryUsersArgs>>;
@@ -3117,7 +3754,10 @@ export type SaleItemResolvers<ContextType = any, ParentType extends ResolversPar
   provider?: Resolver<Maybe<ResolversTypes['Provider']>, ParentType, ContextType>;
   providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  saleCostIsPaid?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  saleCostIsSelected?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   saleId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  salePaidCostId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   totalCostValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   totalCostValueDecimal?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   totalValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -3142,7 +3782,10 @@ export type SaleItemCountAggregateResolvers<ContextType = any, ParentType extend
   productId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   providerId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  saleCostIsPaid?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  saleCostIsSelected?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   saleId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  salePaidCostId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   totalCostValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   totalValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -3157,7 +3800,10 @@ export type SaleItemMaxAggregateResolvers<ContextType = any, ParentType extends 
   productId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   quantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  saleCostIsPaid?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  saleCostIsSelected?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   saleId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  salePaidCostId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   totalCostValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   totalValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
@@ -3172,7 +3818,10 @@ export type SaleItemMinAggregateResolvers<ContextType = any, ParentType extends 
   productId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   quantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  saleCostIsPaid?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  saleCostIsSelected?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   saleId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  salePaidCostId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   totalCostValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   totalValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
@@ -3232,6 +3881,84 @@ export type SalePaginatedResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type SalePaidCostResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCost'] = ResolversParentTypes['SalePaidCost']> = {
+  _count?: Resolver<ResolversTypes['SalePaidCostCount'], ParentType, ContextType>;
+  blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  endDate?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  paidValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SalePaidCostAvgAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostAvgAggregate'] = ResolversParentTypes['SalePaidCostAvgAggregate']> = {
+  paidValue?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SalePaidCostCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostCount'] = ResolversParentTypes['SalePaidCostCount']> = {
+  SaleItem?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SalePaidCostCountAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostCountAggregate'] = ResolversParentTypes['SalePaidCostCountAggregate']> = {
+  _all?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  blameUserId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  endDate?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  paidValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SalePaidCostMaxAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostMaxAggregate'] = ResolversParentTypes['SalePaidCostMaxAggregate']> = {
+  blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  endDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  paidValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SalePaidCostMinAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostMinAggregate'] = ResolversParentTypes['SalePaidCostMinAggregate']> = {
+  blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  endDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  paidValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SalePaidCostOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostOutput'] = ResolversParentTypes['SalePaidCostOutput']> = {
+  nodes?: Resolver<Array<ResolversTypes['SalePaidCost']>, ParentType, ContextType>;
+  pageInfo?: Resolver<Maybe<ResolversTypes['SalePaidCostPaginated']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SalePaidCostPaginatedResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostPaginated'] = ResolversParentTypes['SalePaidCostPaginated']> = {
+  currentPage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  hasNextPage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  lastPage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  nextCursor?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  total?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SalePaidCostSumAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostSumAggregate'] = ResolversParentTypes['SalePaidCostSumAggregate']> = {
+  paidValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type SaleSumAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SaleSumAggregate'] = ResolversParentTypes['SaleSumAggregate']> = {
   totalCostValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   totalValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -3255,6 +3982,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type UserCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserCount'] = ResolversParentTypes['UserCount']> = {
+  SalePaidCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   products?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   providers?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   saleItems?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -3340,6 +4068,15 @@ export type Resolvers<ContextType = any> = {
   SaleMaxAggregate?: SaleMaxAggregateResolvers<ContextType>;
   SaleMinAggregate?: SaleMinAggregateResolvers<ContextType>;
   SalePaginated?: SalePaginatedResolvers<ContextType>;
+  SalePaidCost?: SalePaidCostResolvers<ContextType>;
+  SalePaidCostAvgAggregate?: SalePaidCostAvgAggregateResolvers<ContextType>;
+  SalePaidCostCount?: SalePaidCostCountResolvers<ContextType>;
+  SalePaidCostCountAggregate?: SalePaidCostCountAggregateResolvers<ContextType>;
+  SalePaidCostMaxAggregate?: SalePaidCostMaxAggregateResolvers<ContextType>;
+  SalePaidCostMinAggregate?: SalePaidCostMinAggregateResolvers<ContextType>;
+  SalePaidCostOutput?: SalePaidCostOutputResolvers<ContextType>;
+  SalePaidCostPaginated?: SalePaidCostPaginatedResolvers<ContextType>;
+  SalePaidCostSumAggregate?: SalePaidCostSumAggregateResolvers<ContextType>;
   SaleSumAggregate?: SaleSumAggregateResolvers<ContextType>;
   SalesOutput?: SalesOutputResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
