@@ -29,6 +29,12 @@ export function ProductsForm({ onFinish: finish, ...props }: Parameters<typeof F
       </Col>
 
       <Col>
+        <Form.Item name={nameof<ProductsFormNode>(x => x.costValue)} label="Custo" labelCol={{ span: 24 }}>
+          <InputNumberMoney style={{ width: '100%' }} />
+        </Form.Item>
+      </Col>
+
+      <Col>
         <Form.Item name={nameof<ProductsFormNode>(x => x.priceValue)} label="Preço" labelCol={{ span: 24 }}>
           <InputNumberMoney style={{ width: '100%' }} />
         </Form.Item>
@@ -53,12 +59,6 @@ export function ProductsForm({ onFinish: finish, ...props }: Parameters<typeof F
           valuePropName="checked"
         >
           <Switch />
-        </Form.Item>
-      </Col>
-
-      <Col>
-        <Form.Item name={nameof<ProductsFormNode>(x => x.costValue)} label="Custo" labelCol={{ span: 24 }}>
-          <InputNumberMoney style={{ width: '100%' }} />
         </Form.Item>
       </Col>
     </Form>
