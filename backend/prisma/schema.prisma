@@ -35,13 +35,15 @@ model User {
 
   /// Relations
   /// @HideField({ output: true })
-  providers Provider[]
+  providers    Provider[]
   /// @HideField({ output: true })
-  products  Product[]
+  products     Product[]
   /// @HideField({ output: true })
-  sales     Sale[]
+  sales        Sale[]
   /// @HideField({ output: true })
-  saleItems SaleItem[]
+  saleItems    SaleItem[]
+  /// @HideField({ output: true })
+  SalePaidCost SalePaidCost[]
 }
 
 model Provider {
@@ -56,7 +58,7 @@ model Provider {
   /// Whatsapp
   whatsapp    String?
   /// FK: User.id - User to blame for
-  blameUserId String?  @db.ObjectId
+  blameUserId String? @db.ObjectId
 
   /// @HideField({ match: '@(*Update*|*Create*)Input' })
   createdAt DateTime @default(now())
@@ -65,11 +67,11 @@ model Provider {
 
   /// Relations
   /// @HideField({ output: true })
-  blameUser User?       @relation(fields: [blameUserId], references: [id])
+  blameUser User?      @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
-  products   Product[]
+  products  Product[]
   /// @HideField({ output: true })
-  saleItems  SaleItem[]
+  saleItems SaleItem[]
 }
 
 model Product {
@@ -88,7 +90,7 @@ model Product {
   /// FK: Provider.id
   providerId  String? @db.ObjectId
   /// FK: User.id - User to blame for
-  blameUserId String?  @db.ObjectId
+  blameUserId String? @db.ObjectId
 
   /// @HideField({ match: '@(*Update*|*Create*)Input' })
   createdAt DateTime @default(now())
@@ -97,23 +99,23 @@ model Product {
 
   /// Relations
   /// @HideField({ output: true })
-  blameUser User?       @relation(fields: [blameUserId], references: [id])
+  blameUser User?      @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
   provider  Provider?  @relation(fields: [providerId], references: [id])
   /// @HideField({ output: true })
-  saleItems  SaleItem[]
+  saleItems SaleItem[]
 }
 
 model Sale {
   /// ID
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
   /// Date Time
-  date        DateTime
+  date           DateTime
   /// FK: User.id - User to blame for
-  blameUserId String?   @db.ObjectId
+  blameUserId    String?  @db.ObjectId
   /// Grand Total
   /// @HideField({ match: '@(*Update*|*Create*)Input' })
-  totalValue Int
+  totalValue     Int
   /// Total Cost
   /// @HideField({ match: '@(*Update*|*Create*)Input' })
   totalCostValue Int
@@ -125,9 +127,9 @@ model Sale {
 
   /// Relations
   /// @HideField({ output: true })
-  blameUser User?       @relation(fields: [blameUserId], references: [id])
+  blameUser User?      @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
-  saleItems  SaleItem[]
+  saleItems SaleItem[]
 }
 
 model SaleItem {
@@ -144,12 +146,48 @@ model SaleItem {
   totalCostValue Int
   /// isPostPaid (usually the same as Product.isPostPaid)
   costIsPostPaid Boolean
+
   /// FK: Sale.id
   saleId         String  @db.ObjectId
   /// FK: Provider.id (usually the same as Product.providerId)
   providerId     String? @db.ObjectId
   /// FK: User.id - User to blame for
-  blameUserId    String?  @db.ObjectId
+  blameUserId    String? @db.ObjectId
+  /// FK: SalePaidCost.id
+  salePaidCostId String? @db.ObjectId
+  /// Related salePaidCostId payment were made
+  saleCostIsPaid Boolean @default(false)
+
+  /// @HideField({ match: '@(*Update*|*Create*)Input' })
+  createdAt DateTime @default(now())
+  /// @HideField({ match: '@(*Update*|*Create*)Input' })
+  updatedAt DateTime @updatedAt
+
+  /// Relations
+  /// @HideField({ output: true })
+  blameUser    User?         @relation(fields: [blameUserId], references: [id])
+  /// @HideField({ output: true })
+  sale         Sale?         @relation(fields: [saleId], references: [id])
+  /// @HideField({ output: true })
+  provider     Provider?     @relation(fields: [providerId], references: [id])
+  /// @HideField({ output: true })
+  product      Product       @relation(fields: [productId], references: [id])
+  /// @HideField({ output: true })
+  salePaidCost SalePaidCost? @relation(fields: [salePaidCostId], references: [id])
+
+  @@unique([costIsPostPaid, productId, saleId])
+}
+
+model SalePaidCost {
+  /// ID
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  /// Value
+  value     Int
+  /// Paid Value
+  paidValue Int
+
+  /// FK: User.id - User to blame for
+  blameUserId String? @db.ObjectId
 
   /// @HideField({ match: '@(*Update*|*Create*)Input' })
   createdAt DateTime @default(now())
@@ -160,11 +198,5 @@ model SaleItem {
   /// @HideField({ output: true })
   blameUser User?      @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
-  sale      Sale?     @relation(fields: [saleId], references: [id])
-  /// @HideField({ output: true })
-  provider  Provider? @relation(fields: [providerId], references: [id])
-  /// @HideField({ output: true })
-  product   Product   @relation(fields: [productId], references: [id])
-
-  @@unique([costIsPostPaid, productId, saleId])
+  SaleItem  SaleItem[]
 }
