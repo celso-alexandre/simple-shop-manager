@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SelectProps } from 'antd';
 import { DecodedValueMap, QueryParamConfig, SetQuery } from 'use-query-params';
 import { useProvidersSelectQuery } from '../graphql/__generated__/providers.gql.generated';
@@ -15,16 +15,10 @@ type ProviderAsyncSelectProps = SelectProps<any> & {
   setQuery?: SetQuery<queryFields>;
   query?: Partial<DecodedValueMap<queryFields>>;
   style?: React.CSSProperties;
-  searchTerm?: string;
 };
 
-export const ProviderAsyncSelect: React.FC<ProviderAsyncSelectProps> = ({
-  setQuery,
-  query,
-  style,
-  searchTerm,
-  ...props
-}) => {
+export const ProviderAsyncSelect: React.FC<ProviderAsyncSelectProps> = ({ setQuery, query, style, ...props }) => {
+  const [searchTerm, setSearchTerm] = useState('');
   const { data, loading, fetchMore, refetch } = useProvidersSelectQuery({
     variables: {
       where: !searchTerm
@@ -50,7 +44,10 @@ export const ProviderAsyncSelect: React.FC<ProviderAsyncSelectProps> = ({
         fetchMore={fetchMore}
         allowClear
         showSearch
+        searchValue={searchTerm}
+        onSearch={term => setSearchTerm(term)}
         onClear={() => {
+          setSearchTerm('');
           if (!setQuery) return;
           setQuery(prev => ({
             ...prev,

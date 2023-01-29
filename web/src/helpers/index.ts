@@ -45,7 +45,7 @@ export function objectPropertiesSet<T extends object>(data: T) {
 
 export function getNetMargin(price: number, cost: number, infinityToDecimal?: number) {
   const value = price - cost;
-  const decimal = value / price;
+  const decimal = value / cost;
   const infinity = typeof infinityToDecimal === 'number' && !Number.isFinite(decimal);
 
   return {
