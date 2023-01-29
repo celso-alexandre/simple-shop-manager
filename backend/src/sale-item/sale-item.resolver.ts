@@ -1,4 +1,6 @@
+import { UseGuards } from '@nestjs/common';
 import { Resolver, Args, Query, ResolveField, Parent } from '@nestjs/graphql';
+import { GqlAuthGuard } from '../auth/guard/gql-auth.guard';
 import { Product } from '../product/dto';
 import { Provider } from '../provider/dto';
 import { User } from '../user/dto';
@@ -8,6 +10,7 @@ import { SaleItemsOutput } from './dto/output';
 import { SaleItemService } from './sale-item.service';
 
 @Resolver(() => SaleItem)
+@UseGuards(GqlAuthGuard)
 export class SaleItemResolver {
   constructor(private readonly service: SaleItemService) {}
 

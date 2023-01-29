@@ -1,8 +1,8 @@
+import { UseGuards } from '@nestjs/common';
 import { Resolver, Args, Query, Mutation } from '@nestjs/graphql';
+import { GqlAuthGuard } from '../auth/guard/gql-auth.guard';
 import {
-  CreateManyUserArgs,
   CreateOneUserArgs,
-  DeleteOneUserArgs,
   FindManyUserArgs,
   FindUniqueUserArgs,
   UpdateOneUserArgs,
@@ -15,33 +15,26 @@ import { UserService } from './user.service';
 export class UserResolver {
   constructor(private readonly service: UserService) {}
 
-  @Query(() => User, { name: 'user' })
-  findUnique(@Args() args: FindUniqueUserArgs) {
-    return this.service.findUnique(args);
-  }
-
-  @Query(() => UsersOutput, { name: 'users' })
-  findMany(@Args() args: FindManyUserArgs) {
-    return this.service.findMany(args);
-  }
-
   @Mutation(() => User, { name: 'createUser' })
   createOne(@Args() args: CreateOneUserArgs) {
     return this.service.createOne(args);
   }
 
-  @Mutation(() => Boolean, { name: 'createUsers' })
-  createMany(@Args() args: CreateManyUserArgs) {
-    return this.service.createMany(args);
+  @Query(() => User, { name: 'user' })
+  @UseGuards(GqlAuthGuard)
+  findUnique(@Args() args: FindUniqueUserArgs) {
+    return this.service.findUnique(args);
+  }
+
+  @Query(() => UsersOutput, { name: 'users' })
+  @UseGuards(GqlAuthGuard)
+  findMany(@Args() args: FindManyUserArgs) {
+    return this.service.findMany(args);
   }
 
   @Mutation(() => User, { name: 'updateUser' })
+  @UseGuards(GqlAuthGuard)
   updateOne(@Args() args: UpdateOneUserArgs) {
     return this.service.updateOne(args);
-  }
-
-  @Mutation(() => User, { name: 'deleteUser' })
-  deleteOne(@Args() args: DeleteOneUserArgs) {
-    return this.service.deleteOne(args);
   }
 }

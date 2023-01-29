@@ -27,6 +27,10 @@ model User {
   email String @unique
   /// Name
   name  String
+  /// Password digest
+  password String
+  /// Active
+  isActive Boolean @default(false)
 
   /// @HideField({ match: '@(*Update*|*Create*)Input' })
   createdAt DateTime @default(now())

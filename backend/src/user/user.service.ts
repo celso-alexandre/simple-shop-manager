@@ -1,40 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
 import {
-  CreateManyUserArgs,
   CreateOneUserArgs,
-  DeleteOneUserArgs,
   FindManyUserArgs,
   FindUniqueUserArgs,
   UpdateOneUserArgs,
 } from './dto';
+import { genSalt, hash as genHash } from 'bcrypt';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findUnique(args: FindUniqueUserArgs) {
-    return this.prisma.user.findUniqueOrThrow(args);
+  private async hashPassword(pass: string) {
+    if (pass?.length < 4)
+      throw new BadRequestException('Password requirements not met');
+
+    const salt = await genSalt(10);
+    return genHash(pass, salt);
+  }
+
+  findUnique(args: FindUniqueUserArgs, throwOnNotFound = true) {
+    if (throwOnNotFound) return this.prisma.user.findUniqueOrThrow(args);
+    return this.prisma.user.findUnique(args);
   }
 
   findMany(args: FindManyUserArgs) {
     return this.prisma.findManyPaginated(this.prisma.user, args);
   }
 
-  createOne(args: CreateOneUserArgs) {
+  async createOne(args: CreateOneUserArgs) {
+    args.data.password = await this.hashPassword(args.data.password);
     return this.prisma.user.create(args);
   }
 
-  async createMany(args: CreateManyUserArgs) {
-    await this.prisma.user.createMany(args);
-    return true;
-  }
-
   updateOne(args: UpdateOneUserArgs) {
+    args.data.password = undefined;
     return this.prisma.user.update(args);
-  }
-
-  deleteOne(args: DeleteOneUserArgs) {
-    return this.prisma.user.delete(args);
   }
 }
