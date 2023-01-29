@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { SelectProps } from 'antd';
 import { DecodedValueMap, QueryParamConfig, SetQuery } from 'use-query-params';
 import { useProductsSelectQuery } from '../graphql/__generated__/products.gql.generated';
@@ -15,16 +15,10 @@ type ProductAsyncSelectProps = SelectProps<any> & {
   setQuery?: SetQuery<queryFields>;
   query?: Partial<DecodedValueMap<queryFields>>;
   style?: React.CSSProperties;
-  searchTerm?: string;
 };
 
-export const ProductAsyncSelect: React.FC<ProductAsyncSelectProps> = ({
-  setQuery,
-  query,
-  style,
-  searchTerm,
-  ...props
-}) => {
+export const ProductAsyncSelect: React.FC<ProductAsyncSelectProps> = ({ setQuery, query, style, ...props }) => {
+  const [searchTerm, setSearchTerm] = useState('');
   const { data, loading, fetchMore, refetch } = useProductsSelectQuery({
     variables: {
       where: !searchTerm
@@ -48,7 +42,10 @@ export const ProductAsyncSelect: React.FC<ProductAsyncSelectProps> = ({
         fetchMore={fetchMore}
         allowClear
         showSearch
+        searchValue={searchTerm}
+        onSearch={term => setSearchTerm(term)}
         onClear={() => {
+          setSearchTerm('');
           if (!setQuery) return;
           setQuery(prev => ({
             ...prev,

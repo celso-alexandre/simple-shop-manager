@@ -155,6 +155,8 @@ model SaleItem {
   blameUserId    String? @db.ObjectId
   /// FK: SalePaidCost.id
   salePaidCostId String? @db.ObjectId
+  /// Related salePaidCostId payment marked this one to be paid
+  saleCostIsSelected Boolean @default(false)
   /// Related salePaidCostId payment were made
   saleCostIsPaid Boolean @default(false)
 
@@ -181,6 +183,8 @@ model SaleItem {
 model SalePaidCost {
   /// ID
   id        String @id @default(auto()) @map("_id") @db.ObjectId
+  /// Sales from that date and backward
+  endDate DateTime @db.Date
   /// Value
   value     Int
   /// Paid Value
