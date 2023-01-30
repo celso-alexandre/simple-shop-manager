@@ -6,6 +6,7 @@ import {
   useCreateProductMutation,
   ProductsDocument,
   ProductDocument,
+  ProductsSelectDocument,
 } from '../graphql/__generated__/products.gql.generated';
 import { serializeDecimalAsInt } from '../helpers';
 import { ProductsForm } from './form';
@@ -15,7 +16,7 @@ async function onSubmit(product: ProductsFormNode, create: ReturnType<typeof use
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, providerId, ...data } = productDto(product);
   await create({
-    refetchQueries: [ProductDocument, ProductsDocument],
+    refetchQueries: [ProductDocument, ProductsDocument, ProductsSelectDocument],
     variables: {
       data: {
         ...data,

@@ -6,6 +6,7 @@ import {
   useCreateProviderMutation,
   ProvidersDocument,
   ProviderDocument,
+  ProvidersSelectDocument,
 } from '../graphql/__generated__/providers.gql.generated';
 import { ProvidersForm } from './form';
 
@@ -14,7 +15,7 @@ async function onSubmit(
   create: ReturnType<typeof useCreateProviderMutation>[0]
 ) {
   await create({
-    refetchQueries: [ProviderDocument, ProvidersDocument],
+    refetchQueries: [ProviderDocument, ProvidersDocument, ProvidersSelectDocument],
     variables: {
       data: {
         ...data,

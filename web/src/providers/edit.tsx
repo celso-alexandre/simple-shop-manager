@@ -8,6 +8,7 @@ import {
   ProvidersDocument,
   useProviderQuery,
   ProviderDocument,
+  ProvidersSelectDocument,
 } from '../graphql/__generated__/providers.gql.generated';
 import { objectPropertiesSet } from '../helpers';
 import { ProvidersForm } from './form';
@@ -19,7 +20,7 @@ async function onSubmit(
   let wpp = { set: whatsapp };
   if (!whatsapp || whatsapp === '+55 (__) _____-____') wpp = undefined as any;
   await update({
-    refetchQueries: [ProviderDocument, ProvidersDocument],
+    refetchQueries: [ProviderDocument, ProvidersDocument, ProvidersSelectDocument],
     variables: {
       where: { id },
       data: {
