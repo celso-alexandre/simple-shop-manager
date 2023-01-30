@@ -86,6 +86,6 @@ export class SaleResolver {
 
   @ResolveField(() => Number, { name: 'netMarginPercent' })
   forNetMarginPercent(@Parent() { totalValue, totalCostValue }: Sale) {
-    return this.normalizeFloat((totalValue - totalCostValue) / totalValue);
+    return this.normalizeFloat((totalValue - totalCostValue) / totalCostValue);
   }
 }

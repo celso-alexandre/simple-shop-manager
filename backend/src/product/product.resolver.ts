@@ -61,7 +61,7 @@ export class ProductResolver {
 
   @ResolveField(() => Number, { name: 'netMarginPercent' })
   forNetMarginPercent(@Parent() { priceValue, costValue }: Product) {
-    return (priceValue - costValue) / priceValue;
+    return (priceValue - costValue) / costValue;
   }
 
   @ResolveField(() => Number, { name: 'costValueDecimal' })
