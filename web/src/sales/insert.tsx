@@ -22,7 +22,7 @@ async function onSubmit(data: SalesFormNode, create: ReturnType<typeof useCreate
               ...rest,
               totalValue: serializeDecimalAsInt(totalValue),
               product: { connect: { id: productId } },
-              provider: { connect: { id: providerId } },
+              provider: !providerId ? undefined : { connect: { id: providerId } },
             };
           }),
         },

@@ -17,6 +17,14 @@ gql`
 `;
 
 gql`
+  mutation DeleteSale($where: SaleWhereUniqueInput!) {
+    deleteSale(where: $where) {
+      id
+    }
+  }
+`;
+
+gql`
   query Sale($where: SaleWhereUniqueInput!) {
     sale(where: $where) {
       id

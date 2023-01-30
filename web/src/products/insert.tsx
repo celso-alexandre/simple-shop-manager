@@ -22,7 +22,7 @@ async function onSubmit(product: ProductsFormNode, create: ReturnType<typeof use
         isPostPaid: data.isPostPaid ?? false,
         costValue: serializeDecimalAsInt(data.costValue),
         priceValue: serializeDecimalAsInt(data.priceValue),
-        provider: { connect: { id: providerId } },
+        provider: !providerId ? undefined : { connect: { id: providerId } },
       },
     },
   });

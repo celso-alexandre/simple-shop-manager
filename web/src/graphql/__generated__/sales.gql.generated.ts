@@ -18,6 +18,13 @@ export type UpdateSaleMutationVariables = Types.Exact<{
 
 export type UpdateSaleMutation = { __typename?: 'Mutation', updateSale: { __typename?: 'Sale', id: string } };
 
+export type DeleteSaleMutationVariables = Types.Exact<{
+  where: Types.SaleWhereUniqueInput;
+}>;
+
+
+export type DeleteSaleMutation = { __typename?: 'Mutation', deleteSale: { __typename?: 'Sale', id: string } };
+
 export type SaleQueryVariables = Types.Exact<{
   where: Types.SaleWhereUniqueInput;
 }>;
@@ -103,6 +110,39 @@ export function useUpdateSaleMutation(baseOptions?: Apollo.MutationHookOptions<U
 export type UpdateSaleMutationHookResult = ReturnType<typeof useUpdateSaleMutation>;
 export type UpdateSaleMutationResult = Apollo.MutationResult<UpdateSaleMutation>;
 export type UpdateSaleMutationOptions = Apollo.BaseMutationOptions<UpdateSaleMutation, UpdateSaleMutationVariables>;
+export const DeleteSaleDocument = gql`
+    mutation DeleteSale($where: SaleWhereUniqueInput!) {
+  deleteSale(where: $where) {
+    id
+  }
+}
+    `;
+export type DeleteSaleMutationFn = Apollo.MutationFunction<DeleteSaleMutation, DeleteSaleMutationVariables>;
+
+/**
+ * __useDeleteSaleMutation__
+ *
+ * To run a mutation, you first call `useDeleteSaleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteSaleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteSaleMutation, { data, loading, error }] = useDeleteSaleMutation({
+ *   variables: {
+ *      where: // value for 'where'
+ *   },
+ * });
+ */
+export function useDeleteSaleMutation(baseOptions?: Apollo.MutationHookOptions<DeleteSaleMutation, DeleteSaleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteSaleMutation, DeleteSaleMutationVariables>(DeleteSaleDocument, options);
+      }
+export type DeleteSaleMutationHookResult = ReturnType<typeof useDeleteSaleMutation>;
+export type DeleteSaleMutationResult = Apollo.MutationResult<DeleteSaleMutation>;
+export type DeleteSaleMutationOptions = Apollo.BaseMutationOptions<DeleteSaleMutation, DeleteSaleMutationVariables>;
 export const SaleDocument = gql`
     query Sale($where: SaleWhereUniqueInput!) {
   sale(where: $where) {

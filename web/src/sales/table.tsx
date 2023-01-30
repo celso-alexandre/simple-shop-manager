@@ -1,12 +1,15 @@
 import { Button, Table, Tooltip } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { SalesNode } from '.';
 import { formatMoneyFromDecimal, formatMoneyFromInt, formatPercentFromDecimal } from '../helpers';
+import { SalesDocument, useDeleteSaleMutation } from '../graphql/__generated__/sales.gql.generated';
 
 export function SalesTable(props: TableProps<SalesNode>) {
-  const navigate = useNavigate();
+  const [deleteSale] = useDeleteSaleMutation({
+    refetchQueries: [SalesDocument],
+  });
 
   const columns: typeof props.columns = [
     {
@@ -41,9 +44,19 @@ export function SalesTable(props: TableProps<SalesNode>) {
       key: 'actions',
       render: (value, record) => {
         return (
-          <div>
-            <Button onClick={() => navigate(`/sale/${record.id}`)} size="middle" type="primary">
-              Editar
+          <div style={{ width: 170, display: 'flex', justifyContent: 'space-between' }}>
+            <Link to={`/sale/${record.id}`}>
+              <Button size="middle" type="primary">
+                Editar
+              </Button>
+            </Link>
+            <Button
+              style={{ background: '#f33', color: '#fff' }}
+              onClick={() => deleteSale({ variables: { where: { id: record.id } } })}
+              size="middle"
+              type="default"
+            >
+              Remover
             </Button>
           </div>
         );
