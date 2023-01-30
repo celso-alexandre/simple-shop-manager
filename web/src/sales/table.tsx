@@ -20,7 +20,7 @@ export function SalesTable(props: TableProps<SalesNode>) {
     {
       title: 'Data',
       dataIndex: nameof<SalesNode>(x => x.date),
-      render: value => dayjs(value).format('L LTS'),
+      render: value => dayjs(value).format('DD/MM/YYYY HH:mm'),
     },
     {
       title: 'Valor',
@@ -42,9 +42,10 @@ export function SalesTable(props: TableProps<SalesNode>) {
     },
     {
       key: 'actions',
+      width: 200,
       render: (value, record) => {
         return (
-          <div style={{ width: 170, display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
             <Link to={`/sale/${record.id}`}>
               <Button size="middle" type="primary">
                 Editar

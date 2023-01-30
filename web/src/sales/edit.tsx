@@ -91,7 +91,7 @@ export function SaleEdit() {
         nodes: sale.saleItems.nodes.map(item => ({
           ...item,
           totalValue: item.totalValueDecimal,
-          netMarginPercent: serializeIntAsDecimal(item.netMarginPercent),
+          netMarginPercent: serializeDecimalAsInt(item.netMarginPercent),
         })),
       },
     };

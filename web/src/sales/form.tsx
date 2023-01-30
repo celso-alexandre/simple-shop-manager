@@ -108,7 +108,7 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
 
       <Col>
         <Form.Item name={nameof<SalesFormNode>(x => x.date)} label="Data" labelCol={{ span: 24 }}>
-          <DatePicker style={{ width: '100%' }} format="L" />
+          <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" />
         </Form.Item>
       </Col>
 
@@ -133,7 +133,7 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
                     name={[field.name, nameof<SaleItem>(x => x.productId)]}
                   >
                     <ProductAsyncSelect
-                      style={{ width: 200 }}
+                      style={{ width: 300 }}
                       onChange={async () => {
                         await setSaleItemProduct(field.name);
                       }}
@@ -196,6 +196,7 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
                 <Col>
                   <Form.Item
                     labelCol={{ span: 24 }}
+                    style={{ maxWidth: 150 }}
                     label="M Líquida"
                     name={[field.name, nameof<SaleItem>(x => x.netMarginPercent)]}
                     tooltip={`Custo: ${formatMoneyFromDecimal(

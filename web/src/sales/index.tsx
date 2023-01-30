@@ -81,7 +81,7 @@ export function Sales() {
 
             <RangePicker
               id="dates"
-              format="L"
+              format="DD/MM/YYYY"
               style={{ marginTop: 10 }}
               allowClear
               value={[dayjs(startDate), dayjs(endDate)]}
