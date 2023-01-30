@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
 import { SelectProps } from 'antd';
 import { DecodedValueMap, QueryParamConfig, SetQuery } from 'use-query-params';
+import type { CSSProperties, FC } from 'react';
 import { useProductsSelectQuery } from '../graphql/__generated__/products.gql.generated';
 import type { ProductsSelectQuery } from '../graphql/__generated__/products.gql.generated';
 import { SelectDropdown } from './select.component';
 import { QueryMode } from '../types';
+import { useDebounce } from '../hooks/useDebounce';
 
 type queryFields = {
   productId: QueryParamConfig<number>;
@@ -14,19 +15,19 @@ type queryFields = {
 type ProductAsyncSelectProps = SelectProps<any> & {
   setQuery?: SetQuery<queryFields>;
   query?: Partial<DecodedValueMap<queryFields>>;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 };
 
-export const ProductAsyncSelect: React.FC<ProductAsyncSelectProps> = ({ setQuery, query, style, ...props }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+export const ProductAsyncSelect: FC<ProductAsyncSelectProps> = ({ setQuery, query, style, ...props }) => {
+  const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebounce('');
   const { data, loading, fetchMore, refetch } = useProductsSelectQuery({
     variables: {
-      where: !searchTerm
+      where: !debouncedSearchTerm
         ? undefined
         : {
             OR: [
-              { name: { contains: searchTerm, mode: QueryMode.Insensitive } },
-              { brandName: { contains: searchTerm, mode: QueryMode.Insensitive } },
+              { name: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
+              { brandName: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
             ],
           },
     },

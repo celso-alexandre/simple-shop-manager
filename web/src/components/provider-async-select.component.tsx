@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
 import { SelectProps } from 'antd';
 import { DecodedValueMap, QueryParamConfig, SetQuery } from 'use-query-params';
+import type { CSSProperties, FC } from 'react';
 import { useProvidersSelectQuery } from '../graphql/__generated__/providers.gql.generated';
 import type { ProvidersSelectQuery } from '../graphql/__generated__/providers.gql.generated';
 import { SelectDropdown } from './select.component';
 import { QueryMode } from '../types';
+import { useDebounce } from '../hooks/useDebounce';
 
 type queryFields = {
   providerId: QueryParamConfig<number>;
@@ -14,21 +15,21 @@ type queryFields = {
 type ProviderAsyncSelectProps = SelectProps<any> & {
   setQuery?: SetQuery<queryFields>;
   query?: Partial<DecodedValueMap<queryFields>>;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 };
 
-export const ProviderAsyncSelect: React.FC<ProviderAsyncSelectProps> = ({ setQuery, query, style, ...props }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+export const ProviderAsyncSelect: FC<ProviderAsyncSelectProps> = ({ setQuery, query, style, ...props }) => {
+  const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebounce('');
   const { data, loading, fetchMore, refetch } = useProvidersSelectQuery({
     variables: {
-      where: !searchTerm
+      where: !debouncedSearchTerm
         ? undefined
         : {
             OR: [
-              { name: { contains: searchTerm, mode: QueryMode.Insensitive } },
-              { document: { contains: searchTerm, mode: QueryMode.Insensitive } },
-              { email: { contains: searchTerm, mode: QueryMode.Insensitive } },
-              { whatsapp: { contains: searchTerm, mode: QueryMode.Insensitive } },
+              { name: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
+              { document: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
+              { email: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
+              { whatsapp: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
             ],
           },
     },
