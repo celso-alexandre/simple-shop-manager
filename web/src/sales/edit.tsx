@@ -13,7 +13,7 @@ import {
   useSaleQuery,
   SaleQuery,
 } from '../graphql/__generated__/sales.gql.generated';
-import { objectPropertiesSet, serializeDecimalAsInt, serializeIntAsDecimal } from '../helpers';
+import { objectPropertiesSet, serializeDecimalAsInt } from '../helpers';
 import { SaleItemUpdateWithWhereUniqueWithoutSaleInput } from '../types';
 import { SalesForm } from './form';
 import { saleDto } from './helper';

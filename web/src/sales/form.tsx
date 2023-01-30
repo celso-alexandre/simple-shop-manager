@@ -133,7 +133,7 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
                     name={[field.name, nameof<SaleItem>(x => x.productId)]}
                   >
                     <ProductAsyncSelect
-                      style={{ width: 300 }}
+                      style={{ width: 400 }}
                       onChange={async () => {
                         await setSaleItemProduct(field.name);
                       }}

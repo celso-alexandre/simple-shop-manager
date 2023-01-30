@@ -37,7 +37,7 @@ export const ProductAsyncSelect: FC<ProductAsyncSelectProps> = ({ setQuery, quer
     <div style={style}>
       <SelectDropdown<ProductsSelectQuery, 'products'>
         autoClearSearchValue={false}
-        mapData={({ value, label, label2 }) => ({ label: `${label} ${label2}`, value })}
+        mapData={({ value, label, label2 }) => ({ label: `${label} ${label2 ?? ''}`, value })}
         data={data}
         refetch={refetch}
         fetchMore={fetchMore}

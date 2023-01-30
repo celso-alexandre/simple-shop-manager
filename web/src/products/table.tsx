@@ -59,9 +59,9 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
       render: (value, record) => {
         if (!record.provider) return null;
         return (
-          <Typography.Link
-            href={`/provider/${record.providerId}`}
-          >{`${record.provider?.name} ${record.provider?.whatsapp}`}</Typography.Link>
+          <Typography.Link href={`/provider/${record.providerId}`}>{`${record.provider?.name} ${
+            record.provider?.whatsapp ?? ''
+          }`}</Typography.Link>
         );
       },
       ellipsis: true,

@@ -12,7 +12,7 @@ type MenuItem = Required<MenuProps>['items'][number];
 
 export function SideMenu() {
   const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1079px)',
+    query: '(min-width: 1360px)',
   });
   const [collapsed, setCollapsed] = useState(true);
   const location = useLocation();
