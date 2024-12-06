@@ -2,13 +2,13 @@
 FROM node:22 AS builder
 WORKDIR /app
 
+ADD src ./src
+ADD prisma ./prisma
 COPY package.json pnpm-lock.yaml ./
 COPY pnpm-lock.yaml ./
-COPY ./prisma ./
 COPY tsconfig.json ./
 COPY tsconfig.build.json ./
 COPY nest-cli.json ./
-COPY ./src ./
 
 RUN npm pkg delete scripts.postinstall
 RUN npm install -g pnpm
