@@ -64,8 +64,8 @@ export function SelectDropdown<T extends TData<K>, K extends keyof T>({
           skip: (data?.[entityName].pageInfo?.currentPage || 0) * 10,
         },
         updateQuery: (previousResult, { fetchMoreResult }) => {
-          const previousEntry = previousResult?.[entityName];
-          const newEntries = fetchMoreResult?.[entityName];
+          const previousEntry = (previousResult as T)?.[entityName];
+          const newEntries = (fetchMoreResult as T)?.[entityName];
           return {
             [entityName]: {
               pageInfo: newEntries?.pageInfo,

@@ -93,7 +93,7 @@ export const RefetchButton: React.FC<RefetchButtonProps> = ({
   return (
     <div className={container} {...rest}>
       <Button
-        type="ghost"
+        type="dashed"
         disabled={disabled || isLoading}
         icon={
           <span className="anticon">

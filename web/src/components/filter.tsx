@@ -1,5 +1,5 @@
 import { Col, Input } from 'antd';
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, JSX } from 'react';
 import { IoMdSearch } from 'react-icons/io';
 import type { DecodedValueMap, QueryParamConfig } from 'use-query-params';
 import type { SetDebouncedQuery } from '../helpers/use-query-params-with-debounce';

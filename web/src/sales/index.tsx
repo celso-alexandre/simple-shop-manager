@@ -102,6 +102,7 @@ export function Sales() {
         <SalesTable
           loading={loading}
           dataSource={data?.sales.nodes}
+          rowKey={"id" as any}
           {...tablePagination({
             pageSize: take,
             skip,
