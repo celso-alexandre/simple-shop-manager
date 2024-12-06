@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
 COPY pnpm-lock.yaml ./
-COPY prisma ./prisma
+COPY ./prisma ./
 COPY tsconfig.json ./
 COPY tsconfig.build.json ./
 COPY nest-cli.json ./
