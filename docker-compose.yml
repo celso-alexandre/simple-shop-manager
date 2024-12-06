@@ -6,8 +6,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    env_file:
-      - ./backend/.env
+    volumes:
+      - ./backend/.env:/app/.env:ro
 
   web:
     restart: unless-stopped
@@ -16,5 +16,5 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4173:80"
-    env_file:
-      - ./web/.env
+    volumes:
+      - ./web/.env:/app/.env:ro
