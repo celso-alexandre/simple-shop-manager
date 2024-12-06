@@ -8,6 +8,9 @@
    - [x] If postpaid: allow to assign a provider to be paid
 - [ ] List me the comission on every sale (prepaid)
 - [ ] List me margin on every sale and its summup
+- [ ] Allow to register a new product on sale
+- [ ] Stock management
+   - [ ] Allow to adjust stock on sale
 
 ## Screenshots
 ### Sale
