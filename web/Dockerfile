@@ -8,7 +8,7 @@ COPY src ./src
 COPY codegen.yml ./
 COPY index.html ./
 COPY tsconfig.json ./
-COPY tsconfig.build.json ./
+COPY tsconfig.node.json ./
 COPY vite.config.ts ./
 
 RUN npm install -g pnpm && pnpm install
