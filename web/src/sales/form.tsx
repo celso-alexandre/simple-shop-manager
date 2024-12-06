@@ -107,7 +107,8 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
       </Form.Item>
 
       <Col>
-        <Form.Item name={nameof<SalesFormNode>(x => x.date)} label="Data" labelCol={{ span: 24 }}>
+        <Form.Item name={nameof<SalesFormNode>(x => x.date)}>
+          <label>Data</label>
           <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" />
         </Form.Item>
       </Col>
@@ -120,18 +121,16 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
             type SaleItemKeys = keyof SalesFormNode['saleItems']['nodes'][0];
             return (
               <Fragment key={field.key ?? field.name}>
-                <Col>
-                  <Form.Item hidden labelCol={{ span: 24 }} name={[field.name, 'id' as SaleItemKeys]}>
+                  <Form.Item hidden  name={[field.name, 'id' as SaleItemKeys]}>
                     <InputNumber />
                   </Form.Item>
-                </Col>
 
-                <Col>
                   <Form.Item
-                    labelCol={{ span: 24 }}
-                    label="Produto"
                     name={[field.name, nameof<SaleItem>(x => x.productId)]}
                   >
+                    <div>
+                      <label>Produto</label>
+                    </div>
                     <ProductAsyncSelect
                       style={{ width: 400 }}
                       onChange={async () => {
@@ -139,14 +138,13 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
                       }}
                     />
                   </Form.Item>
-                </Col>
 
-                <Col>
                   <Form.Item
-                    labelCol={{ span: 24 }}
-                    label="Quantidade"
                     name={[field.name, nameof<SaleItem>(x => x.quantity)]}
                   >
+                    <div>
+                      <label>Quantidade</label>
+                    </div>
                     <InputNumber
                       precision={0}
                       min={1}
@@ -155,61 +153,57 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
                       }}
                     />
                   </Form.Item>
-                </Col>
 
-                <Col>
                   <Form.Item
-                    labelCol={{ span: 24 }}
-                    label="Valor"
                     name={[field.name, nameof<SaleItem>(x => x.totalValue)]}
                   >
+                    <div>
+                      <label>Valor</label>
+                    </div>
                     <InputNumberMoney
                       onChange={async value => {
                         await setTotalValue(field.name, +(value ?? 0));
                       }}
                     />
                   </Form.Item>
-                </Col>
 
-                <Col>
                   <Form.Item
-                    labelCol={{ span: 24 }}
-                    label="Fornecedor"
                     name={[field.name, nameof<SaleItem>(x => x.providerId)]}
                     style={{ width: 220 }}
                   >
+                    <div>
+                      <label>Fornecedor</label>
+                    </div>
                     <ProviderAsyncSelect style={{ width: '100%' }} />
                   </Form.Item>
-                </Col>
 
-                <Col>
                   <Form.Item
-                    labelCol={{ span: 24 }}
-                    label="Consignado?"
                     name={[field.name, nameof<SaleItem>(x => x.costIsPostPaid)]}
                     valuePropName="checked"
                   >
+                    <div>
+                      <label>Consignado?</label>
+                    </div>
                     <Switch />
                   </Form.Item>
-                </Col>
 
-                <Col>
                   <Form.Item
-                    labelCol={{ span: 24 }}
                     style={{ maxWidth: 150 }}
-                    label="M Líquida"
                     name={[field.name, nameof<SaleItem>(x => x.netMarginPercent)]}
                     tooltip={`Custo: ${formatMoneyFromDecimal(
                       props.form?.getFieldValue([
-                        ...nameof.split<SalesFormNode>(x => x.saleItems.nodes),
+                        'saleItems',
+                        'nodes',
                         field.name,
-                        nameof<SaleItem>(x => x.totalCostValue),
+                        'totalCostValue',
                       ])
                     )}`}
                   >
+                    <div>
+                      <label>M Líquida</label>
+                    </div>
                     <InputNumberPercent disabled />
                   </Form.Item>
-                </Col>
 
                 <div style={{ width: 100, display: 'flex', justifyContent: 'space-between' }}>
                   <div style={{ display: 'flex', alignItems: 'flex-end' }}>

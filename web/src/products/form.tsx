@@ -17,32 +17,32 @@ export function ProductsForm({ onFinish: finish, ...props }: Parameters<typeof F
       </Form.Item>
 
       <Col>
-        <Form.Item name={nameof<ProductsFormNode>(x => x.name)} label="Nome" labelCol={{ span: 24 }}>
+        <Form.Item name={nameof<ProductsFormNode>(x => x.name)} label="Nome">
           <Input style={{ width: '100%' }} />
         </Form.Item>
       </Col>
 
       <Col>
-        <Form.Item name={nameof<ProductsFormNode>(x => x.brandName)} label="Marca" labelCol={{ span: 24 }}>
+        <Form.Item name={nameof<ProductsFormNode>(x => x.brandName)} label="Marca">
           <Input style={{ width: '100%' }} />
         </Form.Item>
       </Col>
 
       <Col>
-        <Form.Item name={nameof<ProductsFormNode>(x => x.costValue)} label="Custo" labelCol={{ span: 24 }}>
+        <Form.Item name={nameof<ProductsFormNode>(x => x.costValue)} label="Custo">
           <InputNumberMoney style={{ width: '100%' }} />
         </Form.Item>
       </Col>
 
       <Col>
-        <Form.Item name={nameof<ProductsFormNode>(x => x.priceValue)} label="Preço" labelCol={{ span: 24 }}>
+        <Form.Item name={nameof<ProductsFormNode>(x => x.priceValue)} label="Preço">
           <InputNumberMoney style={{ width: '100%' }} />
         </Form.Item>
       </Col>
 
       <Col>
         <Form.Item
-          labelCol={{ span: 24 }}
+         
           label="Fornecedor"
           name={nameof<ProductsFormNode>(x => x.providerId)}
           style={{ width: 300 }}
@@ -55,7 +55,7 @@ export function ProductsForm({ onFinish: finish, ...props }: Parameters<typeof F
         <Form.Item
           name={nameof<ProductsFormNode>(x => x.isPostPaid)}
           label="Consignado"
-          labelCol={{ span: 24 }}
+         
           valuePropName="checked"
         >
           <Switch />

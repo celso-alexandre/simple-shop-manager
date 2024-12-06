@@ -16,13 +16,13 @@ export function ProvidersForm({ onFinish: finish, ...props }: Parameters<typeof 
       </Form.Item>
 
       <Col>
-        <Form.Item name={nameof<ProvidersFormNode>(x => x.name)} label="Name" labelCol={{ span: 24 }}>
+        <Form.Item name={nameof<ProvidersFormNode>(x => x.name)} label="Name">
           <Input style={{ width: '100%' }} />
         </Form.Item>
       </Col>
 
       <Col>
-        <Form.Item name={nameof<ProvidersFormNode>(x => x.document)} label="Documento" labelCol={{ span: 24 }}>
+        <Form.Item name={nameof<ProvidersFormNode>(x => x.document)} label="Documento">
           <Input style={{ width: '100%' }} />
         </Form.Item>
       </Col>
@@ -31,7 +31,7 @@ export function ProvidersForm({ onFinish: finish, ...props }: Parameters<typeof 
         <Form.Item
           name={nameof<ProvidersFormNode>(x => x.email)}
           label="E-mail"
-          labelCol={{ span: 24 }}
+         
           // rules={[{ required: true, type: 'regexp', pattern: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g }]}
         >
           <Input style={{ width: '100%' }} />
@@ -39,7 +39,7 @@ export function ProvidersForm({ onFinish: finish, ...props }: Parameters<typeof 
       </Col>
 
       <Col>
-        <Form.Item name={nameof<ProvidersFormNode>(x => x.whatsapp)} label="Whatsapp" labelCol={{ span: 24 }}>
+        <Form.Item name={nameof<ProvidersFormNode>(x => x.whatsapp)} label="Whatsapp">
           <InputPhone style={{ width: '100%' }} />
         </Form.Item>
       </Col>
