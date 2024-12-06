@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   backend:
+    restart: unless-stopped
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -15,6 +16,7 @@ services:
       NODE_ENV: development
 
   web:
+    restart: unless-stopped
     build:
       context: ./web
       dockerfile: Dockerfile
