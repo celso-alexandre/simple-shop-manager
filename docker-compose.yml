@@ -7,9 +7,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
     env_file:
       - ./backend/.env
     environment:
@@ -21,10 +18,7 @@ services:
       context: ./web
       dockerfile: Dockerfile
     ports:
-      - "8080:80"
-    volumes:
-      - ./web:/app
-      - /app/node_modules
+      - "4173:80"
     env_file:
       - ./web/.env
     environment:
