@@ -8,8 +8,6 @@ services:
       - "3000:3000"
     env_file:
       - ./backend/.env
-    environment:
-      NODE_ENV: development
 
   web:
     restart: unless-stopped
@@ -20,5 +18,3 @@ services:
       - "4173:80"
     env_file:
       - ./web/.env
-    environment:
-      NODE_ENV: production
