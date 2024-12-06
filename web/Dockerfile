@@ -15,7 +15,7 @@ RUN npm install -g pnpm
 RUN pnpm install
 COPY .env ./
 RUN pnpm build
-RUN pnpm prune --prod
+# RUN pnpm prune --prod
 
 # Stage 2: Serve static files
 FROM nginx:alpine
