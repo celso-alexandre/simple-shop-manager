@@ -15,7 +15,7 @@ RUN npm install -g pnpm
 RUN pnpm install --ignore-scripts
 RUN ./node_modules/.bin/prisma generate
 RUN pnpm build
-RUN pnpm prune --prod
+# RUN pnpm prune --prod
 
 # Stage 2: Run application
 FROM node:22-alpine
