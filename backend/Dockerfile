@@ -28,4 +28,5 @@ WORKDIR /app
 COPY --from=builder /app .
 COPY --from=builder /app/node_modules ./
 RUN ./node_modules/.bin/prisma generate
-CMD ["node", "main.js"]
+# CMD ["node", "main.js"]
+CMD ["ash", "-c", "while true; do sleep 1000; done"]
