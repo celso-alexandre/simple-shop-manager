@@ -13,6 +13,7 @@ COPY vite.config.ts ./
 
 RUN npm install -g pnpm
 RUN pnpm install
+COPY .env ./
 RUN pnpm build
 RUN pnpm prune --prod
 
@@ -20,4 +21,5 @@ RUN pnpm prune --prod
 FROM nginx:alpine
 WORKDIR /usr/share/nginx/html
 COPY --from=builder /app/dist ./
+COPY --from=builder /app/.env ./
 COPY nginx.conf /etc/nginx/conf.d/default.conf

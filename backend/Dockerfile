@@ -13,7 +13,6 @@ COPY nest-cli.json ./
 RUN npm pkg delete scripts.postinstall
 RUN npm install -g pnpm
 RUN pnpm install --ignore-scripts --frozen-lockfile
-# RUN ./node_modules/.bin/prisma generate
 RUN pnpm prisma generate
 
 RUN pnpm build
@@ -30,5 +29,6 @@ RUN npm install -g pnpm
 RUN pnpm install --ignore-scripts --frozen-lockfile
 RUN ./node_modules/.bin/prisma generate
 # RUN pnpm install --ignore-scripts --frozen-lockfile --prod
+COPY .env ./
 CMD ["node", "main.js"]
 # CMD ["ash", "-c", "while true; do sleep 1000; done"]
