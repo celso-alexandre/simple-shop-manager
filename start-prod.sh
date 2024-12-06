@@ -1,4 +1,5 @@
 #!/bin/bash
+source ~/.bashrc
 git add .
 git stash
 git pull
