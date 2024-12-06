@@ -2,7 +2,9 @@
 FROM node:22 AS builder
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
+RUN npm pkg delete scripts.postinstall
 RUN npm install -g pnpm && pnpm install
+RUN ./node_modules/.bin/prisma generate
 COPY . .
 RUN pnpm build
 
