@@ -26,7 +26,7 @@ RUN rm -rf dist
 FROM node:22-alpine
 WORKDIR /app
 COPY --from=builder /app .
-# COPY --from=builder /app/node_modules ./
-# RUN ./node_modules/.bin/prisma generate
+RUN rm -rf /app/node_modules/.pnpm/@prisma*
+RUN ./node_modules/.bin/prisma generate
 CMD ["node", "main.js"]
 # CMD ["ash", "-c", "while true; do sleep 1000; done"]
