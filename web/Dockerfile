@@ -5,6 +5,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN npm install -g pnpm && pnpm install
 COPY . .
 RUN pnpm build
+RUN pnpm prune --prod
 
 # Stage 2: Serve static files
 FROM nginx:alpine
