@@ -13,7 +13,8 @@ COPY ./src ./
 RUN npm pkg delete scripts.postinstall
 RUN npm install -g pnpm
 RUN pnpm install --ignore-scripts
-RUN ./node_modules/.bin/prisma generate
+# RUN ./node_modules/.bin/prisma generate
+RUN pnpm prisma generate
 RUN pnpm build
 # RUN pnpm prune --prod
 
