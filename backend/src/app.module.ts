@@ -3,7 +3,7 @@ import { ConfigModule, ConfigType } from '@nestjs/config';
 import { join } from 'path';
 import { GqlModuleOptions, GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver } from '@nestjs/apollo';
-import { Enviroment } from '@Src/common/env.config';
+import { Enviroment } from './common/env.config';
 import { CommonModule } from './common/common.module';
 import { UserModule } from './user/user.module';
 import { ProductModule } from './product/product.module';

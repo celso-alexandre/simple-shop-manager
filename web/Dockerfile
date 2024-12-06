@@ -1,7 +1,16 @@
 # Stage 1: Install dependencies and build
 FROM node:22 AS builder
 WORKDIR /app
+
 COPY package.json pnpm-lock.yaml ./
+COPY public ./public
+COPY src ./src
+COPY codegen.yml ./
+COPY index.html ./
+COPY tsconfig.json ./
+COPY tsconfig.build.json ./
+COPY vite.config.ts ./
+
 RUN npm install -g pnpm && pnpm install
 RUN pnpm build
 RUN pnpm prune --prod
