@@ -11,7 +11,8 @@ COPY tsconfig.json ./
 COPY tsconfig.node.json ./
 COPY vite.config.ts ./
 
-RUN npm install -g pnpm && pnpm install
+RUN npm install -g pnpm
+RUN pnpm install
 RUN pnpm build
 RUN pnpm prune --prod
 
