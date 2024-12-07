@@ -1,4 +1,4 @@
-/* eslint-disable no-void */
+
 import { useState, useMemo, useEffect } from 'react';
 import { Select, SelectProps } from 'antd';
 import { ObservableQueryFields } from '@apollo/client';
@@ -17,7 +17,6 @@ type TData<X extends keyof any> = { __typename?: string } & Record<
 
 type TVariables = { skip?: number; take?: number; search?: string };
 
-// eslint-disable-next-line no-use-before-define
 type SelectDropdownProps<T extends TData<K>, K extends keyof T> = {
   data?: T;
   fetchMore: ObservableQueryFields<T, TVariables>['fetchMore'];
@@ -30,7 +29,6 @@ type SelectDropdownProps<T extends TData<K>, K extends keyof T> = {
   };
 } & SelectProps<any>;
 
-// eslint-disable-next-line no-use-before-define
 export function SelectDropdown<T extends TData<K>, K extends keyof T>({
   data,
   fetchMore,
@@ -51,7 +49,6 @@ export function SelectDropdown<T extends TData<K>, K extends keyof T>({
   const options = useMemo(() => {
     if (!mapData) return;
 
-    // eslint-disable-next-line consistent-return
     return data?.[entityName]?.nodes?.map(mapData) || [];
   }, [data]);
 
@@ -79,7 +76,9 @@ export function SelectDropdown<T extends TData<K>, K extends keyof T>({
   return (
     <Select
       onPopupScroll={onScroll}
-      onSearch={text => setselectedSearch(text as any)}
+      onSearch={(text) => {
+        setselectedSearch(text as any);
+      }}
       searchValue={selectedSearch}
       options={options}
       loading={loading}

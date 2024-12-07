@@ -13,6 +13,7 @@ import { ProductsForm } from './form';
 import { productDto } from './helpers';
 
 async function onSubmit(product: ProductsFormNode, create: ReturnType<typeof useCreateProductMutation>[0]) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, providerId, ...data } = productDto(product);
   await create({
     refetchQueries: [ProductDocument, ProductsDocument, ProductsSelectDocument],
@@ -40,10 +41,19 @@ export function ProductInsert() {
     <>
       <Title title="Novo Produto" />
 
-      <ProductsForm form={form} onFinish={values => onSubmit(values, create)} />
+      <ProductsForm
+        form={form}
+        onFinish={(values) => {
+          onSubmit(values, create);
+        }} />
 
       <Row style={{ marginTop: '20px' }}>
-        <Button size="large" type="primary" onClick={() => form.submit()}>
+        <Button
+          size="large"
+          type="primary"
+          onClick={() => {
+            form.submit();
+          }}>
           Salvar
         </Button>
       </Row>

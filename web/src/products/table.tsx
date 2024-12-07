@@ -1,7 +1,6 @@
 import { Button, Table, Tooltip, Typography } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
-import { useNavigate } from 'react-router-dom';
 import { ProductsNode } from '.';
 import { formatPercentFromDecimal, formatMoneyFromDecimal, formatMoneyFromInt } from '../helpers';
 import { BooleanTag } from '../components/tag';
@@ -12,45 +11,67 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
   const columns: typeof props.columns = [
     {
       title: 'ID',
-      dataIndex: nameof<ProductsNode>(x => x.id),
+      dataIndex: nameof<ProductsNode>((x) => {
+        return x.id;
+      }),
       ellipsis: true,
     },
     {
       title: 'Nome',
-      dataIndex: nameof<ProductsNode>(x => x.name),
+      dataIndex: nameof<ProductsNode>((x) => {
+        return x.name;
+      }),
       ellipsis: true,
     },
     {
       title: 'Marca',
-      dataIndex: nameof<ProductsNode>(x => x.brandName),
+      dataIndex: nameof<ProductsNode>((x) => {
+        return x.brandName;
+      }),
       ellipsis: true,
     },
     {
       title: 'Data',
-      dataIndex: nameof<ProductsNode>(x => x.createdAt),
-      render: value => dayjs(value).format('L'),
+      dataIndex: nameof<ProductsNode>((x) => {
+        return x.createdAt;
+      }),
+      render: (value) => {
+        return dayjs(value).format('L');
+      },
     },
     {
       title: 'Preço',
-      dataIndex: nameof<ProductsNode>(x => x.priceValueDecimal),
-      render: value => formatMoneyFromDecimal(value),
+      dataIndex: nameof<ProductsNode>((x) => {
+        return x.priceValueDecimal;
+      }),
+      render: (value) => {
+        return formatMoneyFromDecimal(value);
+      },
     },
     {
       title: 'Qtde',
-      dataIndex: nameof<ProductsNode>(x => x.qty),
+      dataIndex: nameof<ProductsNode>((x) => {
+        return x.qty;
+      }),
       render: (_, record) => {
         if (record.controlsQty) return record.qty;
         return null;
-      }
+      },
     },
     {
       title: 'Tp Custo',
-      dataIndex: nameof<ProductsNode>(x => x.isPostPaid),
-      render: value => <BooleanTag bool={value}>{value ? 'Consignado' : 'Normal'}</BooleanTag>,
+      dataIndex: nameof<ProductsNode>((x) => {
+        return x.isPostPaid;
+      }),
+      render: (value) => {
+        return <BooleanTag bool={value}>{value ? 'Consignado' : 'Normal'}</BooleanTag>;
+      },
     },
     {
       title: 'M Líquida',
-      dataIndex: nameof<ProductsNode>(x => x.priceValueDecimal),
+      dataIndex: nameof<ProductsNode>((x) => {
+        return x.priceValueDecimal;
+      }),
       render: (value, record) => {
         const common = (
           <>
@@ -63,7 +84,9 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
     },
     {
       title: 'Fornecedor',
-      dataIndex: nameof<ProductsNode>(x => x.provider),
+      dataIndex: nameof<ProductsNode>((x) => {
+        return x.provider;
+      }),
       render: (value, record) => {
         if (!record.provider) return null;
         return (
@@ -81,10 +104,13 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
       render: (value, record) => {
         return (
           <div>
-            <Button onClick={() => {
+            <Button
+              onClick={() => {
               // navigate(`/product/${record.id}`)
-              window.location.href = `/product/${record.id}`;
-            }} size="middle" type="primary">
+                window.location.href = `/product/${record.id}`;
+              }}
+              size="middle"
+              type="primary">
               Editar
             </Button>
           </div>

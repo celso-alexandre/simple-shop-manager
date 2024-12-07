@@ -11,25 +11,39 @@ export function ProvidersForm({ onFinish: finish, ...props }: Parameters<typeof 
   }
   return (
     <Form onFinish={onFinish} style={{ width: '100%' }} layout="inline" {...props}>
-      <Form.Item hidden name={nameof<ProvidersFormNode>(x => x.id)}>
+      <Form.Item
+        hidden
+        name={nameof<ProvidersFormNode>((x) => {
+          return x.id;
+        })}>
         <Input />
       </Form.Item>
 
       <Col>
-        <Form.Item name={nameof<ProvidersFormNode>(x => x.name)} label="Name">
-          <Input style={{ width: '100%' }} />
-        </Form.Item>
-      </Col>
-
-      <Col>
-        <Form.Item name={nameof<ProvidersFormNode>(x => x.document)} label="Documento">
+        <Form.Item
+          name={nameof<ProvidersFormNode>((x) => {
+            return x.name;
+          })}
+          label="Name">
           <Input style={{ width: '100%' }} />
         </Form.Item>
       </Col>
 
       <Col>
         <Form.Item
-          name={nameof<ProvidersFormNode>(x => x.email)}
+          name={nameof<ProvidersFormNode>((x) => {
+            return x.document;
+          })}
+          label="Documento">
+          <Input style={{ width: '100%' }} />
+        </Form.Item>
+      </Col>
+
+      <Col>
+        <Form.Item
+          name={nameof<ProvidersFormNode>((x) => {
+            return x.email;
+          })}
           label="E-mail"
          
           // rules={[{ required: true, type: 'regexp', pattern: /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g }]}
@@ -39,7 +53,11 @@ export function ProvidersForm({ onFinish: finish, ...props }: Parameters<typeof 
       </Col>
 
       <Col>
-        <Form.Item name={nameof<ProvidersFormNode>(x => x.whatsapp)} label="Whatsapp">
+        <Form.Item
+          name={nameof<ProvidersFormNode>((x) => {
+            return x.whatsapp;
+          })}
+          label="Whatsapp">
           <InputPhone style={{ width: '100%' }} />
         </Form.Item>
       </Col>

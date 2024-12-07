@@ -26,10 +26,11 @@
     "prisma:format": "pnpm prisma format",
     "prisma:deploy": "pnpm prisma migrate deploy && pnpm prisma:seed",
     "prisma:seed": "ts-node prisma/seed.ts",
-    "prisma:generate": "PRISMA_BINARY_TARGET=\\\"native\\\" prisma generate",
+    "prisma:generate": "prisma generate",
     "prisma:proto": "PRISMA_BINARY_TARGET=\\\"native\\\" prisma db push",
     "prisma:migrate": "PRISMA_BINARY_TARGET=\\\"native\\\" prisma migrate dev && pnpm prisma-uml prisma/schema.prisma --output jpg --file schema.jpg",
-    "prisma:migrate:create": "pnpm prisma migrate dev --create-only"
+    "prisma:migrate:create": "pnpm prisma migrate dev --create-only",
+    "generate": "pnpm prisma:generate"
   },
   "dependencies": {
     "@nestjs/apollo": "^12.2.2",

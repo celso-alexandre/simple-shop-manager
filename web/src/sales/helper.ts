@@ -1,6 +1,5 @@
 import { SalesFormNode } from '.';
-
-// eslint-disable-next-line no-use-before-define
+ 
 export function filterValidSaleItem(item: ReturnType<typeof saleDto>['saleItems']['nodes'][number]) {
   return typeof item.costIsPostPaid === 'boolean' && item.productId && item.quantity && item.totalValue;
 }
@@ -14,14 +13,16 @@ export function saleDto(sale: SalesFormNode): Omit<SalesFormNode, 'saleItems'> &
     id: sale.id,
     date: sale.date,
     saleItems: {
-      nodes: sale.saleItems.nodes.filter(filterValidSaleItem).map(item => ({
-        id: item.id,
-        costIsPostPaid: item.costIsPostPaid,
-        productId: item.productId,
-        quantity: item.quantity,
-        totalValue: item.totalValue,
-        providerId: item.providerId,
-      })),
+      nodes: sale.saleItems.nodes.filter(filterValidSaleItem).map((item) => {
+        return {
+          id: item.id,
+          costIsPostPaid: item.costIsPostPaid,
+          productId: item.productId,
+          quantity: item.quantity,
+          totalValue: item.totalValue,
+          providerId: item.providerId,
+        };
+      }),
     },
   };
 }

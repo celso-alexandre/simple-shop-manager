@@ -10,7 +10,7 @@ export type SetDebouncedQuery<T extends QueryParamConfigMap> = (
 
 export function useQueryParamsWithDebounce<T extends QueryParamConfigMap>(
   queryParams: T,
-  debounceTimeMs = 400
+  debounceTimeMs = 400,
 ): [DecodedValueMap<T>, SetQuery<T>, Query<T>, SetDebouncedQuery<T>] {
   const [query, setQuery] = useQueryParams<T>(queryParams);
   const [queryObject, setQueryObject] = useState<Query<T>>(query);
@@ -19,18 +19,18 @@ export function useQueryParamsWithDebounce<T extends QueryParamConfigMap>(
     debounce((newParams, urlUpdateType) => {
       setQuery(newParams, urlUpdateType);
     }, debounceTimeMs),
-    [ref]
+    [ref],
   );
   const setDebouncedQuery: SetDebouncedQuery<T> = (params, urlUpdateType) => {
     const curr = typeof params === 'function' ? params(ref.current) : params;
     let queryObj: Query<T>;
     switch (urlUpdateType) {
-      case 'replace':
-      case 'push':
-        queryObj = curr;
-        break;
-      default:
-        queryObj = { ...ref.current, ...curr };
+    case 'replace':
+    case 'push':
+      queryObj = curr;
+      break;
+    default:
+      queryObj = { ...ref.current, ...curr };
     }
     setQueryObject(queryObj);
     ref.current = queryObj;

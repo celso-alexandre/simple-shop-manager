@@ -20,7 +20,9 @@ type Props = {
 export function Filter({ query, setQuery, refetch, loading, extraBefore, extraAfter }: Props) {
   return (
     <ListFilterLayout
-      clearQuery={() => setQuery({}, 'push')}
+      clearQuery={() => {
+        setQuery({}, 'push');
+      }}
       content={[
         ...(extraBefore ?? []),
         <Col flex={6} key={1}>
@@ -36,7 +38,9 @@ export function Filter({ query, setQuery, refetch, loading, extraBefore, extraAf
             prefix={<IoMdSearch />}
             onChange={(input: ChangeEvent<HTMLInputElement>) => {
               const { value } = input.target;
-              setQuery(prev => ({ ...prev, search: value, skip: 0 }));
+              setQuery((prev) => {
+                return { ...prev, search: value, skip: 0 };
+              });
             }}
             value={query.search ?? ''}
           />

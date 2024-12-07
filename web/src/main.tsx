@@ -56,15 +56,16 @@ function Main() {
     let clipboard = '';
     if (graphQLErrors) {
       clipboard += graphQLErrors.map(
-        ({ message, locations, path }) =>
-          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}\n\n`
+        ({ message, locations, path }) => {
+          return `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}\n\n`;
+        },
       );
     }
     if (networkError) {
       clipboard += `[Network error]: ${networkError}`;
     }
 
-    graphQLErrors?.forEach(e => {
+    graphQLErrors?.forEach((e) => {
       const [_domain, errorKey, _params] = (e.message || '').split('|');
       const httpStatus = parseInt((e as any).extensions?.response?.statusCode, 10) || undefined;
 
@@ -89,7 +90,9 @@ function Main() {
           closeIcon: (
             <AiOutlineClose color="#da6969" style={{ width: '100%', height: '100%', margin: 0, padding: 0 }} />
           ),
-          onClose: () => navigator.clipboard.writeText(errorKey),
+          onClose: () => {
+            return navigator.clipboard.writeText(errorKey);
+          },
         });
         return;
       }
@@ -101,7 +104,9 @@ function Main() {
         icon: <AiFillWarning color="#f2f2f2" />,
         className: errorToast,
         closeIcon: <AiOutlineClose color="#da6969" style={{ width: '100%', height: '100%', margin: 0, padding: 0 }} />,
-        onClose: () => navigator.clipboard.writeText(clipboard),
+        onClose: () => {
+          return navigator.clipboard.writeText(clipboard);
+        },
       });
     });
 
@@ -132,5 +137,5 @@ function Main() {
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Main />
-  </React.StrictMode>
+  </React.StrictMode>,
 );

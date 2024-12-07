@@ -1,6 +1,6 @@
 import { Button, Col, Row, Skeleton, Typography } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import type { ProvidersFormNode } from '.';
 import { Title } from '../components/title';
 import {
@@ -15,7 +15,7 @@ import { ProvidersForm } from './form';
 
 async function onSubmit(
   { id, whatsapp, ...data }: ProvidersFormNode,
-  update: ReturnType<typeof useUpdateProviderMutation>[0]
+  update: ReturnType<typeof useUpdateProviderMutation>[0],
 ) {
   let wpp = { set: whatsapp };
   if (!whatsapp || whatsapp === '+55 (__) _____-____') wpp = undefined as any;
@@ -52,13 +52,18 @@ export function ProviderEdit() {
       <ProvidersForm
         initialValues={data?.provider}
         form={form}
-        onFinish={async values => {
+        onFinish={async (values) => {
           await onSubmit(values, update);
         }}
       />
 
       <Row style={{ marginTop: '20px' }}>
-        <Button size="large" type="primary" onClick={() => form.submit()}>
+        <Button
+          size="large"
+          type="primary"
+          onClick={() => {
+            form.submit();
+          }}>
           Salvar
         </Button>
       </Row>
@@ -68,11 +73,13 @@ export function ProviderEdit() {
           <Typography.Title level={3}>Produtos Fornecidos</Typography.Title>
           <Col span={24}>
             <Typography.Paragraph>
-              {data?.provider?.products?.nodes?.map(node => (
-                <a style={{ marginRight: 10 }} key={node.id} href={`/product/${node.id}`}>
-                  {node.name}
-                </a>
-              ))}
+              {data?.provider?.products?.nodes?.map((node) => {
+                return (
+                  <a style={{ marginRight: 10 }} key={node.id} href={`/product/${node.id}`}>
+                    {node.name}
+                  </a>
+                );
+              })}
             </Typography.Paragraph>
           </Col>
         </Row>

@@ -9,37 +9,54 @@ export function ProvidersTable(props: TableProps<ProvidersNode>) {
   const columns: typeof props.columns = [
     {
       title: 'ID',
-      dataIndex: nameof<ProvidersNode>(x => x.id),
+      dataIndex: nameof<ProvidersNode>((x) => {
+        return x.id;
+      }),
       ellipsis: true,
     },
     {
       title: 'Nome',
-      dataIndex: nameof<ProvidersNode>(x => x.name),
+      dataIndex: nameof<ProvidersNode>((x) => {
+        return x.name;
+      }),
     },
     {
       title: 'Whatsapp',
-      dataIndex: nameof<ProvidersNode>(x => x.whatsapp),
+      dataIndex: nameof<ProvidersNode>((x) => {
+        return x.whatsapp;
+      }),
       ellipsis: true,
     },
     {
       title: 'Cadastro',
-      dataIndex: nameof<ProvidersNode>(x => x.createdAt),
-      render: value => dayjs(value).format('L'),
+      dataIndex: nameof<ProvidersNode>((x) => {
+        return x.createdAt;
+      }),
+      render: (value) => {
+        return dayjs(value).format('L');
+      },
     },
     {
       title: 'Atualização',
-      dataIndex: nameof<ProvidersNode>(x => x.createdAt),
-      render: (value, record) => record.updatedAt !== record.createdAt && dayjs(value).format('L'),
+      dataIndex: nameof<ProvidersNode>((x) => {
+        return x.createdAt;
+      }),
+      render: (value, record) => {
+        return record.updatedAt !== record.createdAt && dayjs(value).format('L');
+      },
     },
     {
       key: 'actions',
       render: (value, record) => {
         return (
           <div>
-            <Button onClick={() => {
+            <Button
+              onClick={() => {
               // navigate(`/provider/${record.id}`)
-              window.location.href = `/provider/${record.id}`;
-            }} size="middle" type="primary">
+                window.location.href = `/provider/${record.id}`;
+              }}
+              size="middle"
+              type="primary">
               Editar
             </Button>
           </div>

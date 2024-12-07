@@ -12,7 +12,7 @@ import { ProvidersForm } from './form';
 
 async function onSubmit(
   { whatsapp, ...data }: ProvidersFormNode,
-  create: ReturnType<typeof useCreateProviderMutation>[0]
+  create: ReturnType<typeof useCreateProviderMutation>[0],
 ) {
   await create({
     refetchQueries: [ProviderDocument, ProvidersDocument, ProvidersSelectDocument],
@@ -37,14 +37,19 @@ export function ProviderInsert() {
 
       <ProvidersForm
         form={form}
-        onFinish={async values => {
+        onFinish={async (values) => {
           await form.validateFields();
           await onSubmit(values, create);
         }}
       />
 
       <Row style={{ marginTop: '20px' }}>
-        <Button size="large" type="primary" onClick={() => form.submit()}>
+        <Button
+          size="large"
+          type="primary"
+          onClick={() => {
+            form.submit();
+          }}>
           Salvar
         </Button>
       </Row>

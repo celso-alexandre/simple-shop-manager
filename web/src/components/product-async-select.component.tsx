@@ -25,11 +25,11 @@ export const ProductAsyncSelect: FC<ProductAsyncSelectProps> = ({ setQuery, quer
       where: !debouncedSearchTerm
         ? undefined
         : {
-            OR: [
-              { name: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
-              { brandName: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
-            ],
-          },
+          OR: [
+            { name: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
+            { brandName: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
+          ],
+        },
     },
   });
 
@@ -37,23 +37,29 @@ export const ProductAsyncSelect: FC<ProductAsyncSelectProps> = ({ setQuery, quer
     <div style={style}>
       <SelectDropdown<ProductsSelectQuery, 'products'>
         autoClearSearchValue={false}
-        mapData={({ value, label, label2 }) => ({ label: `${label} ${label2 ?? ''}`, value })}
+        mapData={({ value, label, label2 }) => {
+          return { label: `${label} ${label2 ?? ''}`, value };
+        }}
         data={data}
         refetch={refetch}
         fetchMore={fetchMore}
         allowClear
         showSearch
         searchValue={searchTerm}
-        onSearch={term => setSearchTerm(term)}
+        onSearch={(term) => {
+          setSearchTerm(term);
+        }}
         onClear={() => {
           setSearchTerm('');
           if (!setQuery) return;
-          setQuery(prev => ({
-            ...prev,
-            productId: undefined,
-            productDesc: undefined,
-            skip: 0,
-          }));
+          setQuery((prev) => {
+            return {
+              ...prev,
+              productId: undefined,
+              productDesc: undefined,
+              skip: 0,
+            };
+          });
         }}
         value={query?.productDesc}
         entityName="products"
@@ -61,12 +67,14 @@ export const ProductAsyncSelect: FC<ProductAsyncSelectProps> = ({ setQuery, quer
         onChange={(value, option) => {
           if (!setQuery) return;
           const { label } = option as unknown as { label: string };
-          setQuery(prev => ({
-            ...prev,
-            productId: value,
-            productDesc: label,
-            skip: 0,
-          }));
+          setQuery((prev) => {
+            return {
+              ...prev,
+              productId: value,
+              productDesc: label,
+              skip: 0,
+            };
+          });
         }}
         loading={loading}
         filterOption={false}

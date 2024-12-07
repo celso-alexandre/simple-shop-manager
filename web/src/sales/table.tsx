@@ -1,7 +1,6 @@
 import { Button, Table, Tooltip } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
-import { Link } from 'react-router-dom';
 import { SalesNode } from '.';
 import { formatMoneyFromDecimal, formatMoneyFromInt, formatPercentFromDecimal } from '../helpers';
 import { SalesDocument, useDeleteSaleMutation } from '../graphql/__generated__/sales.gql.generated';
@@ -14,22 +13,34 @@ export function SalesTable(props: TableProps<SalesNode>) {
   const columns: typeof props.columns = [
     {
       title: 'ID',
-      dataIndex: nameof<SalesNode>(x => x.id),
+      dataIndex: nameof<SalesNode>((x) => {
+        return x.id;
+      }),
       ellipsis: true,
     },
     {
       title: 'Data',
-      dataIndex: nameof<SalesNode>(x => x.date),
-      render: value => dayjs(value).format('DD/MM/YYYY HH:mm'),
+      dataIndex: nameof<SalesNode>((x) => {
+        return x.date;
+      }),
+      render: (value) => {
+        return dayjs(value).format('DD/MM/YYYY HH:mm');
+      },
     },
     {
       title: 'Valor',
-      dataIndex: nameof<SalesNode>(x => x.totalValueDecimal),
-      render: value => formatMoneyFromDecimal(value),
+      dataIndex: nameof<SalesNode>((x) => {
+        return x.totalValueDecimal;
+      }),
+      render: (value) => {
+        return formatMoneyFromDecimal(value);
+      },
     },
     {
       title: 'M Líquida',
-      dataIndex: nameof<SalesNode>(x => x.netMarginPercent),
+      dataIndex: nameof<SalesNode>((x) => {
+        return x.netMarginPercent;
+      }),
       render: (value, record) => {
         const common = (
           <>
@@ -53,7 +64,9 @@ export function SalesTable(props: TableProps<SalesNode>) {
             </a>
             <Button
               style={{ background: '#f33', color: '#fff' }}
-              onClick={() => deleteSale({ variables: { where: { id: record.id } } })}
+              onClick={() => {
+                deleteSale({ variables: { where: { id: record.id } } });
+              }}
               size="middle"
               type="default"
             >

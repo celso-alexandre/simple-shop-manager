@@ -15,8 +15,8 @@ async function onSubmit(data: SalesFormNode, create: ReturnType<typeof useCreate
       data: {
         date,
         saleItems: {
-          create: saleItems.nodes.map(item => {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          create: saleItems.nodes.map((item) => {
+             
             const { productId, providerId, totalValue, ...rest } = item;
             return {
               ...rest,
@@ -43,7 +43,9 @@ export function SaleInsert() {
 
       <SalesForm
         form={form}
-        onFinish={values => onSubmit(values, create)}
+        onFinish={(values) => {
+          onSubmit(values, create);
+        }}
       />
 
       <Row style={{ marginTop: '20px' }}>
@@ -51,8 +53,8 @@ export function SaleInsert() {
           size="large"
           type="primary"
           onClick={async () => {
-            await form.validateFields()
-            form.submit()
+            await form.validateFields();
+            form.submit();
           }}
         >
           Salvar

@@ -53,13 +53,13 @@ export function Sales() {
         OR: !search
           ? undefined
           : [
-              { saleItems: { some: { product: { is: { name: { contains: search, mode: QueryMode.Insensitive } } } } } },
-              {
-                saleItems: {
-                  some: { product: { is: { brandName: { contains: search, mode: QueryMode.Insensitive } } } },
-                },
+            { saleItems: { some: { product: { is: { name: { contains: search, mode: QueryMode.Insensitive } } } } } },
+            {
+              saleItems: {
+                some: { product: { is: { brandName: { contains: search, mode: QueryMode.Insensitive } } } },
               },
-            ],
+            },
+          ],
       },
     },
   });
@@ -85,13 +85,15 @@ export function Sales() {
               style={{ marginTop: 10 }}
               allowClear
               value={[dayjs(startDate), dayjs(endDate)]}
-              onChange={dates => {
+              onChange={(dates) => {
                 const [startDay, endDay] = dates ?? [];
-                setQueryDebounced(prev => ({
-                  ...prev,
-                  startDate: startDay ? dayjs(startDay).toDate() : undefined,
-                  endDate: endDay ? dayjs(endDay).toDate() : undefined,
-                }));
+                setQueryDebounced((prev) => {
+                  return {
+                    ...prev,
+                    startDate: startDay ? dayjs(startDay).toDate() : undefined,
+                    endDate: endDay ? dayjs(endDay).toDate() : undefined,
+                  };
+                });
               }}
             />
           </Col>,
@@ -102,13 +104,15 @@ export function Sales() {
         <SalesTable
           loading={loading}
           dataSource={data?.sales.nodes}
-          rowKey={"id" as any}
+          rowKey={'id' as any}
           {...tablePagination({
             pageSize: take,
             skip,
             totalPages: data?.sales.pageInfo?.total || 0,
             setPagination(newSkip, newTake) {
-              setQueryDebounced(prev => ({ ...prev, skip: newSkip, take: newTake }));
+              setQueryDebounced((prev) => {
+                return { ...prev, skip: newSkip, take: newTake };
+              });
             },
           })}
         />

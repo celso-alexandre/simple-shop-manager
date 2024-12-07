@@ -85,7 +85,6 @@ export type Mutation = {
   __typename?: 'Mutation';
   confirmSalePaidCost: SalePaidCost;
   createProduct: Product;
-  createProducts: Scalars['Boolean']['output'];
   createProvider: Provider;
   createProviders: Scalars['Boolean']['output'];
   createSale: Sale;
@@ -112,11 +111,6 @@ export type MutationConfirmSalePaidCostArgs = {
 
 export type MutationCreateProductArgs = {
   data: ProductCreateInput;
-};
-
-
-export type MutationCreateProductsArgs = {
-  data: Array<ProductCreateManyInput>;
 };
 
 
@@ -361,19 +355,6 @@ export type ProductCreateManyBlameUserInputEnvelope = {
   data: Array<ProductCreateManyBlameUserInput>;
 };
 
-export type ProductCreateManyInput = {
-  blameUserId?: InputMaybe<Scalars['String']['input']>;
-  brandName?: InputMaybe<Scalars['String']['input']>;
-  controlsQty?: InputMaybe<Scalars['Boolean']['input']>;
-  costValue: Scalars['Int']['input'];
-  id?: InputMaybe<Scalars['String']['input']>;
-  isPostPaid: Scalars['Boolean']['input'];
-  name: Scalars['String']['input'];
-  priceValue: Scalars['Int']['input'];
-  providerId?: InputMaybe<Scalars['String']['input']>;
-  qty?: InputMaybe<Scalars['Int']['input']>;
-};
-
 export type ProductCreateManyProviderInput = {
   blameUserId?: InputMaybe<Scalars['String']['input']>;
   brandName?: InputMaybe<Scalars['String']['input']>;
@@ -537,8 +518,6 @@ export type ProductMovement = {
   createdAt: Scalars['DateTime']['output'];
   /** ID */
   id: Scalars['ID']['output'];
-  /** Movement type */
-  movement: Scalars['String']['output'];
   /** FK: Product.id */
   productId: Scalars['String']['output'];
   /** Quantity (positive for input, negative for output) */
@@ -561,7 +540,6 @@ export type ProductMovementCountAggregate = {
   blameUserId: Scalars['Int']['output'];
   createdAt: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
-  movement: Scalars['Int']['output'];
   productId: Scalars['Int']['output'];
   quantity: Scalars['Int']['output'];
   saleItemId: Scalars['Int']['output'];
@@ -571,7 +549,6 @@ export type ProductMovementCountAggregate = {
 
 export type ProductMovementCreateManyBlameUserInput = {
   id?: InputMaybe<Scalars['String']['input']>;
-  movement: Scalars['String']['input'];
   productId: Scalars['String']['input'];
   quantity: Scalars['Int']['input'];
   saleItemId?: InputMaybe<Scalars['String']['input']>;
@@ -585,7 +562,6 @@ export type ProductMovementCreateManyBlameUserInputEnvelope = {
 export type ProductMovementCreateManyProductInput = {
   blameUserId?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
-  movement: Scalars['String']['input'];
   quantity: Scalars['Int']['input'];
   saleItemId?: InputMaybe<Scalars['String']['input']>;
   type: ProductMovementType;
@@ -598,7 +574,6 @@ export type ProductMovementCreateManyProductInputEnvelope = {
 export type ProductMovementCreateManySaleItemInput = {
   blameUserId?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
-  movement: Scalars['String']['input'];
   productId: Scalars['String']['input'];
   quantity: Scalars['Int']['input'];
   type: ProductMovementType;
@@ -648,7 +623,6 @@ export type ProductMovementCreateWithoutBlameUserInput = {
   Product: ProductCreateNestedOneWithoutProductMovementInput;
   SaleItem?: InputMaybe<SaleItemCreateNestedOneWithoutProductMovementInput>;
   id?: InputMaybe<Scalars['String']['input']>;
-  movement: Scalars['String']['input'];
   quantity: Scalars['Int']['input'];
   type: ProductMovementType;
 };
@@ -657,7 +631,6 @@ export type ProductMovementCreateWithoutProductInput = {
   SaleItem?: InputMaybe<SaleItemCreateNestedOneWithoutProductMovementInput>;
   blameUser?: InputMaybe<UserCreateNestedOneWithoutProductMovementInput>;
   id?: InputMaybe<Scalars['String']['input']>;
-  movement: Scalars['String']['input'];
   quantity: Scalars['Int']['input'];
   type: ProductMovementType;
 };
@@ -666,7 +639,6 @@ export type ProductMovementCreateWithoutSaleItemInput = {
   Product: ProductCreateNestedOneWithoutProductMovementInput;
   blameUser?: InputMaybe<UserCreateNestedOneWithoutProductMovementInput>;
   id?: InputMaybe<Scalars['String']['input']>;
-  movement: Scalars['String']['input'];
   quantity: Scalars['Int']['input'];
   type: ProductMovementType;
 };
@@ -682,7 +654,6 @@ export type ProductMovementMaxAggregate = {
   blameUserId?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   id?: Maybe<Scalars['String']['output']>;
-  movement?: Maybe<Scalars['String']['output']>;
   productId?: Maybe<Scalars['String']['output']>;
   quantity?: Maybe<Scalars['Int']['output']>;
   saleItemId?: Maybe<Scalars['String']['output']>;
@@ -695,7 +666,6 @@ export type ProductMovementMinAggregate = {
   blameUserId?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   id?: Maybe<Scalars['String']['output']>;
-  movement?: Maybe<Scalars['String']['output']>;
   productId?: Maybe<Scalars['String']['output']>;
   quantity?: Maybe<Scalars['Int']['output']>;
   saleItemId?: Maybe<Scalars['String']['output']>;
@@ -714,7 +684,6 @@ export type ProductMovementScalarWhereInput = {
   blameUserId?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
-  movement?: InputMaybe<StringFilter>;
   productId?: InputMaybe<StringFilter>;
   quantity?: InputMaybe<IntFilter>;
   saleItemId?: InputMaybe<StringNullableFilter>;
@@ -728,12 +697,13 @@ export type ProductMovementSumAggregate = {
 };
 
 export enum ProductMovementType {
+  Initial = 'INITIAL',
   Manual = 'MANUAL',
-  Sale = 'SALE'
+  Sale = 'SALE',
+  SaleEdit = 'SALE_EDIT'
 }
 
 export type ProductMovementUpdateManyMutationInput = {
-  movement?: InputMaybe<StringFieldUpdateOperationsInput>;
   quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumProductMovementTypeFieldUpdateOperationsInput>;
 };
@@ -813,7 +783,6 @@ export type ProductMovementUpdateWithWhereUniqueWithoutSaleItemInput = {
 export type ProductMovementUpdateWithoutBlameUserInput = {
   Product?: InputMaybe<ProductUpdateOneRequiredWithoutProductMovementNestedInput>;
   SaleItem?: InputMaybe<SaleItemUpdateOneWithoutProductMovementNestedInput>;
-  movement?: InputMaybe<StringFieldUpdateOperationsInput>;
   quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumProductMovementTypeFieldUpdateOperationsInput>;
 };
@@ -821,7 +790,6 @@ export type ProductMovementUpdateWithoutBlameUserInput = {
 export type ProductMovementUpdateWithoutProductInput = {
   SaleItem?: InputMaybe<SaleItemUpdateOneWithoutProductMovementNestedInput>;
   blameUser?: InputMaybe<UserUpdateOneWithoutProductMovementNestedInput>;
-  movement?: InputMaybe<StringFieldUpdateOperationsInput>;
   quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumProductMovementTypeFieldUpdateOperationsInput>;
 };
@@ -829,7 +797,6 @@ export type ProductMovementUpdateWithoutProductInput = {
 export type ProductMovementUpdateWithoutSaleItemInput = {
   Product?: InputMaybe<ProductUpdateOneRequiredWithoutProductMovementNestedInput>;
   blameUser?: InputMaybe<UserUpdateOneWithoutProductMovementNestedInput>;
-  movement?: InputMaybe<StringFieldUpdateOperationsInput>;
   quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumProductMovementTypeFieldUpdateOperationsInput>;
 };
@@ -862,7 +829,6 @@ export type ProductMovementWhereInput = {
   blameUserId?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
-  movement?: InputMaybe<StringFilter>;
   productId?: InputMaybe<StringFilter>;
   quantity?: InputMaybe<IntFilter>;
   saleItemId?: InputMaybe<StringNullableFilter>;
@@ -880,7 +846,6 @@ export type ProductMovementWhereUniqueInput = {
   blameUserId?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<Scalars['String']['input']>;
-  movement?: InputMaybe<StringFilter>;
   productId?: InputMaybe<StringFilter>;
   quantity?: InputMaybe<IntFilter>;
   saleItemId?: InputMaybe<StringNullableFilter>;
@@ -3705,7 +3670,6 @@ export type ResolversTypes = {
   ProductCreateInput: ProductCreateInput;
   ProductCreateManyBlameUserInput: ProductCreateManyBlameUserInput;
   ProductCreateManyBlameUserInputEnvelope: ProductCreateManyBlameUserInputEnvelope;
-  ProductCreateManyInput: ProductCreateManyInput;
   ProductCreateManyProviderInput: ProductCreateManyProviderInput;
   ProductCreateManyProviderInputEnvelope: ProductCreateManyProviderInputEnvelope;
   ProductCreateNestedManyWithoutBlameUserInput: ProductCreateNestedManyWithoutBlameUserInput;
@@ -4087,7 +4051,6 @@ export type ResolversParentTypes = {
   ProductCreateInput: ProductCreateInput;
   ProductCreateManyBlameUserInput: ProductCreateManyBlameUserInput;
   ProductCreateManyBlameUserInputEnvelope: ProductCreateManyBlameUserInputEnvelope;
-  ProductCreateManyInput: ProductCreateManyInput;
   ProductCreateManyProviderInput: ProductCreateManyProviderInput;
   ProductCreateManyProviderInputEnvelope: ProductCreateManyProviderInputEnvelope;
   ProductCreateNestedManyWithoutBlameUserInput: ProductCreateNestedManyWithoutBlameUserInput;
@@ -4437,7 +4400,6 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   confirmSalePaidCost?: Resolver<ResolversTypes['SalePaidCost'], ParentType, ContextType, RequireFields<MutationConfirmSalePaidCostArgs, 'data' | 'where'>>;
   createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'data'>>;
-  createProducts?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateProductsArgs, 'data'>>;
   createProvider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<MutationCreateProviderArgs, 'data'>>;
   createProviders?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateProvidersArgs, 'data'>>;
   createSale?: Resolver<ResolversTypes['Sale'], ParentType, ContextType, RequireFields<MutationCreateSaleArgs, 'data'>>;
@@ -4545,7 +4507,6 @@ export type ProductMovementResolvers<ContextType = any, ParentType extends Resol
   blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  movement?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   productId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   saleItemId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -4564,7 +4525,6 @@ export type ProductMovementCountAggregateResolvers<ContextType = any, ParentType
   blameUserId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  movement?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   productId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   saleItemId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -4577,7 +4537,6 @@ export type ProductMovementMaxAggregateResolvers<ContextType = any, ParentType e
   blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  movement?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   productId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   quantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   saleItemId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -4590,7 +4549,6 @@ export type ProductMovementMinAggregateResolvers<ContextType = any, ParentType e
   blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  movement?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   productId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   quantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   saleItemId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

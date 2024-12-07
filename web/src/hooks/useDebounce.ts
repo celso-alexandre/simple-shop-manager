@@ -3,7 +3,7 @@ import type { Dispatch, SetStateAction } from 'react';
 
 export function useDebounce<T>(
   defValue: T,
-  delay = 300
+  delay = 300,
 ): [debouncedValue: T, setDebouncedValue: Dispatch<SetStateAction<T>>, debouncedValue: T] {
   const [value, setValue] = useState<T>(defValue);
   const [debouncedValue, setDebouncedValue] = useState<T>(defValue);

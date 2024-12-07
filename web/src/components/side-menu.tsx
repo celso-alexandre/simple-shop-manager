@@ -6,7 +6,7 @@ import { BiBarcode, BiListPlus, BiListUl } from 'react-icons/bi';
 import { MdOutlineAddBusiness, MdOutlinePointOfSale } from 'react-icons/md';
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from 'react-icons/ai';
 import { useMediaQuery } from 'react-responsive';
-import { matchRoutes, useLocation, Link } from 'react-router-dom';
+import { matchRoutes, useLocation } from 'react-router-dom';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -18,7 +18,9 @@ export function SideMenu() {
   const location = useLocation();
 
   const toggleCollapsed = () => {
-    setCollapsed(bol => !bol);
+    setCollapsed((bol) => {
+      return !bol;
+    });
   };
 
   useEffect(() => {
@@ -95,19 +97,24 @@ export function SideMenu() {
   ];
 
   const routes = useMemo(
-    () =>
-      items.reduce((prev, cur) => {
+    () => {
+      return items.reduce((prev, cur) => {
         if (!(cur.key as string)?.includes('/') && !cur.children?.length) return prev;
         return [
           ...prev,
           ...(!cur.children
             ? [{ path: cur.key as string }]
             : cur.children
-                ?.filter(child => child?.key)
-                ?.flatMap(child => ({ path: child?.key as string, parent: cur.key as string })) || []),
+              ?.filter((child) => {
+                return child?.key;
+              })
+              ?.flatMap((child) => {
+                return { path: child?.key as string, parent: cur.key as string };
+              }) || []),
         ];
-      }, [] as { path: string; parent?: string }[]),
-    []
+      }, [] as { path: string; parent?: string }[]);
+    },
+    [],
   );
 
   const matches = matchRoutes(routes, location);

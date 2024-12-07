@@ -20,11 +20,17 @@ import { saleDto } from './helper';
 
 async function onSubmit(sale: SalesFormNode, update: ReturnType<typeof useUpdateSaleMutation>[0], data?: SaleQuery) {
   const { id, date, saleItems } = saleDto(sale);
-  const createMany = saleItems.nodes.filter(item => !item.id);
-  const updateMany = saleItems.nodes.filter(item => item.id);
+  const createMany = saleItems.nodes.filter((item) => {
+    return !item.id;
+  });
+  const updateMany = saleItems.nodes.filter((item) => {
+    return item.id;
+  });
   const disconnect =
-    data?.sale?.saleItems?.nodes?.filter(item => {
-      return !updateMany.find(x => x.id === item.id);
+    data?.sale?.saleItems?.nodes?.filter((item) => {
+      return !updateMany.find((x) => {
+        return x.id === item.id;
+      });
     }) ?? [];
 
   await update({
@@ -34,35 +40,37 @@ async function onSubmit(sale: SalesFormNode, update: ReturnType<typeof useUpdate
       data: {
         date: { set: date },
         saleItems: {
-          deleteMany: !disconnect?.length ? undefined : [{ id: { in: disconnect.map(item => item.id) } }],
+          deleteMany: !disconnect?.length ? undefined : [{ id: { in: disconnect.map((item) => {
+            return item.id;
+          }) } }],
           create: !createMany?.length
             ? undefined
-            : createMany.map(item => {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const { id: saleItemId, productId, providerId, totalValue, ...rest } = item;
-                return {
-                  ...rest,
-                  totalValue: serializeDecimalAsInt(totalValue),
-                  product: { connect: { id: productId } },
-                  provider: !providerId ? undefined : { connect: { id: providerId } },
-                };
-              }),
+            : createMany.map((item) => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const { id: saleItemId, productId, providerId, totalValue, ...rest } = item;
+              return {
+                ...rest,
+                totalValue: serializeDecimalAsInt(totalValue),
+                product: { connect: { id: productId } },
+                provider: !providerId ? undefined : { connect: { id: providerId } },
+              };
+            }),
           update: !updateMany?.length
             ? undefined
-            : updateMany.map(item => {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const { id: saleItemId, productId, providerId, totalValue, ...rest } = item;
-                const res: SaleItemUpdateWithWhereUniqueWithoutSaleInput = {
-                  where: { id: saleItemId },
-                  data: {
-                    ...objectPropertiesSet(rest),
-                    totalValue: { set: serializeDecimalAsInt(totalValue) },
-                    product: { connect: { id: productId } },
-                    provider: !providerId ? { disconnect: true } : { connect: { id: providerId } },
-                  },
-                };
-                return res;
-              }),
+            : updateMany.map((item) => {
+               
+              const { id: saleItemId, productId, providerId, totalValue, ...rest } = item;
+              const res: SaleItemUpdateWithWhereUniqueWithoutSaleInput = {
+                where: { id: saleItemId },
+                data: {
+                  ...objectPropertiesSet(rest),
+                  totalValue: { set: serializeDecimalAsInt(totalValue) },
+                  product: { connect: { id: productId } },
+                  provider: !providerId ? { disconnect: true } : { connect: { id: providerId } },
+                },
+              };
+              return res;
+            }),
         },
       },
     },
@@ -88,11 +96,13 @@ export function SaleEdit() {
       ...sale,
       date: dayjs(sale.date),
       saleItems: {
-        nodes: sale.saleItems.nodes.map(item => ({
-          ...item,
-          totalValue: item.totalValueDecimal,
-          netMarginPercent: serializeDecimalAsInt(item.netMarginPercent),
-        })),
+        nodes: sale.saleItems.nodes.map((item) => {
+          return {
+            ...item,
+            totalValue: item.totalValueDecimal,
+            netMarginPercent: serializeDecimalAsInt(item.netMarginPercent),
+          };
+        }),
       },
     };
   }, [data]);
@@ -113,7 +123,12 @@ export function SaleEdit() {
       />
 
       <Row style={{ marginTop: '20px' }}>
-        <Button size="large" type="primary" onClick={() => form.submit()}>
+        <Button
+          size="large"
+          type="primary"
+          onClick={() => {
+            form.submit();
+          }}>
           Salvar
         </Button>
       </Row>

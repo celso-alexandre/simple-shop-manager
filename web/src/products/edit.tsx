@@ -64,10 +64,20 @@ export function ProductEdit() {
     <>
       <Title title={initialValues?.name ?? 'Produto não encontrado'} />
 
-      <ProductsForm initialValues={initialValues} form={form} onFinish={values => onSubmit(values, update)} />
+      <ProductsForm
+        initialValues={initialValues}
+        form={form}
+        onFinish={(values) => {
+          onSubmit(values, update);
+        }} />
 
       <Row style={{ marginTop: '20px' }}>
-        <Button size="large" type="primary" onClick={() => form.submit()}>
+        <Button
+          size="large"
+          type="primary"
+          onClick={() => {
+            form.submit();
+          }}>
           Salvar
         </Button>
       </Row>

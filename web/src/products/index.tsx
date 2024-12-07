@@ -27,10 +27,10 @@ export function Products() {
         OR: !search
           ? undefined
           : [
-              { name: { contains: search, mode: QueryMode.Insensitive } },
-              { brandName: { contains: search, mode: QueryMode.Insensitive } },
-              { provider: { is: { name: { contains: search, mode: QueryMode.Insensitive } } } },
-            ],
+            { name: { contains: search, mode: QueryMode.Insensitive } },
+            { brandName: { contains: search, mode: QueryMode.Insensitive } },
+            { provider: { is: { name: { contains: search, mode: QueryMode.Insensitive } } } },
+          ],
       },
     },
   });

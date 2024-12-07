@@ -1,0 +1,15 @@
+echo 'Running /.husky/pre-commit'
+cd backend
+pnpm i
+# pnpm generate
+pnpm build
+rm -rf dist
+# pnpm lint
+
+cd ../web
+pnpm i
+# pnpm generate
+pnpm build
+rm -r dist
+pnpm lint
+git add src/graphql/__generated__

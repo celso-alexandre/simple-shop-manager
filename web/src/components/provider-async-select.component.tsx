@@ -25,13 +25,13 @@ export const ProviderAsyncSelect: FC<ProviderAsyncSelectProps> = ({ setQuery, qu
       where: !debouncedSearchTerm
         ? undefined
         : {
-            OR: [
-              { name: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
-              { document: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
-              { email: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
-              { whatsapp: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
-            ],
-          },
+          OR: [
+            { name: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
+            { document: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
+            { email: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
+            { whatsapp: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
+          ],
+        },
     },
   });
 
@@ -39,23 +39,29 @@ export const ProviderAsyncSelect: FC<ProviderAsyncSelectProps> = ({ setQuery, qu
     <div style={style}>
       <SelectDropdown<ProvidersSelectQuery, 'providers'>
         autoClearSearchValue={false}
-        mapData={({ value, label }) => ({ label, value })}
+        mapData={({ value, label }) => {
+          return { label, value };
+        }}
         data={data}
         refetch={refetch}
         fetchMore={fetchMore}
         allowClear
         showSearch
         searchValue={searchTerm}
-        onSearch={term => setSearchTerm(term)}
+        onSearch={(term) => {
+          setSearchTerm(term);
+        }}
         onClear={() => {
           setSearchTerm('');
           if (!setQuery) return;
-          setQuery(prev => ({
-            ...prev,
-            providerId: undefined,
-            providerDesc: undefined,
-            skip: 0,
-          }));
+          setQuery((prev) => {
+            return {
+              ...prev,
+              providerId: undefined,
+              providerDesc: undefined,
+              skip: 0,
+            };
+          });
         }}
         value={query?.providerDesc}
         entityName="providers"
@@ -63,12 +69,14 @@ export const ProviderAsyncSelect: FC<ProviderAsyncSelectProps> = ({ setQuery, qu
         onChange={(value, option) => {
           if (!setQuery) return;
           const { label } = option as unknown as { label: string };
-          setQuery(prev => ({
-            ...prev,
-            providerId: value,
-            providerDesc: label,
-            skip: 0,
-          }));
+          setQuery((prev) => {
+            return {
+              ...prev,
+              providerId: value,
+              providerDesc: label,
+              skip: 0,
+            };
+          });
         }}
         loading={loading}
         filterOption={false}

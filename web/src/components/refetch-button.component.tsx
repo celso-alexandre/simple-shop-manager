@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Progress, Select } from 'antd';
-import { AiFillCaretDown, AiFillCloseCircle, AiOutlineReload } from 'react-icons/ai';
+import { AiFillCaretDown, AiOutlineReload } from 'react-icons/ai';
 import { createUseStyles } from 'react-jss';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
@@ -16,11 +16,13 @@ const useStyles = createUseStyles({
     display: 'flex',
     alignItems: 'center',
     borderRadius: '2px',
-    backgroundColor: (props: { isLoading: boolean; disabled: boolean }) =>
-      props.isLoading || props.disabled ? '#bdbdbd' : '#fbb01a',
+    backgroundColor: (props: { isLoading: boolean; disabled: boolean }) => {
+      return props.isLoading || props.disabled ? '#bdbdbd' : '#fbb01a';
+    },
     '& .ant-select-selector, & .ant-select-clear': {
-      backgroundColor: (props: { isLoading: boolean; disabled: boolean }) =>
-        props.isLoading || props.disabled ? '#bdbdbd' : '#fbb01a',
+      backgroundColor: (props: { isLoading: boolean; disabled: boolean }) => {
+        return props.isLoading || props.disabled ? '#bdbdbd' : '#fbb01a';
+      },
       padding: '0 4px',
     },
     '& .ant-progress-inner': {
@@ -31,7 +33,9 @@ const useStyles = createUseStyles({
       height: '3px !important',
     },
     '& .ant-progress-bg': {
-      backgroundColor: (props: { isLoading: boolean; disabled: boolean }) => (props.isLoading ? '#bdbdbd' : '#fbb01a'),
+      backgroundColor: (props: { isLoading: boolean; disabled: boolean }) => {
+        return (props.isLoading ? '#bdbdbd' : '#fbb01a');
+      },
     },
   },
   refetchContainer: {
@@ -67,7 +71,7 @@ export const RefetchButton: React.FC<RefetchButtonProps> = ({
   }, [isLoading, selectedValue]);
 
   const updateProgress = () => {
-    setProgress(prev => {
+    setProgress((prev) => {
       if (prev >= 100) {
         setRefetch();
         return 0;
@@ -87,7 +91,9 @@ export const RefetchButton: React.FC<RefetchButtonProps> = ({
       }
     }, 1000);
     setProgress(0);
-    return () => clearInterval(intervalId);
+    return () => {
+      clearInterval(intervalId);
+    };
   }, [startMilli, endMilli, isLoading, disabled]);
 
   return (
@@ -119,7 +125,7 @@ export const RefetchButton: React.FC<RefetchButtonProps> = ({
           color: '#FFF',
         }}
         value={selectedValue || undefined}
-        onChange={value => {
+        onChange={(value) => {
           setSelectedValue(value);
         }}
         onClear={() => {
