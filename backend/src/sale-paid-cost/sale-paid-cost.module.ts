@@ -4,6 +4,6 @@ import { SalePaidCostService } from './sale-paid-cost.service';
 
 @Module({
   providers: [SalePaidCostResolver, SalePaidCostService],
-  exports: [SalePaidCostService],
+  exports: [SalePaidCostService]
 })
 export class SalePaidCostModule {}

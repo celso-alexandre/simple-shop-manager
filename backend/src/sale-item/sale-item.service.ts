@@ -3,7 +3,7 @@ import { PrismaService } from '../common/prisma.service';
 import type {
   FindManySaleItemArgs,
   FindUniqueSaleItemArgs,
-  SaleItem,
+  SaleItem
 } from './dto';
 
 @Injectable()

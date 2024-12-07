@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
 import { Prisma, PrismaClient } from '@prisma/client';
@@ -13,24 +14,24 @@ export class PrismaService
       log: [
         {
           emit: 'event',
-          level: 'query',
-        },
-      ],
+          level: 'query'
+        }
+      ]
     });
   }
 
   async onModuleInit() {
     await this.$connect();
   }
-   
+
   async findManyPaginated<T extends RelationKeys, K extends PrismaClient[T]>(
     delegate: K,
-    args: Parameters<K['findMany']>[0],
+    args: Parameters<K['findMany']>[0]
   ) {
     const { take, skip, cursor, select, ...remainingArgs } = args;
     const [queryResult, totalCount] = await Promise.all([
       (delegate as any).findMany(args),
-      (delegate as any).count(remainingArgs),
+      (delegate as any).count(remainingArgs)
     ]);
 
     const result = {
@@ -39,8 +40,8 @@ export class PrismaService
         total: totalCount,
         hasNextPage: take + skip < totalCount,
         currentPage: Math.ceil(skip / take) + 1 || 1,
-        lastPage: Math.ceil(totalCount / take) || 1,
-      },
+        lastPage: Math.ceil(totalCount / take) || 1
+      }
     };
 
     return result;
@@ -56,17 +57,17 @@ export class PrismaService
     R extends ReturnType<K['findUnique']>[S],
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    P extends Parameters<R>[0],
+    P extends Parameters<R>[0]
   >(model: K, id: number | string, subset: S, args: P) {
     const baseSet = (model.findUnique as any)({
       where: {
-        id,
+        id
       },
       select: {
         _count: {
-          select: { [subset]: true },
-        },
-      },
+          select: { [subset]: true }
+        }
+      }
     });
     const { take, skip } = args as {
       take: number;
@@ -83,8 +84,8 @@ export class PrismaService
         total: count,
         hasNextPage: take + skip < count,
         currentPage: Math.ceil(skip / take) + 1 || 1,
-        lastPage: Math.ceil(count / take) || 1,
-      },
+        lastPage: Math.ceil(count / take) || 1
+      }
     };
 
     return result;

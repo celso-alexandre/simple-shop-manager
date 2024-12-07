@@ -16,7 +16,7 @@ import { SalePaidCostModule } from './sale-paid-cost/sale-paid-cost.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [Enviroment],
+      load: [Enviroment]
     }),
     GraphQLModule.forRootAsync({
       driver: ApolloDriver,
@@ -24,18 +24,18 @@ import { SalePaidCostModule } from './sale-paid-cost/sale-paid-cost.module';
         const endpoint = join(config.basePath || '', 'graphql');
         const schemaModuleOptions: Partial<GqlModuleOptions> = {
           autoSchemaFile: true,
-          sortSchema: true,
+          sortSchema: true
         };
         return {
           path: endpoint,
           playground: {
-            endpoint: join(config.basePath || '', endpoint),
+            endpoint: join(config.basePath || '', endpoint)
           },
           introspection: true,
-          ...schemaModuleOptions,
+          ...schemaModuleOptions
         };
       },
-      inject: [Enviroment.KEY],
+      inject: [Enviroment.KEY]
     }),
     CommonModule,
     UserModule,
@@ -43,7 +43,7 @@ import { SalePaidCostModule } from './sale-paid-cost/sale-paid-cost.module';
     ProviderModule,
     SaleModule,
     SaleItemModule,
-    SalePaidCostModule,
-  ],
+    SalePaidCostModule
+  ]
 })
 export class AppModule {}

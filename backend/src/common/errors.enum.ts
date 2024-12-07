@@ -10,9 +10,9 @@ export enum ExceptionKeys {
 
   // Manually thrown errors
   'Sale_SaleItem_zero_length_badRequest',
-  'SalePaidCost_zero_paidValue_badRequest',
+  'SalePaidCost_zero_paidValue_badRequest'
 }
 
 registerEnumType(ExceptionKeys, {
-  name: 'MainExceptionKeys',
+  name: 'MainExceptionKeys'
 });

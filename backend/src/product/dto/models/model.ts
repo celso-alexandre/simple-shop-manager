@@ -5,8 +5,11 @@ import { ExceptionKeys } from '../../../common/errors.enum';
 @ObjectType()
 @Directive('@key(fields: "id")')
 export class Product extends GeneratedProduct {
-  @Field(() => {
-    return ExceptionKeys;
-  }, { nullable: true })
-    errors?: keyof typeof ExceptionKeys;
+  @Field(
+    () => {
+      return ExceptionKeys;
+    },
+    { nullable: true }
+  )
+  errors?: keyof typeof ExceptionKeys;
 }

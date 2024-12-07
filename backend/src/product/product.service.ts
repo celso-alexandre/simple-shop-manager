@@ -6,7 +6,7 @@ import type {
   FindManyProductArgs,
   FindUniqueProductArgs,
   Product,
-  UpdateOneProductArgs,
+  UpdateOneProductArgs
 } from './dto';
 
 @Injectable()
@@ -31,8 +31,8 @@ export class ProductService {
         data: {
           Product: { connect: { id: product.id } },
           quantity: product.qty,
-          type: 'INITIAL',
-        },
+          type: 'INITIAL'
+        }
       });
       return product;
     });
@@ -43,7 +43,7 @@ export class ProductService {
       const prodBefore = await this.prisma.product.update({
         data: { updatedAt: new Date() },
         where: { id: args.where.id },
-        select: { qty: true },
+        select: { qty: true }
       });
       const product = await this.prisma.product.update(args);
       const balanceDiff = product.qty - prodBefore.qty;
@@ -54,8 +54,8 @@ export class ProductService {
         data: {
           Product: { connect: { id: product.id } },
           quantity: balanceDiff,
-          type: 'MANUAL',
-        },
+          type: 'MANUAL'
+        }
       });
       return product;
     });

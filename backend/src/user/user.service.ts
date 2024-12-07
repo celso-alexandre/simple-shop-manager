@@ -6,7 +6,7 @@ import {
   DeleteOneUserArgs,
   FindManyUserArgs,
   FindUniqueUserArgs,
-  UpdateOneUserArgs,
+  UpdateOneUserArgs
 } from './dto';
 
 @Injectable()

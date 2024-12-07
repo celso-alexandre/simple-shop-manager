@@ -2,7 +2,7 @@ import {
   ExceptionFilter,
   Catch,
   ConflictException,
-  HttpException,
+  HttpException
 } from '@nestjs/common';
 import { upperFirst } from 'lodash';
 import { buildNestException } from './build-nest-exception';
@@ -44,7 +44,7 @@ export class PrismaExceptionFilter implements ExceptionFilter {
       const { message, meta } = exception;
       const { target } = meta as { target: string };
       const regExResult = this.P2002_message_regEx.exec(
-        message?.replace(/\n/g, ''),
+        message?.replace(/\n/g, '')
       );
       const [modelName] = regExResult;
       const modelOrig = modelName?.replace('prisma.', '') ?? '';
@@ -53,19 +53,18 @@ export class PrismaExceptionFilter implements ExceptionFilter {
       const orderedTarget = (
         targetFields?.filter((x, i) => {
           return i > 0 && i + 1 < targetFields.length;
-        }) ||
-        []
+        }) || []
       ).sort((a, b) => {
-        return (a > b ? 1 : b > a ? -1 : 0);
+        return a > b ? 1 : b > a ? -1 : 0;
       });
       if (!parent || !orderedTarget.length) throw exception;
       const error = buildNestException(
         `${parent}_UQ_${orderedTarget.join('_')}_conflict`,
-        ConflictException,
+        ConflictException
       );
       error.stack = exception.stack;
       throw error;
-    },
+    }
 
     // P2003: (exception: PrismaClientKnownRequestError) => {
     //   // Foreign key constraint failed on the field: {field_name}

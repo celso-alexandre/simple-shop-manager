@@ -4,6 +4,6 @@ import { SaleItemService } from './sale-item.service';
 
 @Module({
   providers: [SaleItemResolver, SaleItemService],
-  exports: [SaleItemService],
+  exports: [SaleItemService]
 })
 export class SaleItemModule {}

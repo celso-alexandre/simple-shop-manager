@@ -8,7 +8,7 @@ import type {
   FindManyProviderArgs,
   FindUniqueProviderArgs,
   Provider,
-  UpdateOneProviderArgs,
+  UpdateOneProviderArgs
 } from './dto';
 
 @Injectable()
@@ -49,7 +49,7 @@ export class ProviderService {
       this.prisma.provider,
       id,
       'products',
-      args,
+      args
     );
   }
 }

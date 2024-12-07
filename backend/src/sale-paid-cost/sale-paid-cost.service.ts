@@ -5,7 +5,7 @@ import { PrismaService } from '../common/prisma.service';
 import type {
   DeleteOneSalePaidCostArgs,
   FindManySalePaidCostArgs,
-  FindUniqueSalePaidCostArgs,
+  FindUniqueSalePaidCostArgs
 } from './dto';
 import { CreateOneSalePaidCostArgs } from './dto/args/create-one.args';
 import { UpdateOneSalePaidCostArgs } from './dto/args/update-one.args';
@@ -29,13 +29,13 @@ export class SalePaidCostService {
         where: {
           sale: { date: { lte: args.data.endDate } },
           salePaidCostId: null,
-          totalCostValue: { gt: 0 },
+          totalCostValue: { gt: 0 }
         },
         data: {
           salePaidCostId: salePaidCost.id,
           saleCostIsSelected: true,
-          saleCostIsPaid: false,
-        },
+          saleCostIsPaid: false
+        }
       });
       return salePaidCost;
     });
@@ -46,13 +46,13 @@ export class SalePaidCostService {
       const salePaidCost = await prisma.salePaidCost.delete(args);
       await prisma.saleItem.updateMany({
         where: {
-          salePaidCostId: salePaidCost.id,
+          salePaidCostId: salePaidCost.id
         },
         data: {
           salePaidCostId: null,
           saleCostIsSelected: false,
-          saleCostIsPaid: false,
-        },
+          saleCostIsPaid: false
+        }
       });
       return salePaidCost;
     });
@@ -66,25 +66,25 @@ export class SalePaidCostService {
         where: {
           salePaidCostId: salePaidCost.id,
           costIsPostPaid: false,
-          saleCostIsSelected: true,
+          saleCostIsSelected: true
         },
         data: {
-          saleCostIsPaid: false,
-        },
+          saleCostIsPaid: false
+        }
       });
       const agg = await prisma.saleItem.aggregate({
         where: { salePaidCostId: salePaidCost.id },
-        _sum: { totalCostValue: true },
+        _sum: { totalCostValue: true }
       });
       if (!agg._sum.totalCostValue)
         throw buildNestException<typeof ExceptionKeys>(
           'SalePaidCost_zero_paidValue_badRequest',
-          BadRequestException,
+          BadRequestException
         );
 
       return prisma.salePaidCost.update({
         where: { id: salePaidCost.id },
-        data: { paidValue: agg._sum.totalCostValue ?? 0 },
+        data: { paidValue: agg._sum.totalCostValue ?? 0 }
       });
     });
   }

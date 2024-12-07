@@ -8,7 +8,7 @@ import type {
   FindManySaleArgs,
   FindUniqueSaleArgs,
   Sale,
-  UpdateOneSaleArgs,
+  UpdateOneSaleArgs
 } from './dto';
 import { PrismaClient } from '@prisma/client';
 
@@ -25,31 +25,31 @@ export class SaleService {
   }
 
   generateTotals(
-    saleItems: Pick<SaleItem, 'totalValue' | 'totalCostValue'>[],
+    saleItems: Pick<SaleItem, 'totalValue' | 'totalCostValue'>[]
   ): Pick<Sale, 'totalCostValue' | 'totalValue'> {
     return saleItems.reduce(
       (prev, cur) => {
         prev = {
           totalCostValue: prev.totalCostValue + cur.totalCostValue,
-          totalValue: prev.totalValue + cur.totalValue,
+          totalValue: prev.totalValue + cur.totalValue
         };
         return prev;
       },
-      { totalCostValue: 0, totalValue: 0 },
+      { totalCostValue: 0, totalValue: 0 }
     );
   }
 
   generateSaleItemTotals({
     totalValue,
     quantity,
-    product,
+    product
   }: Pick<SaleItem, 'quantity' | 'totalValue' | 'product'>): Pick<
     SaleItem,
     'totalCostValue' | 'totalValue'
   > {
     return {
       totalValue,
-      totalCostValue: quantity * product.costValue,
+      totalCostValue: quantity * product.costValue
     };
   }
 
@@ -57,14 +57,14 @@ export class SaleService {
     if (!sale?.saleItems?.length) {
       throw buildNestException(
         'Sale_SaleItem_zero_length_badRequest',
-        BadRequestException,
+        BadRequestException
       );
     }
     for (const item of sale.saleItems) {
       if (item.quantity <= 0) {
         throw buildNestException(
           'SaleItem_quantity_zero_or_negative_badRequest',
-          BadRequestException,
+          BadRequestException
         );
       }
       return;
@@ -72,7 +72,7 @@ export class SaleService {
         if (!item.ProductMovement?.length) {
           throw buildNestException(
             'SaleItem_ProductMovement_zero_length_badRequest',
-            BadRequestException,
+            BadRequestException
           );
         }
         const saleMovement = item.ProductMovement.filter((mov) => {
@@ -81,19 +81,19 @@ export class SaleService {
         if (!saleMovement.length) {
           throw buildNestException(
             'SaleItem_ProductMovement_no_sale_movement_badRequest',
-            BadRequestException,
+            BadRequestException
           );
         }
         if (saleMovement.length > 1) {
           throw buildNestException(
             'SaleItem_ProductMovement_more_than_one_sale_movement_badRequest',
-            BadRequestException,
+            BadRequestException
           );
         }
-        if (saleMovement[0].quantity !== (item.quantity * -1)) {
+        if (saleMovement[0].quantity !== item.quantity * -1) {
           throw buildNestException(
             'SaleItem_ProductMovement_quantity_mismatch_badRequest',
-            BadRequestException,
+            BadRequestException
           );
         }
         const emptyMovement = item.ProductMovement.find((mov) => {
@@ -102,7 +102,7 @@ export class SaleService {
         if (emptyMovement) {
           throw buildNestException(
             'SaleItem_ProductMovement_empty_quantity_badRequest',
-            BadRequestException,
+            BadRequestException
           );
         }
         return;
@@ -110,7 +110,7 @@ export class SaleService {
       if (item.ProductMovement.length > 1) {
         throw buildNestException(
           'SaleItem_ProductMovement_not_allowed_for_product_badRequest',
-          BadRequestException,
+          BadRequestException
         );
       }
     }
@@ -128,16 +128,18 @@ export class SaleService {
               return {
                 totalCostValue: 0,
                 ...item,
-                ProductMovement: undefined,
+                ProductMovement: undefined
               };
-            }),
-          },
+            })
+          }
         },
-        include: { saleItems: { include: { product: true } } },
+        include: { saleItems: { include: { product: true } } }
       });
       this.validateSale(sale);
 
-      const productMovements: Parameters<PrismaClient['productMovement']['createMany']>[0]['data'] = [];
+      const productMovements: Parameters<
+        PrismaClient['productMovement']['createMany']
+      >[0]['data'] = [];
       for (const item of sale.saleItems) {
         if (!item.product.controlsQty) {
           continue;
@@ -145,14 +147,14 @@ export class SaleService {
         productMovements.push({
           type: 'SALE',
           quantity: item.quantity * -1,
-          productId: item.product.id,
+          productId: item.product.id
         });
       }
       const promises: Promise<any>[] = [];
       promises.push(
         prisma.productMovement.createMany({
-          data: productMovements,
-        }),
+          data: productMovements
+        })
       );
 
       promises.push(
@@ -161,11 +163,11 @@ export class SaleService {
             where: { id: item.product.id },
             data: {
               qty: {
-                decrement: item.quantity,
-              },
-            },
+                decrement: item.quantity
+              }
+            }
           });
-        }),
+        })
       );
 
       await Promise.all(promises);
@@ -174,18 +176,20 @@ export class SaleService {
         update: sale.saleItems.map((item) => {
           return {
             where: { id: item.id },
-            data: this.generateSaleItemTotals(item),
+            data: this.generateSaleItemTotals(item)
           };
-        }),
+        })
       };
       return prisma.sale.update({
         where: { id: sale.id },
         data: {
-          ...this.generateTotals(saleItems.update.map((item) => {
-            return item.data;
-          })),
-          saleItems,
-        },
+          ...this.generateTotals(
+            saleItems.update.map((item) => {
+              return item.data;
+            })
+          ),
+          saleItems
+        }
       });
     });
   }
@@ -195,7 +199,7 @@ export class SaleService {
       const saleBefore = await prisma.sale.update({
         data: { updatedAt: new Date() },
         where: { id: args.where.id },
-        include: { saleItems: { include: { product: true } } },
+        include: { saleItems: { include: { product: true } } }
       });
 
       const sale = await prisma.sale.update({
@@ -207,7 +211,7 @@ export class SaleService {
             create: args.data.saleItems?.create?.map((item) => {
               return {
                 ...item,
-                totalCostValue: 0,
+                totalCostValue: 0
               };
             }),
             update: args.data.saleItems?.update?.map((item) => {
@@ -215,18 +219,20 @@ export class SaleService {
                 ...item,
                 data: {
                   ...item.data,
-                  totalCostValue: 0,
-                },
+                  totalCostValue: 0
+                }
               };
-            }),
-          },
+            })
+          }
         },
-        include: { saleItems: { include: { product: true } } },
+        include: { saleItems: { include: { product: true } } }
       });
       this.validateSale(sale);
 
       const promises: Promise<any>[] = [];
-      const productMovements: Parameters<PrismaClient['productMovement']['createMany']>[0]['data'] = [];
+      const productMovements: Parameters<
+        PrismaClient['productMovement']['createMany']
+      >[0]['data'] = [];
       for (const item of sale.saleItems) {
         if (!item.product.controlsQty) {
           continue;
@@ -244,7 +250,7 @@ export class SaleService {
         productMovements.push({
           type: 'SALE_EDIT',
           quantity: qtyDiff,
-          productId: item.product.id,
+          productId: item.product.id
         });
 
         promises.push(
@@ -252,16 +258,16 @@ export class SaleService {
             where: { id: item.product.id },
             data: {
               qty: {
-                [qtyDiff >= 0 ? 'increment' : 'decrement']: Math.abs(qtyDiff),
-              },
-            },
-          }),
+                [qtyDiff >= 0 ? 'increment' : 'decrement']: Math.abs(qtyDiff)
+              }
+            }
+          })
         );
       }
       promises.push(
         prisma.productMovement.createMany({
-          data: productMovements,
-        }),
+          data: productMovements
+        })
       );
 
       await Promise.all(promises);
@@ -270,18 +276,20 @@ export class SaleService {
         update: sale.saleItems.map((item) => {
           return {
             where: { id: item.id },
-            data: this.generateSaleItemTotals(item),
+            data: this.generateSaleItemTotals(item)
           };
-        }),
+        })
       };
       return prisma.sale.update({
         where: { id: sale.id },
         data: {
-          ...this.generateTotals(saleItems.update.map((item) => {
-            return item.data;
-          })),
-          saleItems,
-        },
+          ...this.generateTotals(
+            saleItems.update.map((item) => {
+              return item.data;
+            })
+          ),
+          saleItems
+        }
       });
     });
   }
@@ -299,7 +307,7 @@ export class SaleService {
       this.prisma.sale,
       id,
       'saleItems',
-      args,
+      args
     );
   }
 }

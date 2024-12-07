@@ -4,6 +4,6 @@ import { ProviderService } from './provider.service';
 
 @Module({
   providers: [ProviderResolver, ProviderService],
-  exports: [ProviderService],
+  exports: [ProviderService]
 })
 export class ProviderModule {}
