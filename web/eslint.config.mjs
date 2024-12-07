@@ -9,7 +9,7 @@ export default [
     files: ['src/*.{ts,tsx}'],    
   },
   {
-    ignores: ['src/types.ts', 'src/graphql/*', 'src/graphql/**/*'],
+    ignores: ['tailwind.config.js', 'src/types.ts', 'src/graphql/*', 'src/graphql/**/*'],
   },
   { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,

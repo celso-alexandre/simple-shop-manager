@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* .ant-form-item {
+  margin-bottom: 0;
+}
+.clone-antd-input-border {
+  border: 1px solid #F0F0F0;
+  border-radius: 0.5rem;
+} */
+
+dialog {
+  all: unset; /* Resets all browser default styles */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 50;
+}

@@ -1,3 +1,4 @@
+import './main.css';
 import { ApolloClient, ApolloProvider, from, HttpLink, InMemoryCache } from '@apollo/client';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
