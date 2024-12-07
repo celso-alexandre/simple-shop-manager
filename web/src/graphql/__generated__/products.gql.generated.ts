@@ -23,23 +23,23 @@ export type ProductQueryVariables = Types.Exact<{
 }>;
 
 
-export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', id: string, name: string, brandName?: string | null, isPostPaid: boolean, costValue: number, costValueDecimal: number, priceValue: number, priceValueDecimal: number, netMarginValue: number, netMarginPercent: number, createdAt: any, updatedAt: any, providerId?: string | null, provider?: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null } | null, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null } };
+export type ProductQuery = { __typename?: 'Query', product: { __typename?: 'Product', id: string, name: string, brandName?: string | null, isPostPaid: boolean, costValue: number, costValueDecimal: number, priceValue: number, priceValueDecimal: number, netMarginValue: number, netMarginPercent: number, qty: number, controlsQty: boolean, createdAt: any, updatedAt: any, providerId?: string | null, provider?: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null } | null, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null } };
 
 export type ProductsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ProductWhereInput>;
   orderBy?: Types.InputMaybe<Array<Types.ProductOrderByWithRelationInput> | Types.ProductOrderByWithRelationInput>;
-  take?: Types.InputMaybe<Types.Scalars['Int']>;
-  skip?: Types.InputMaybe<Types.Scalars['Int']>;
+  take?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  skip?: Types.InputMaybe<Types.Scalars['Int']['input']>;
 }>;
 
 
-export type ProductsQuery = { __typename?: 'Query', products: { __typename?: 'ProductsOutput', nodes: Array<{ __typename?: 'Product', id: string, name: string, brandName?: string | null, isPostPaid: boolean, costValue: number, costValueDecimal: number, priceValue: number, priceValueDecimal: number, netMarginValue: number, netMarginPercent: number, createdAt: any, updatedAt: any, providerId?: string | null, provider?: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null } | null, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null }>, pageInfo?: { __typename?: 'ProductPaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
+export type ProductsQuery = { __typename?: 'Query', products: { __typename?: 'ProductsOutput', nodes: Array<{ __typename?: 'Product', id: string, name: string, brandName?: string | null, isPostPaid: boolean, costValue: number, costValueDecimal: number, priceValue: number, priceValueDecimal: number, netMarginValue: number, netMarginPercent: number, controlsQty: boolean, qty: number, createdAt: any, updatedAt: any, providerId?: string | null, provider?: { __typename?: 'Provider', id: string, name: string, email?: string | null, whatsapp?: string | null } | null, blameUser?: { __typename?: 'User', id: string, name: string, email: string } | null }>, pageInfo?: { __typename?: 'ProductPaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
 
 export type ProductsSelectQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ProductWhereInput>;
   orderBy?: Types.InputMaybe<Array<Types.ProductOrderByWithRelationInput> | Types.ProductOrderByWithRelationInput>;
-  take?: Types.InputMaybe<Types.Scalars['Int']>;
-  skip?: Types.InputMaybe<Types.Scalars['Int']>;
+  take?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  skip?: Types.InputMaybe<Types.Scalars['Int']['input']>;
 }>;
 
 
@@ -126,6 +126,8 @@ export const ProductDocument = gql`
     priceValueDecimal
     netMarginValue
     netMarginPercent
+    qty
+    controlsQty
     createdAt
     updatedAt
     providerId
@@ -160,7 +162,7 @@ export const ProductDocument = gql`
  *   },
  * });
  */
-export function useProductQuery(baseOptions: Apollo.QueryHookOptions<ProductQuery, ProductQueryVariables>) {
+export function useProductQuery(baseOptions: Apollo.QueryHookOptions<ProductQuery, ProductQueryVariables> & ({ variables: ProductQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<ProductQuery, ProductQueryVariables>(ProductDocument, options);
       }
@@ -168,8 +170,13 @@ export function useProductLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Pr
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ProductQuery, ProductQueryVariables>(ProductDocument, options);
         }
+export function useProductSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProductQuery, ProductQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProductQuery, ProductQueryVariables>(ProductDocument, options);
+        }
 export type ProductQueryHookResult = ReturnType<typeof useProductQuery>;
 export type ProductLazyQueryHookResult = ReturnType<typeof useProductLazyQuery>;
+export type ProductSuspenseQueryHookResult = ReturnType<typeof useProductSuspenseQuery>;
 export type ProductQueryResult = Apollo.QueryResult<ProductQuery, ProductQueryVariables>;
 export const ProductsDocument = gql`
     query Products($where: ProductWhereInput, $orderBy: [ProductOrderByWithRelationInput!], $take: Int, $skip: Int) {
@@ -185,6 +192,8 @@ export const ProductsDocument = gql`
       priceValueDecimal
       netMarginValue
       netMarginPercent
+      controlsQty
+      qty
       createdAt
       updatedAt
       providerId
@@ -238,8 +247,13 @@ export function useProductsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<P
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ProductsQuery, ProductsQueryVariables>(ProductsDocument, options);
         }
+export function useProductsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProductsQuery, ProductsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProductsQuery, ProductsQueryVariables>(ProductsDocument, options);
+        }
 export type ProductsQueryHookResult = ReturnType<typeof useProductsQuery>;
 export type ProductsLazyQueryHookResult = ReturnType<typeof useProductsLazyQuery>;
+export type ProductsSuspenseQueryHookResult = ReturnType<typeof useProductsSuspenseQuery>;
 export type ProductsQueryResult = Apollo.QueryResult<ProductsQuery, ProductsQueryVariables>;
 export const ProductsSelectDocument = gql`
     query ProductsSelect($where: ProductWhereInput, $orderBy: [ProductOrderByWithRelationInput!], $take: Int, $skip: Int) {
@@ -287,6 +301,11 @@ export function useProductsSelectLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ProductsSelectQuery, ProductsSelectQueryVariables>(ProductsSelectDocument, options);
         }
+export function useProductsSelectSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProductsSelectQuery, ProductsSelectQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProductsSelectQuery, ProductsSelectQueryVariables>(ProductsSelectDocument, options);
+        }
 export type ProductsSelectQueryHookResult = ReturnType<typeof useProductsSelectQuery>;
 export type ProductsSelectLazyQueryHookResult = ReturnType<typeof useProductsSelectLazyQuery>;
+export type ProductsSelectSuspenseQueryHookResult = ReturnType<typeof useProductsSelectSuspenseQuery>;
 export type ProductsSelectQueryResult = Apollo.QueryResult<ProductsSelectQuery, ProductsSelectQueryVariables>;

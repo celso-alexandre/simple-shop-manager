@@ -11,6 +11,7 @@
 - [ ] Allow to register a new product on sale
 - [ ] Stock management
    - [ ] Allow to adjust stock on sale
+   - [ ] Arrival of new product (allow to quickly increment balance of multiple products at once)
 
 ## Screenshots
 ### Sale

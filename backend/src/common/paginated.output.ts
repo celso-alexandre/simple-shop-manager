@@ -29,9 +29,7 @@ export function PaginatedOutput<T extends Type>(classRef: T): any {
 
   @ObjectType({ isAbstract: true })
   abstract class Pagination {
-    @Field(() => [classRef], {
-      description: 'Grouped ObjectType for findManyrequests',
-    })
+    @Field(() => [classRef])
     nodes: Array<T>;
 
     @Field(() => PageInfo, {

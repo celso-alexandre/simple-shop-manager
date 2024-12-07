@@ -36,6 +36,14 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
       render: value => formatMoneyFromDecimal(value),
     },
     {
+      title: 'Qtde',
+      dataIndex: nameof<ProductsNode>(x => x.qty),
+      render: (_, record) => {
+        if (record.controlsQty) return record.qty;
+        return null;
+      }
+    },
+    {
       title: 'Tp Custo',
       dataIndex: nameof<ProductsNode>(x => x.isPostPaid),
       render: value => <BooleanTag bool={value}>{value ? 'Consignado' : 'Normal'}</BooleanTag>,

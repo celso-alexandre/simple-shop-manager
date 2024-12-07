@@ -10,6 +10,7 @@ import type {
   Sale,
   UpdateOneSaleArgs,
 } from './dto';
+import { ProductMovementCreateWithoutSaleInput } from '../prisma/@generated';
 
 @Injectable()
 export class SaleService {
@@ -53,11 +54,61 @@ export class SaleService {
   }
 
   validateSale(sale: Sale) {
-    if (!sale?.saleItems?.length)
+    if (!sale?.saleItems?.length) {
       throw buildNestException(
         'Sale_SaleItem_zero_length_badRequest',
         BadRequestException,
       );
+    }
+    for (const item of sale.saleItems) {
+      if (item.quantity <= 0) {
+        throw buildNestException(
+          'SaleItem_quantity_zero_or_negative_badRequest',
+          BadRequestException,
+        );
+      }
+      if (item.product.controlsQty) {
+        if (!item.ProductMovement?.length) {
+          throw buildNestException(
+            'SaleItem_ProductMovement_zero_length_badRequest',
+            BadRequestException,
+          );
+        }
+        const saleMovement = item.ProductMovement.filter(mov => mov.type === 'SALE');
+        if (!saleMovement.length) {
+          throw buildNestException(
+            'SaleItem_ProductMovement_no_sale_movement_badRequest',
+            BadRequestException,
+          );
+        }
+        if (saleMovement.length > 1) {
+          throw buildNestException(
+            'SaleItem_ProductMovement_more_than_one_sale_movement_badRequest',
+            BadRequestException,
+          );
+        }
+        if (saleMovement[0].quantity !== (item.quantity * -1)) {
+          throw buildNestException(
+            'SaleItem_ProductMovement_quantity_mismatch_badRequest',
+            BadRequestException,
+          );
+        }
+        const emptyMovement = item.ProductMovement.find(mov => !mov.quantity);
+        if (emptyMovement) {
+          throw buildNestException(
+            'SaleItem_ProductMovement_empty_quantity_badRequest',
+            BadRequestException,
+          );
+        }
+        return;
+      }
+      if (item.ProductMovement.length > 1) {
+        throw buildNestException(
+          'SaleItem_ProductMovement_not_allowed_for_product_badRequest',
+          BadRequestException,
+        );
+      }
+    }
   }
 
   createOne({ data }: CreateOneSaleArgsCustom) {

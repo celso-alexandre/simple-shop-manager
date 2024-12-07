@@ -28,8 +28,8 @@ export type ProviderQuery = { __typename?: 'Query', provider: { __typename?: 'Pr
 export type ProvidersQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ProviderWhereInput>;
   orderBy?: Types.InputMaybe<Array<Types.ProviderOrderByWithRelationInput> | Types.ProviderOrderByWithRelationInput>;
-  take?: Types.InputMaybe<Types.Scalars['Int']>;
-  skip?: Types.InputMaybe<Types.Scalars['Int']>;
+  take?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  skip?: Types.InputMaybe<Types.Scalars['Int']['input']>;
 }>;
 
 
@@ -38,8 +38,8 @@ export type ProvidersQuery = { __typename?: 'Query', providers: { __typename?: '
 export type ProvidersSelectQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ProviderWhereInput>;
   orderBy?: Types.InputMaybe<Array<Types.ProviderOrderByWithRelationInput> | Types.ProviderOrderByWithRelationInput>;
-  take?: Types.InputMaybe<Types.Scalars['Int']>;
-  skip?: Types.InputMaybe<Types.Scalars['Int']>;
+  take?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  skip?: Types.InputMaybe<Types.Scalars['Int']['input']>;
 }>;
 
 
@@ -154,7 +154,7 @@ export const ProviderDocument = gql`
  *   },
  * });
  */
-export function useProviderQuery(baseOptions: Apollo.QueryHookOptions<ProviderQuery, ProviderQueryVariables>) {
+export function useProviderQuery(baseOptions: Apollo.QueryHookOptions<ProviderQuery, ProviderQueryVariables> & ({ variables: ProviderQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<ProviderQuery, ProviderQueryVariables>(ProviderDocument, options);
       }
@@ -162,8 +162,13 @@ export function useProviderLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<P
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ProviderQuery, ProviderQueryVariables>(ProviderDocument, options);
         }
+export function useProviderSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProviderQuery, ProviderQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProviderQuery, ProviderQueryVariables>(ProviderDocument, options);
+        }
 export type ProviderQueryHookResult = ReturnType<typeof useProviderQuery>;
 export type ProviderLazyQueryHookResult = ReturnType<typeof useProviderLazyQuery>;
+export type ProviderSuspenseQueryHookResult = ReturnType<typeof useProviderSuspenseQuery>;
 export type ProviderQueryResult = Apollo.QueryResult<ProviderQuery, ProviderQueryVariables>;
 export const ProvidersDocument = gql`
     query Providers($where: ProviderWhereInput, $orderBy: [ProviderOrderByWithRelationInput!], $take: Int, $skip: Int) {
@@ -220,8 +225,13 @@ export function useProvidersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ProvidersQuery, ProvidersQueryVariables>(ProvidersDocument, options);
         }
+export function useProvidersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProvidersQuery, ProvidersQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProvidersQuery, ProvidersQueryVariables>(ProvidersDocument, options);
+        }
 export type ProvidersQueryHookResult = ReturnType<typeof useProvidersQuery>;
 export type ProvidersLazyQueryHookResult = ReturnType<typeof useProvidersLazyQuery>;
+export type ProvidersSuspenseQueryHookResult = ReturnType<typeof useProvidersSuspenseQuery>;
 export type ProvidersQueryResult = Apollo.QueryResult<ProvidersQuery, ProvidersQueryVariables>;
 export const ProvidersSelectDocument = gql`
     query ProvidersSelect($where: ProviderWhereInput, $orderBy: [ProviderOrderByWithRelationInput!], $take: Int, $skip: Int) {
@@ -268,6 +278,11 @@ export function useProvidersSelectLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<ProvidersSelectQuery, ProvidersSelectQueryVariables>(ProvidersSelectDocument, options);
         }
+export function useProvidersSelectSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<ProvidersSelectQuery, ProvidersSelectQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<ProvidersSelectQuery, ProvidersSelectQueryVariables>(ProvidersSelectDocument, options);
+        }
 export type ProvidersSelectQueryHookResult = ReturnType<typeof useProvidersSelectQuery>;
 export type ProvidersSelectLazyQueryHookResult = ReturnType<typeof useProvidersSelectLazyQuery>;
+export type ProvidersSelectSuspenseQueryHookResult = ReturnType<typeof useProvidersSelectSuspenseQuery>;
 export type ProvidersSelectQueryResult = Apollo.QueryResult<ProvidersSelectQuery, ProvidersSelectQueryVariables>;

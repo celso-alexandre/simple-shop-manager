@@ -4,9 +4,9 @@ import {
   ConflictException,
   HttpException,
 } from '@nestjs/common';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { upperFirst } from 'lodash';
 import { buildNestException } from './build-nest-exception';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 // type PrismaErrorMeta = {
 //   cause?: string;

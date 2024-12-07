@@ -13,16 +13,17 @@ import { ProductsForm } from './form';
 import { productDto } from './helpers';
 
 async function onSubmit(product: ProductsFormNode, create: ReturnType<typeof useCreateProductMutation>[0]) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, providerId, ...data } = productDto(product);
   await create({
     refetchQueries: [ProductDocument, ProductsDocument, ProductsSelectDocument],
     variables: {
       data: {
         ...data,
-        isPostPaid: data.isPostPaid ?? false,
+        isPostPaid: data.isPostPaid || false,
         costValue: serializeDecimalAsInt(data.costValue),
         priceValue: serializeDecimalAsInt(data.priceValue),
+        qty: data.qty || 0,
+        controlsQty: data.controlsQty || false,
         provider: !providerId ? undefined : { connect: { id: providerId } },
       },
     },

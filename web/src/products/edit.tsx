@@ -53,6 +53,8 @@ export function ProductEdit() {
       isPostPaid: data.product.isPostPaid ?? false,
       costValue: serializeIntAsDecimal(data.product.costValue),
       priceValue: serializeIntAsDecimal(data.product.priceValue),
+      controlsQty: data.product.controlsQty ?? false,
+      qty: data.product.qty ?? 0,
     };
   }, [data]);
 

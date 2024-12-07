@@ -1,7 +1,7 @@
 generator client {
-  provider        = "prisma-client-js"
-  binaryTargets   = ["native"]
-  previewFeatures = ["filteredRelationCount"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+  // previewFeatures = ["filteredRelationCount"]
 }
 
 generator nestgraphql {
@@ -35,15 +35,16 @@ model User {
 
   /// Relations
   /// @HideField({ output: true })
-  providers    Provider[]
+  providers       Provider[]
   /// @HideField({ output: true })
-  products     Product[]
+  products        Product[]
   /// @HideField({ output: true })
-  sales        Sale[]
+  sales           Sale[]
   /// @HideField({ output: true })
-  saleItems    SaleItem[]
+  saleItems       SaleItem[]
   /// @HideField({ output: true })
-  SalePaidCost SalePaidCost[]
+  SalePaidCost    SalePaidCost[]
+  ProductMovement ProductMovement[]
 }
 
 model Provider {
@@ -87,6 +88,10 @@ model Product {
   isPostPaid  Boolean
   /// Cost value
   costValue   Int
+  /// Product Controls Qty
+  controlsQty Boolean @default(false)
+  /// Qty in stock
+  qty         Int     @default(0)
   /// FK: Provider.id
   providerId  String? @db.ObjectId
   /// FK: User.id - User to blame for
@@ -99,11 +104,48 @@ model Product {
 
   /// Relations
   /// @HideField({ output: true })
-  blameUser User?      @relation(fields: [blameUserId], references: [id])
+  blameUser       User?             @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
-  provider  Provider?  @relation(fields: [providerId], references: [id])
+  provider        Provider?         @relation(fields: [providerId], references: [id])
   /// @HideField({ output: true })
-  saleItems SaleItem[]
+  SaleItems       SaleItem[]
+  /// @HideField({ output: true })
+  ProductMovement ProductMovement[]
+}
+
+enum ProductMovementType {
+  SALE
+  MANUAL
+}
+
+model ProductMovement {
+  /// ID
+  id          String              @id @default(auto()) @map("_id") @db.ObjectId
+  /// FK: Product.id
+  productId   String              @db.ObjectId
+  /// Sale
+  saleItemId  String?             @db.ObjectId
+  /// Type of movement
+  type        ProductMovementType
+  /// Quantity (positive for input, negative for output)
+  quantity    Int
+  /// Movement type
+  movement    String
+  /// FK: User.id - User to blame for
+  blameUserId String?             @db.ObjectId
+
+  /// @HideField({ match: '@(*Update*|*Create*)Input' })
+  createdAt DateTime @default(now())
+  /// @HideField({ match: '@(*Update*|*Create*)Input' })
+  updatedAt DateTime @updatedAt
+
+  /// Relations
+  /// @HideField({ output: true })
+  blameUser User?     @relation(fields: [blameUserId], references: [id])
+  /// @HideField({ output: true })
+  Product   Product   @relation(fields: [productId], references: [id])
+  /// @HideField({ output: true })
+  SaleItem  SaleItem? @relation(fields: [saleItemId], references: [id])
 }
 
 model Sale {
@@ -148,17 +190,17 @@ model SaleItem {
   costIsPostPaid Boolean
 
   /// FK: Sale.id
-  saleId         String  @db.ObjectId
+  saleId             String  @db.ObjectId
   /// FK: Provider.id (usually the same as Product.providerId)
-  providerId     String? @db.ObjectId
+  providerId         String? @db.ObjectId
   /// FK: User.id - User to blame for
-  blameUserId    String? @db.ObjectId
+  blameUserId        String? @db.ObjectId
   /// FK: SalePaidCost.id
-  salePaidCostId String? @db.ObjectId
+  salePaidCostId     String? @db.ObjectId
   /// Related salePaidCostId payment marked this one to be paid
   saleCostIsSelected Boolean @default(false)
   /// Related salePaidCostId payment were made
-  saleCostIsPaid Boolean @default(false)
+  saleCostIsPaid     Boolean @default(false)
 
   /// @HideField({ match: '@(*Update*|*Create*)Input' })
   createdAt DateTime @default(now())
@@ -167,24 +209,25 @@ model SaleItem {
 
   /// Relations
   /// @HideField({ output: true })
-  blameUser    User?         @relation(fields: [blameUserId], references: [id])
+  blameUser       User?             @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
-  sale         Sale?         @relation(fields: [saleId], references: [id])
+  sale            Sale?             @relation(fields: [saleId], references: [id])
   /// @HideField({ output: true })
-  provider     Provider?     @relation(fields: [providerId], references: [id])
+  provider        Provider?         @relation(fields: [providerId], references: [id])
   /// @HideField({ output: true })
-  product      Product       @relation(fields: [productId], references: [id])
+  product         Product           @relation(fields: [productId], references: [id])
   /// @HideField({ output: true })
-  salePaidCost SalePaidCost? @relation(fields: [salePaidCostId], references: [id])
+  salePaidCost    SalePaidCost?     @relation(fields: [salePaidCostId], references: [id])
+  ProductMovement ProductMovement[]
 
   @@unique([costIsPostPaid, productId, saleId])
 }
 
 model SalePaidCost {
   /// ID
-  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   /// Sales from that date and backward
-  endDate DateTime @db.Date
+  endDate   DateTime @db.Date
   /// Value
   value     Int
   /// Paid Value

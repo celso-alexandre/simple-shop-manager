@@ -35,8 +35,8 @@ export type SaleQuery = { __typename?: 'Query', sale: { __typename?: 'Sale', id:
 export type SalesQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.SaleWhereInput>;
   orderBy?: Types.InputMaybe<Array<Types.SaleOrderByWithRelationInput> | Types.SaleOrderByWithRelationInput>;
-  take?: Types.InputMaybe<Types.Scalars['Int']>;
-  skip?: Types.InputMaybe<Types.Scalars['Int']>;
+  take?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+  skip?: Types.InputMaybe<Types.Scalars['Int']['input']>;
 }>;
 
 
@@ -206,7 +206,7 @@ export const SaleDocument = gql`
  *   },
  * });
  */
-export function useSaleQuery(baseOptions: Apollo.QueryHookOptions<SaleQuery, SaleQueryVariables>) {
+export function useSaleQuery(baseOptions: Apollo.QueryHookOptions<SaleQuery, SaleQueryVariables> & ({ variables: SaleQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<SaleQuery, SaleQueryVariables>(SaleDocument, options);
       }
@@ -214,8 +214,13 @@ export function useSaleLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SaleQ
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<SaleQuery, SaleQueryVariables>(SaleDocument, options);
         }
+export function useSaleSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SaleQuery, SaleQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SaleQuery, SaleQueryVariables>(SaleDocument, options);
+        }
 export type SaleQueryHookResult = ReturnType<typeof useSaleQuery>;
 export type SaleLazyQueryHookResult = ReturnType<typeof useSaleLazyQuery>;
+export type SaleSuspenseQueryHookResult = ReturnType<typeof useSaleSuspenseQuery>;
 export type SaleQueryResult = Apollo.QueryResult<SaleQuery, SaleQueryVariables>;
 export const SalesDocument = gql`
     query Sales($where: SaleWhereInput, $orderBy: [SaleOrderByWithRelationInput!], $take: Int, $skip: Int) {
@@ -275,6 +280,11 @@ export function useSalesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Sale
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<SalesQuery, SalesQueryVariables>(SalesDocument, options);
         }
+export function useSalesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SalesQuery, SalesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<SalesQuery, SalesQueryVariables>(SalesDocument, options);
+        }
 export type SalesQueryHookResult = ReturnType<typeof useSalesQuery>;
 export type SalesLazyQueryHookResult = ReturnType<typeof useSalesLazyQuery>;
+export type SalesSuspenseQueryHookResult = ReturnType<typeof useSalesSuspenseQuery>;
 export type SalesQueryResult = Apollo.QueryResult<SalesQuery, SalesQueryVariables>;

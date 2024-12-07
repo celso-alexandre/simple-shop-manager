@@ -93,12 +93,10 @@ export const RefetchButton: React.FC<RefetchButtonProps> = ({
   return (
     <div className={container} {...rest}>
       <Button
-        type="dashed"
+        type="text"
         disabled={disabled || isLoading}
         icon={
-          <span className="anticon">
-            <AiOutlineReload size={18} className={isLoading ? 'anticon anticon-spin' : 'anticon'} color="#FFF" />
-          </span>
+          <AiOutlineReload color="white" size={18} className={isLoading ? 'anticon anticon-spin' : 'anticon'} />
         }
         onClick={() => {
           setRefetch();
@@ -109,14 +107,14 @@ export const RefetchButton: React.FC<RefetchButtonProps> = ({
 
       <Select
         showSearch={false}
-        dropdownMatchSelectWidth={200}
-        bordered={false}
+        popupMatchSelectWidth={200}
+        variant="borderless"
         disabled={true}
         allowClear
         suffixIcon={<AiFillCaretDown color="#FFF" />}
-        clearIcon={() => {
-          return <AiFillCloseCircle color="#FFF" enableBackground={0} />;
-        }}
+        // clearIcon={() => {
+        //   return <AiFillCloseCircle color="#FFF" enableBackground={0} />;
+        // }}
         style={{
           color: '#FFF',
         }}

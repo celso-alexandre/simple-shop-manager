@@ -9,5 +9,7 @@ export function productDto(product: ProductsFormNode): ProductsFormNode {
     priceValue: product.priceValue,
     brandName: product.brandName,
     providerId: product.providerId,
+    controlsQty: product.controlsQty,
+    qty: product.qty,
   };
 }

@@ -29,6 +29,8 @@ gql`
       priceValueDecimal
       netMarginValue
       netMarginPercent
+      qty
+      controlsQty
       createdAt
       updatedAt
 
@@ -62,6 +64,8 @@ gql`
         priceValueDecimal
         netMarginValue
         netMarginPercent
+        controlsQty
+        qty
         createdAt
         updatedAt
 
