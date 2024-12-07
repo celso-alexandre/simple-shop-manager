@@ -6,15 +6,14 @@
 - [x] Allow to register products
    - [x] Cost type: prepaid or postpaid (consignation)
    - [x] If postpaid: allow to assign a provider to be paid
-- [ ] List me the comission on every sale (prepaid)
-- [ ] List me margin on every sale and its summup
-- [ ] Allow to register a new product on sale
+- [x] List me margin on every sale and its summup
+- [x] Allow to register a new product on sale
 - [ ] Stock management
    - [x] Adjust stock in product edit page
    - [x] Auto-debit product stock quantity on sale (if product "controlsQty" = true)
    - [x] Correctly handle sale edit regarding stock
    - [x] Mantain a history of stock changes
-   - [ ] Arrival of new product (allow to quickly increment balance of multiple products at once)
+   - [ ] Arrival of new product (allow to quickly increment balance of multiple products at once) / stock manual adjustment in batch (maybe one screen for both cases)
 
 ## Screenshots
 ### Sale
