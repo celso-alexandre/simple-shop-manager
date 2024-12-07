@@ -67,6 +67,7 @@ export class SaleService {
           BadRequestException,
         );
       }
+      return;
       if (item.product.controlsQty) {
         if (!item.ProductMovement?.length) {
           throw buildNestException(
