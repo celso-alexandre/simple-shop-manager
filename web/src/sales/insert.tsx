@@ -2,12 +2,19 @@ import { Button, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { SalesFormNode } from '.';
 import { Title } from '../components/title';
-import { useCreateSaleMutation, SalesDocument, SaleDocument } from '../graphql/__generated__/sales.gql.generated';
+import {
+  useCreateSaleMutation,
+  SalesDocument,
+  SaleDocument,
+} from '../graphql/__generated__/sales.gql.generated';
 import { serializeDecimalAsInt } from '../helpers';
 import { SalesForm } from './form';
 import { saleDto } from './helper';
 
-async function onSubmit(data: SalesFormNode, create: ReturnType<typeof useCreateSaleMutation>[0]) {
+async function onSubmit(
+  data: SalesFormNode,
+  create: ReturnType<typeof useCreateSaleMutation>[0]
+) {
   const { date, saleItems } = saleDto(data);
   await create({
     refetchQueries: [SaleDocument, SalesDocument],
@@ -16,13 +23,14 @@ async function onSubmit(data: SalesFormNode, create: ReturnType<typeof useCreate
         date,
         saleItems: {
           create: saleItems.nodes.map((item) => {
-             
             const { productId, providerId, totalValue, ...rest } = item;
             return {
               ...rest,
               totalValue: serializeDecimalAsInt(totalValue),
               product: { connect: { id: productId } },
-              provider: !providerId ? undefined : { connect: { id: providerId } },
+              provider: !providerId
+                ? undefined
+                : { connect: { id: providerId } },
             };
           }),
         },
@@ -55,8 +63,7 @@ export function SaleInsert() {
           onClick={async () => {
             await form.validateFields();
             form.submit();
-          }}
-        >
+          }}>
           Salvar
         </Button>
       </Row>

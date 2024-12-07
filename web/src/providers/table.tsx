@@ -42,7 +42,9 @@ export function ProvidersTable(props: TableProps<ProvidersNode>) {
         return x.createdAt;
       }),
       render: (value, record) => {
-        return record.updatedAt !== record.createdAt && dayjs(value).format('L');
+        return (
+          record.updatedAt !== record.createdAt && dayjs(value).format('L')
+        );
       },
     },
     {
@@ -52,7 +54,7 @@ export function ProvidersTable(props: TableProps<ProvidersNode>) {
           <div>
             <Button
               onClick={() => {
-              // navigate(`/provider/${record.id}`)
+                // navigate(`/provider/${record.id}`)
                 window.location.href = `/provider/${record.id}`;
               }}
               size="middle"

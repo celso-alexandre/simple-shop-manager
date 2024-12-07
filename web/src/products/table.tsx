@@ -2,7 +2,11 @@ import { Button, Table, Tooltip, Typography } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
 import { ProductsNode } from '.';
-import { formatPercentFromDecimal, formatMoneyFromDecimal, formatMoneyFromInt } from '../helpers';
+import {
+  formatPercentFromDecimal,
+  formatMoneyFromDecimal,
+  formatMoneyFromInt,
+} from '../helpers';
 import { BooleanTag } from '../components/tag';
 
 export function ProductsTable(props: TableProps<ProductsNode>) {
@@ -64,7 +68,11 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
         return x.isPostPaid;
       }),
       render: (value) => {
-        return <BooleanTag bool={value}>{value ? 'Consignado' : 'Normal'}</BooleanTag>;
+        return (
+          <BooleanTag bool={value}>
+            {value ? 'Consignado' : 'Normal'}
+          </BooleanTag>
+        );
       },
     },
     {
@@ -75,11 +83,17 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
       render: (value, record) => {
         const common = (
           <>
-            {formatPercentFromDecimal(record.netMarginPercent)} ({formatMoneyFromInt(record.netMarginValue)})
+            {formatPercentFromDecimal(record.netMarginPercent)} (
+            {formatMoneyFromInt(record.netMarginValue)})
           </>
         );
         if (!record.priceValueDecimal) return common;
-        return <Tooltip title={`Custo: ${formatMoneyFromDecimal(record.costValueDecimal)}`}>{common}</Tooltip>;
+        return (
+          <Tooltip
+            title={`Custo: ${formatMoneyFromDecimal(record.costValueDecimal)}`}>
+            {common}
+          </Tooltip>
+        );
       },
     },
     {
@@ -90,7 +104,8 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
       render: (value, record) => {
         if (!record.provider) return null;
         return (
-          <Typography.Link href={`/provider/${record.providerId}`}>{`${record.provider?.name} ${
+          <Typography.Link
+            href={`/provider/${record.providerId}`}>{`${record.provider?.name} ${
             record.provider?.whatsapp ?? ''
           }`}</Typography.Link>
         );
@@ -106,7 +121,7 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
           <div>
             <Button
               onClick={() => {
-              // navigate(`/product/${record.id}`)
+                // navigate(`/product/${record.id}`)
                 window.location.href = `/product/${record.id}`;
               }}
               size="middle"

@@ -18,7 +18,11 @@ import { SaleItemUpdateWithWhereUniqueWithoutSaleInput } from '../types';
 import { SalesForm } from './form';
 import { saleDto } from './helper';
 
-async function onSubmit(sale: SalesFormNode, update: ReturnType<typeof useUpdateSaleMutation>[0], data?: SaleQuery) {
+async function onSubmit(
+  sale: SalesFormNode,
+  update: ReturnType<typeof useUpdateSaleMutation>[0],
+  data?: SaleQuery
+) {
   const { id, date, saleItems } = saleDto(sale);
   const createMany = saleItems.nodes.filter((item) => {
     return !item.id;
@@ -40,37 +44,59 @@ async function onSubmit(sale: SalesFormNode, update: ReturnType<typeof useUpdate
       data: {
         date: { set: date },
         saleItems: {
-          deleteMany: !disconnect?.length ? undefined : [{ id: { in: disconnect.map((item) => {
-            return item.id;
-          }) } }],
+          deleteMany: !disconnect?.length
+            ? undefined
+            : [
+                {
+                  id: {
+                    in: disconnect.map((item) => {
+                      return item.id;
+                    }),
+                  },
+                },
+              ],
           create: !createMany?.length
             ? undefined
             : createMany.map((item) => {
-              // eslint-disable-next-line @typescript-eslint/no-unused-vars
-              const { id: saleItemId, productId, providerId, totalValue, ...rest } = item;
-              return {
-                ...rest,
-                totalValue: serializeDecimalAsInt(totalValue),
-                product: { connect: { id: productId } },
-                provider: !providerId ? undefined : { connect: { id: providerId } },
-              };
-            }),
+                const {
+                  id: _saleItemId,
+                  productId,
+                  providerId,
+                  totalValue,
+                  ...rest
+                } = item;
+                return {
+                  ...rest,
+                  totalValue: serializeDecimalAsInt(totalValue),
+                  product: { connect: { id: productId } },
+                  provider: !providerId
+                    ? undefined
+                    : { connect: { id: providerId } },
+                };
+              }),
           update: !updateMany?.length
             ? undefined
             : updateMany.map((item) => {
-               
-              const { id: saleItemId, productId, providerId, totalValue, ...rest } = item;
-              const res: SaleItemUpdateWithWhereUniqueWithoutSaleInput = {
-                where: { id: saleItemId },
-                data: {
-                  ...objectPropertiesSet(rest),
-                  totalValue: { set: serializeDecimalAsInt(totalValue) },
-                  product: { connect: { id: productId } },
-                  provider: !providerId ? { disconnect: true } : { connect: { id: providerId } },
-                },
-              };
-              return res;
-            }),
+                const {
+                  id: saleItemId,
+                  productId,
+                  providerId,
+                  totalValue,
+                  ...rest
+                } = item;
+                const res: SaleItemUpdateWithWhereUniqueWithoutSaleInput = {
+                  where: { id: saleItemId },
+                  data: {
+                    ...objectPropertiesSet(rest),
+                    totalValue: { set: serializeDecimalAsInt(totalValue) },
+                    product: { connect: { id: productId } },
+                    provider: !providerId
+                      ? { disconnect: true }
+                      : { connect: { id: providerId } },
+                  },
+                };
+                return res;
+              }),
         },
       },
     },

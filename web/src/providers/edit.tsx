@@ -15,12 +15,16 @@ import { ProvidersForm } from './form';
 
 async function onSubmit(
   { id, whatsapp, ...data }: ProvidersFormNode,
-  update: ReturnType<typeof useUpdateProviderMutation>[0],
+  update: ReturnType<typeof useUpdateProviderMutation>[0]
 ) {
   let wpp = { set: whatsapp };
   if (!whatsapp || whatsapp === '+55 (__) _____-____') wpp = undefined as any;
   await update({
-    refetchQueries: [ProviderDocument, ProvidersDocument, ProvidersSelectDocument],
+    refetchQueries: [
+      ProviderDocument,
+      ProvidersDocument,
+      ProvidersSelectDocument,
+    ],
     variables: {
       where: { id },
       data: {
@@ -75,7 +79,10 @@ export function ProviderEdit() {
             <Typography.Paragraph>
               {data?.provider?.products?.nodes?.map((node) => {
                 return (
-                  <a style={{ marginRight: 10 }} key={node.id} href={`/product/${node.id}`}>
+                  <a
+                    style={{ marginRight: 10 }}
+                    key={node.id}
+                    href={`/product/${node.id}`}>
                     {node.name}
                   </a>
                 );

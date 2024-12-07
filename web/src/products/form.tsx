@@ -4,8 +4,13 @@ import { InputNumberMoney } from '../components/input-number-money';
 import { ProviderAsyncSelect } from '../components/provider-async-select.component';
 import { useState } from 'react';
 
-export function ProductsForm({ onFinish: finish, ...props }: Parameters<typeof Form<ProductsFormNode>>[0]) {
-  const [controlsQty, setControlsQty] = useState(props?.initialValues?.controlsQty || false);
+export function ProductsForm({
+  onFinish: finish,
+  ...props
+}: Parameters<typeof Form<ProductsFormNode>>[0]) {
+  const [controlsQty, setControlsQty] = useState(
+    props?.initialValues?.controlsQty || false
+  );
   async function onFinish(values: ProductsFormNode) {
     if (finish) await finish(values);
     // navigate('/products');
@@ -67,8 +72,7 @@ export function ProductsForm({ onFinish: finish, ...props }: Parameters<typeof F
           name={nameof<ProductsFormNode>((x) => {
             return x.providerId;
           })}
-          style={{ width: 300 }}
-        >
+          style={{ width: 300 }}>
           <ProviderAsyncSelect style={{ width: '100%' }} />
         </Form.Item>
       </Col>
@@ -79,13 +83,12 @@ export function ProductsForm({ onFinish: finish, ...props }: Parameters<typeof F
             return x.controlsQty;
           })}
           label="Controla Qtde?"
-          valuePropName="checked"
-        >
+          valuePropName="checked">
           <Switch
-            onChange={((chk) => {
+            onChange={(chk) => {
               setControlsQty(chk);
               props.form?.setFieldValue('qty', 0);
-            })}
+            }}
           />
         </Form.Item>
       </Col>
@@ -95,12 +98,8 @@ export function ProductsForm({ onFinish: finish, ...props }: Parameters<typeof F
           name={nameof<ProductsFormNode>((x) => {
             return x.qty;
           })}
-          label="Qtde"
-        >
-          <InputNumber
-            disabled={!controlsQty}
-            min={0}
-          />
+          label="Qtde">
+          <InputNumber disabled={!controlsQty} min={0} />
         </Form.Item>
       </Col>
 
@@ -110,8 +109,7 @@ export function ProductsForm({ onFinish: finish, ...props }: Parameters<typeof F
             return x.isPostPaid;
           })}
           label="Consignado"
-          valuePropName="checked"
-        >
+          valuePropName="checked">
           <Switch />
         </Form.Item>
       </Col>

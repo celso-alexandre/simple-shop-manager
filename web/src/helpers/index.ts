@@ -22,7 +22,9 @@ export function formatMoneyFromInt<T extends number | undefined>(value: T) {
   return formatMoneyFromDecimal(val);
 }
 
-export function formatPercentFromDecimal<T extends number | undefined>(value: T) {
+export function formatPercentFromDecimal<T extends number | undefined>(
+  value: T
+) {
   if (!value) return value;
   return Intl.NumberFormat(undefined, {
     style: 'percent',
@@ -37,15 +39,25 @@ export function objectPropertiesSet<T extends object>(data: T) {
     if (key === '__typename') return prev;
     return {
       ...prev,
-      [key]: { set: typeof val === 'object' && Object.keys(val).length ? { ...val, __typename: undefined } : val },
+      [key]: {
+        set:
+          typeof val === 'object' && Object.keys(val).length
+            ? { ...val, __typename: undefined }
+            : val,
+      },
     };
   }, {} as any);
 }
 
-export function getNetMargin(price: number, cost: number, infinityToDecimal?: number) {
+export function getNetMargin(
+  price: number,
+  cost: number,
+  infinityToDecimal?: number
+) {
   const value = price - cost;
   const decimal = value / cost;
-  const infinity = typeof infinityToDecimal === 'number' && !Number.isFinite(decimal);
+  const infinity =
+    typeof infinityToDecimal === 'number' && !Number.isFinite(decimal);
 
   return {
     value,

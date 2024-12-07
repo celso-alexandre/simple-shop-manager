@@ -1,4 +1,3 @@
-
 import { useState, useMemo, useEffect } from 'react';
 import { Select, SelectProps } from 'antd';
 import { ObservableQueryFields } from '@apollo/client';
@@ -54,7 +53,11 @@ export function SelectDropdown<T extends TData<K>, K extends keyof T>({
 
   const onScroll = async (event: any) => {
     const { target } = event;
-    if (!loading && (target.scrollTop as number) + (target.offsetHeight as number) === target.scrollHeight) {
+    if (
+      !loading &&
+      (target.scrollTop as number) + (target.offsetHeight as number) ===
+        target.scrollHeight
+    ) {
       target.scrollTo(0, target.scrollHeight);
       await fetchMore({
         variables: {
@@ -66,7 +69,10 @@ export function SelectDropdown<T extends TData<K>, K extends keyof T>({
           return {
             [entityName]: {
               pageInfo: newEntries?.pageInfo,
-              nodes: [...(previousEntry?.nodes ?? []), ...(newEntries?.nodes ?? [])],
+              nodes: [
+                ...(previousEntry?.nodes ?? []),
+                ...(newEntries?.nodes ?? []),
+              ],
             },
           } as any;
         },

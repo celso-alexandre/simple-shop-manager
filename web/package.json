@@ -14,7 +14,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "generate": "graphql-codegen -r dotenv/config && tsc --noEmit",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "@apollo/client": "^3.12.2",
@@ -41,6 +42,7 @@
     "@graphql-codegen/typescript-operations": "^4.4.0",
     "@graphql-codegen/typescript-react-apollo": "^4.3.2",
     "@graphql-codegen/typescript-resolvers": "^4.4.1",
+    "@tanstack/eslint-plugin-query": "^5.62.1",
     "@types/lodash": "^4.17.13",
     "@types/node": "^22.10.1",
     "@types/react": "^19.0.1",
@@ -65,6 +67,7 @@
     "graphql-tag": "^2.12.6",
     "postcss": "^8.4.49",
     "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.9",
     "tailwindcss": "^3.4.16",
     "ts-graphql-plugin": "^4.0.3",
     "ts-nameof": "^5.0.0",

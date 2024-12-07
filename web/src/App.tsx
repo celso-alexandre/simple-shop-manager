@@ -27,7 +27,12 @@ export function App() {
     <div style={{ display: 'flex' }}>
       <SideMenu />
 
-      <div style={{ justifyContent: 'flex-end', marginLeft: '30px', width: '100%' }}>
+      <div
+        style={{
+          justifyContent: 'flex-end',
+          marginLeft: '30px',
+          width: '100%',
+        }}>
         <QueryParamProvider adapter={ReactRouter6Adapter}>
           <Routes>
             <Route path="/" element={<Sales />} />

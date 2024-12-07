@@ -18,18 +18,33 @@ type ProductAsyncSelectProps = SelectProps<any> & {
   style?: CSSProperties;
 };
 
-export const ProductAsyncSelect: FC<ProductAsyncSelectProps> = ({ setQuery, query, style, ...props }) => {
+export const ProductAsyncSelect: FC<ProductAsyncSelectProps> = ({
+  setQuery,
+  query,
+  style,
+  ...props
+}) => {
   const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebounce('');
   const { data, loading, fetchMore, refetch } = useProductsSelectQuery({
     variables: {
       where: !debouncedSearchTerm
         ? undefined
         : {
-          OR: [
-            { name: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
-            { brandName: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
-          ],
-        },
+            OR: [
+              {
+                name: {
+                  contains: debouncedSearchTerm,
+                  mode: QueryMode.Insensitive,
+                },
+              },
+              {
+                brandName: {
+                  contains: debouncedSearchTerm,
+                  mode: QueryMode.Insensitive,
+                },
+              },
+            ],
+          },
     },
   });
 

@@ -12,14 +12,21 @@ import { ProvidersForm } from './form';
 
 async function onSubmit(
   { whatsapp, ...data }: ProvidersFormNode,
-  create: ReturnType<typeof useCreateProviderMutation>[0],
+  create: ReturnType<typeof useCreateProviderMutation>[0]
 ) {
   await create({
-    refetchQueries: [ProviderDocument, ProvidersDocument, ProvidersSelectDocument],
+    refetchQueries: [
+      ProviderDocument,
+      ProvidersDocument,
+      ProvidersSelectDocument,
+    ],
     variables: {
       data: {
         ...data,
-        whatsapp: !whatsapp || whatsapp === '+55 (__) _____-____' ? undefined : whatsapp,
+        whatsapp:
+          !whatsapp || whatsapp === '+55 (__) _____-____'
+            ? undefined
+            : whatsapp,
       },
     },
   });

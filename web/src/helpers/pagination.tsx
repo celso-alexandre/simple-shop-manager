@@ -22,7 +22,10 @@ export function tablePagination({
       showSizeChanger: true,
       total: totalPages,
       onChange: (newPage: number, newPageSize: number) => {
-        setPagination(newPageSize !== pageSize ? 0 : (newPage - 1) * newPageSize, newPageSize);
+        setPagination(
+          newPageSize !== pageSize ? 0 : (newPage - 1) * newPageSize,
+          newPageSize
+        );
       },
     },
   };

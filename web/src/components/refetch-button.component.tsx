@@ -34,7 +34,7 @@ const useStyles = createUseStyles({
     },
     '& .ant-progress-bg': {
       backgroundColor: (props: { isLoading: boolean; disabled: boolean }) => {
-        return (props.isLoading ? '#bdbdbd' : '#fbb01a');
+        return props.isLoading ? '#bdbdbd' : '#fbb01a';
       },
     },
   },
@@ -62,7 +62,10 @@ export const RefetchButton: React.FC<RefetchButtonProps> = ({
 }) => {
   const [progress, setProgress] = useState(0);
   const [selectedValue, setSelectedValue] = useState(defaultSelected);
-  const { refetchContainer, container } = useStyles({ isLoading, disabled: false });
+  const { refetchContainer, container } = useStyles({
+    isLoading,
+    disabled: false,
+  });
 
   const { startMilli, endMilli } = useMemo(() => {
     return isLoading
@@ -102,7 +105,11 @@ export const RefetchButton: React.FC<RefetchButtonProps> = ({
         type="text"
         disabled={disabled || isLoading}
         icon={
-          <AiOutlineReload color="white" size={18} className={isLoading ? 'anticon anticon-spin' : 'anticon'} />
+          <AiOutlineReload
+            color="white"
+            size={18}
+            className={isLoading ? 'anticon anticon-spin' : 'anticon'}
+          />
         }
         onClick={() => {
           setRefetch();
@@ -131,8 +138,7 @@ export const RefetchButton: React.FC<RefetchButtonProps> = ({
         onClear={() => {
           setSelectedValue(0);
           setProgress(0);
-        }}
-      >
+        }}>
         <Select.Option value={10000}>10s</Select.Option>
         <Select.Option value={60000}>1m</Select.Option>
         <Select.Option value={300000}>5m</Select.Option>

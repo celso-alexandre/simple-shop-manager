@@ -18,20 +18,45 @@ type ProviderAsyncSelectProps = SelectProps<any> & {
   style?: CSSProperties;
 };
 
-export const ProviderAsyncSelect: FC<ProviderAsyncSelectProps> = ({ setQuery, query, style, ...props }) => {
+export const ProviderAsyncSelect: FC<ProviderAsyncSelectProps> = ({
+  setQuery,
+  query,
+  style,
+  ...props
+}) => {
   const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebounce('');
   const { data, loading, fetchMore, refetch } = useProvidersSelectQuery({
     variables: {
       where: !debouncedSearchTerm
         ? undefined
         : {
-          OR: [
-            { name: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
-            { document: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
-            { email: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
-            { whatsapp: { contains: debouncedSearchTerm, mode: QueryMode.Insensitive } },
-          ],
-        },
+            OR: [
+              {
+                name: {
+                  contains: debouncedSearchTerm,
+                  mode: QueryMode.Insensitive,
+                },
+              },
+              {
+                document: {
+                  contains: debouncedSearchTerm,
+                  mode: QueryMode.Insensitive,
+                },
+              },
+              {
+                email: {
+                  contains: debouncedSearchTerm,
+                  mode: QueryMode.Insensitive,
+                },
+              },
+              {
+                whatsapp: {
+                  contains: debouncedSearchTerm,
+                  mode: QueryMode.Insensitive,
+                },
+              },
+            ],
+          },
     },
   });
 

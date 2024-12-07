@@ -12,7 +12,10 @@ import { serializeDecimalAsInt } from '../helpers';
 import { ProductsForm } from './form';
 import { productDto } from './helpers';
 
-async function onSubmit(product: ProductsFormNode, create: ReturnType<typeof useCreateProductMutation>[0]) {
+async function onSubmit(
+  product: ProductsFormNode,
+  create: ReturnType<typeof useCreateProductMutation>[0]
+) {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { id, providerId, ...data } = productDto(product);
   await create({
@@ -45,7 +48,8 @@ export function ProductInsert() {
         form={form}
         onFinish={(values) => {
           onSubmit(values, create);
-        }} />
+        }}
+      />
 
       <Row style={{ marginTop: '20px' }}>
         <Button

@@ -96,26 +96,30 @@ export function SideMenu() {
     },
   ];
 
-  const routes = useMemo(
-    () => {
-      return items.reduce((prev, cur) => {
-        if (!(cur.key as string)?.includes('/') && !cur.children?.length) return prev;
+  const routes = useMemo(() => {
+    return items.reduce(
+      (prev, cur) => {
+        if (!(cur.key as string)?.includes('/') && !cur.children?.length)
+          return prev;
         return [
           ...prev,
           ...(!cur.children
             ? [{ path: cur.key as string }]
             : cur.children
-              ?.filter((child) => {
-                return child?.key;
-              })
-              ?.flatMap((child) => {
-                return { path: child?.key as string, parent: cur.key as string };
-              }) || []),
+                ?.filter((child) => {
+                  return child?.key;
+                })
+                ?.flatMap((child) => {
+                  return {
+                    path: child?.key as string,
+                    parent: cur.key as string,
+                  };
+                }) || []),
         ];
-      }, [] as { path: string; parent?: string }[]);
-    },
-    [],
-  );
+      },
+      [] as { path: string; parent?: string }[]
+    );
+  }, []);
 
   const matches = matchRoutes(routes, location);
   const { route } = matches?.[0] || {};
@@ -131,7 +135,10 @@ export function SideMenu() {
         items={items}
         contentEditable={false}
       />
-      <Button type="primary" onClick={toggleCollapsed} style={{ width: '100%' }}>
+      <Button
+        type="primary"
+        onClick={toggleCollapsed}
+        style={{ width: '100%' }}>
         {collapsed ? <AiOutlineMenuUnfold /> : <AiOutlineMenuFold />}
       </Button>
     </div>

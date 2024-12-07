@@ -17,7 +17,14 @@ type Props = {
   extraBefore?: JSX.Element[];
   extraAfter?: JSX.Element[];
 };
-export function Filter({ query, setQuery, refetch, loading, extraBefore, extraAfter }: Props) {
+export function Filter({
+  query,
+  setQuery,
+  refetch,
+  loading,
+  extraBefore,
+  extraAfter,
+}: Props) {
   return (
     <ListFilterLayout
       clearQuery={() => {

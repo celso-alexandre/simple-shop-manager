@@ -5,18 +5,25 @@ import { RiFilterOffLine } from 'react-icons/ri';
 type ListFilterLayoutProps = {
   content: React.ReactNode[];
   clearQuery: () => void;
-}
+};
 
-export const ListFilterLayout = ({ content, clearQuery }: ListFilterLayoutProps) => {
+export const ListFilterLayout = ({
+  content,
+  clearQuery,
+}: ListFilterLayoutProps) => {
   return (
     <>
       <Row justify="end">
         <div style={{ width: '100%' }}>
           <Button
-            style={{ background: 'none', border: 'none', float: 'right', padding: 0 }}
+            style={{
+              background: 'none',
+              border: 'none',
+              float: 'right',
+              padding: 0,
+            }}
             size="small"
-            onClick={clearQuery}
-          >
+            onClick={clearQuery}>
             <RiFilterOffLine className="anticon" />
             <span>Limpar filtros</span>
           </Button>

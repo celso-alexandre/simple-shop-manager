@@ -8,8 +8,7 @@ export function Title({ title }: { title: string }) {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-      }}
-    >
+      }}>
       <Typography.Title level={2}>{title}</Typography.Title>
     </div>
   );

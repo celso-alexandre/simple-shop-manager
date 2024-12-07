@@ -2,8 +2,15 @@ import { Button, Table, Tooltip } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
 import { SalesNode } from '.';
-import { formatMoneyFromDecimal, formatMoneyFromInt, formatPercentFromDecimal } from '../helpers';
-import { SalesDocument, useDeleteSaleMutation } from '../graphql/__generated__/sales.gql.generated';
+import {
+  formatMoneyFromDecimal,
+  formatMoneyFromInt,
+  formatPercentFromDecimal,
+} from '../helpers';
+import {
+  SalesDocument,
+  useDeleteSaleMutation,
+} from '../graphql/__generated__/sales.gql.generated';
 
 export function SalesTable(props: TableProps<SalesNode>) {
   const [deleteSale] = useDeleteSaleMutation({
@@ -44,11 +51,17 @@ export function SalesTable(props: TableProps<SalesNode>) {
       render: (value, record) => {
         const common = (
           <>
-            {formatPercentFromDecimal(record.netMarginPercent)} ({formatMoneyFromInt(record.netMarginValue)})
+            {formatPercentFromDecimal(record.netMarginPercent)} (
+            {formatMoneyFromInt(record.netMarginValue)})
           </>
         );
         if (!record.totalValueDecimal) return common;
-        return <Tooltip title={`Custo: ${formatMoneyFromDecimal(record.totalCostValueDecimal)}`}>{common}</Tooltip>;
+        return (
+          <Tooltip
+            title={`Custo: ${formatMoneyFromDecimal(record.totalCostValueDecimal)}`}>
+            {common}
+          </Tooltip>
+        );
       },
     },
     {
@@ -56,7 +69,12 @@ export function SalesTable(props: TableProps<SalesNode>) {
       width: 200,
       render: (value, record) => {
         return (
-          <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}>
             <a href={`/sale/${record.id}`}>
               <Button size="middle" type="primary">
                 Editar
@@ -68,8 +86,7 @@ export function SalesTable(props: TableProps<SalesNode>) {
                 deleteSale({ variables: { where: { id: record.id } } });
               }}
               size="middle"
-              type="default"
-            >
+              type="default">
               Remover
             </Button>
           </div>

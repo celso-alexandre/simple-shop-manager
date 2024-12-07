@@ -7,6 +7,9 @@
    "useTabs": false,
    "tabWidth": 2,
    "singleQuote": true,
-   "trailingComma": "none",
-   "jsxBracketSameLine": true
+   "trailingComma": "es5",
+   "jsxBracketSameLine": true,
+   "plugins": [
+      "prettier-plugin-tailwindcss"
+   ]
 }

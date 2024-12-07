@@ -11,11 +11,18 @@ import {
   ProductDocument,
   ProductsSelectDocument,
 } from '../graphql/__generated__/products.gql.generated';
-import { objectPropertiesSet, serializeDecimalAsInt, serializeIntAsDecimal } from '../helpers';
+import {
+  objectPropertiesSet,
+  serializeDecimalAsInt,
+  serializeIntAsDecimal,
+} from '../helpers';
 import { ProductsForm } from './form';
 import { productDto } from './helpers';
 
-async function onSubmit(product: ProductsFormNode, update: ReturnType<typeof useUpdateProductMutation>[0]) {
+async function onSubmit(
+  product: ProductsFormNode,
+  update: ReturnType<typeof useUpdateProductMutation>[0]
+) {
   const { id, providerId, ...data } = productDto(product);
   await update({
     refetchQueries: [ProductDocument, ProductsDocument, ProductsSelectDocument],
@@ -28,7 +35,9 @@ async function onSubmit(product: ProductsFormNode, update: ReturnType<typeof use
           costValue: serializeDecimalAsInt(data.costValue),
           priceValue: serializeDecimalAsInt(data.priceValue),
         }),
-        provider: !providerId ? { disconnect: true } : { connect: { id: providerId } },
+        provider: !providerId
+          ? { disconnect: true }
+          : { connect: { id: providerId } },
       },
     },
   });
@@ -69,7 +78,8 @@ export function ProductEdit() {
         form={form}
         onFinish={(values) => {
           onSubmit(values, update);
-        }} />
+        }}
+      />
 
       <Row style={{ marginTop: '20px' }}>
         <Button

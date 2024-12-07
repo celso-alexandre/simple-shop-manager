@@ -1,10 +1,20 @@
 import type { DecodedValueMap } from 'use-query-params';
 import { Col, DatePicker } from 'antd';
 import dayjs from 'dayjs';
-import { DateParam, NumberParam, QueryParamConfig, StringParam, withDefault } from 'use-query-params';
+import {
+  DateParam,
+  NumberParam,
+  QueryParamConfig,
+  StringParam,
+  withDefault,
+} from 'use-query-params';
 import { Filter } from '../components/filter';
 import { Title } from '../components/title';
-import { SaleQuery, SalesQuery, useSalesQuery } from '../graphql/__generated__/sales.gql.generated';
+import {
+  SaleQuery,
+  SalesQuery,
+  useSalesQuery,
+} from '../graphql/__generated__/sales.gql.generated';
 import { useQueryParamsWithDebounce } from '../helpers/use-query-params-with-debounce';
 import { QueryMode, SortOrder } from '../types';
 import { SalesTable } from './table';
@@ -13,7 +23,13 @@ import { tablePagination } from '../helpers/pagination';
 export type SalesNode = SalesQuery['sales']['nodes'][0];
 export type SaleItem = Pick<
   SaleQuery['sale']['saleItems']['nodes'][number],
-  'productId' | 'providerId' | 'totalValue' | 'quantity' | 'totalCostValue' | 'costIsPostPaid' | 'netMarginPercent'
+  | 'productId'
+  | 'providerId'
+  | 'totalValue'
+  | 'quantity'
+  | 'totalCostValue'
+  | 'costIsPostPaid'
+  | 'netMarginPercent'
 > & { id?: string };
 export type SalesFormNode = Pick<SaleQuery['sale'], 'date'> & {
   id?: string;
@@ -35,13 +51,14 @@ export function Sales() {
     startDate: dayjs().startOf('month').toDate(),
     endDate: dayjs().endOf('month').toDate(),
   };
-  const [query, , queryObj, setQueryDebounced] = useQueryParamsWithDebounce<SalesQueryParams>({
-    take: withDefault(NumberParam, queryDefaults.take),
-    skip: withDefault(NumberParam, queryDefaults.skip),
-    search: StringParam,
-    startDate: withDefault(DateParam, queryDefaults.startDate),
-    endDate: withDefault(DateParam, queryDefaults.endDate),
-  });
+  const [query, , queryObj, setQueryDebounced] =
+    useQueryParamsWithDebounce<SalesQueryParams>({
+      take: withDefault(NumberParam, queryDefaults.take),
+      skip: withDefault(NumberParam, queryDefaults.skip),
+      search: StringParam,
+      startDate: withDefault(DateParam, queryDefaults.startDate),
+      endDate: withDefault(DateParam, queryDefaults.endDate),
+    });
   const { skip, take, search, startDate, endDate } = query;
   const { data, loading, refetch } = useSalesQuery({
     variables: {
@@ -53,13 +70,32 @@ export function Sales() {
         OR: !search
           ? undefined
           : [
-            { saleItems: { some: { product: { is: { name: { contains: search, mode: QueryMode.Insensitive } } } } } },
-            {
-              saleItems: {
-                some: { product: { is: { brandName: { contains: search, mode: QueryMode.Insensitive } } } },
+              {
+                saleItems: {
+                  some: {
+                    product: {
+                      is: {
+                        name: { contains: search, mode: QueryMode.Insensitive },
+                      },
+                    },
+                  },
+                },
               },
-            },
-          ],
+              {
+                saleItems: {
+                  some: {
+                    product: {
+                      is: {
+                        brandName: {
+                          contains: search,
+                          mode: QueryMode.Insensitive,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            ],
       },
     },
   });
@@ -75,7 +111,9 @@ export function Sales() {
         loading={loading}
         extraAfter={[
           <Col key={-1}>
-            <label style={{ fontWeight: 'bold', display: 'block' }} htmlFor="dates">
+            <label
+              style={{ fontWeight: 'bold', display: 'block' }}
+              htmlFor="dates">
               Período
             </label>
 

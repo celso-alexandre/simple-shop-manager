@@ -1,12 +1,25 @@
 import { SalesFormNode } from '.';
- 
-export function filterValidSaleItem(item: ReturnType<typeof saleDto>['saleItems']['nodes'][number]) {
-  return typeof item.costIsPostPaid === 'boolean' && item.productId && item.quantity && item.totalValue;
+
+export function filterValidSaleItem(
+  item: ReturnType<typeof saleDto>['saleItems']['nodes'][number]
+) {
+  return (
+    typeof item.costIsPostPaid === 'boolean' &&
+    item.productId &&
+    item.quantity &&
+    item.totalValue
+  );
 }
 
-export function saleDto(sale: SalesFormNode): Omit<SalesFormNode, 'saleItems'> & {
+export function saleDto(sale: SalesFormNode): Omit<
+  SalesFormNode,
+  'saleItems'
+> & {
   saleItems: {
-    nodes: Omit<SalesFormNode['saleItems']['nodes'][0], 'netMarginPercent' | 'totalCostValue'>[];
+    nodes: Omit<
+      SalesFormNode['saleItems']['nodes'][0],
+      'netMarginPercent' | 'totalCostValue'
+    >[];
   };
 } {
   return {
