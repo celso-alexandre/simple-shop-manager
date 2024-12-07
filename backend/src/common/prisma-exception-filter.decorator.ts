@@ -22,16 +22,16 @@ export class PrismaExceptionFilter implements ExceptionFilter {
 
   private P2002_message_regEx = /((prisma\.)(\w+))/g;
 
-  private P2025_fk_not_found_regEx =
-    /^No '([a-zA-Z]+)' record\(s\) \(needed to inline the relation on '([a-zA-Z]+)' record\(s\)\) was found for a nested connect on (one-to-one|one-to-many) relation '[a-zA-Z]+'.$/;
+  // private P2025_fk_not_found_regEx =
+  //   /^No '([a-zA-Z]+)' record\(s\) \(needed to inline the relation on '([a-zA-Z]+)' record\(s\)\) was found for a nested connect on (one-to-one|one-to-many) relation '[a-zA-Z]+'.$/;
 
-  private P2025_pk_not_found_regEx =
-    /^Invalid [\s\S].*prisma.([A-Za-z]+).(update|create)\(\)`[\s\S].*$/;
+  // private P2025_pk_not_found_regEx =
+  //   /^Invalid [\s\S].*prisma.([A-Za-z]+).(update|create)\(\)`[\s\S].*$/;
 
-  private P2025_pk_not_found_regEx2 = /^No ([^\s]+) found/;
+  // private P2025_pk_not_found_regEx2 = /^No ([^\s]+) found/;
 
-  private P2018_meta_detail_regEx =
-    /^Expected 1 records to be connected after connect operation on one-to-many relation '([a-zA-Z]+)', found 0.$/;
+  // private P2018_meta_detail_regEx =
+  //   /^Expected 1 records to be connected after connect operation on one-to-many relation '([a-zA-Z]+)', found 0.$/;
 
   constructor(domain: string, debugging = false) {
     this.domain = domain;
@@ -51,9 +51,13 @@ export class PrismaExceptionFilter implements ExceptionFilter {
       const parent = upperFirst(modelOrig);
       const targetFields = target.split('_');
       const orderedTarget = (
-        targetFields?.filter((x, i) => i > 0 && i + 1 < targetFields.length) ||
+        targetFields?.filter((x, i) => {
+          return i > 0 && i + 1 < targetFields.length;
+        }) ||
         []
-      ).sort((a, b) => (a > b ? 1 : b > a ? -1 : 0));
+      ).sort((a, b) => {
+        return (a > b ? 1 : b > a ? -1 : 0);
+      });
       if (!parent || !orderedTarget.length) throw exception;
       const error = buildNestException(
         `${parent}_UQ_${orderedTarget.join('_')}_conflict`,
@@ -160,6 +164,7 @@ export class PrismaExceptionFilter implements ExceptionFilter {
     if (!this.domain) throw exception;
 
     try {
+      // eslint-disable-next-line no-prototype-builtins
       const hasHandler = this.handlers.hasOwnProperty(exception.code);
       if (!hasHandler) throw exception;
       this.handlers[exception.code](exception);

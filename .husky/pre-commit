@@ -4,7 +4,7 @@ pnpm i
 # pnpm generate
 pnpm build
 rm -rf dist
-# pnpm lint
+pnpm lint
 
 cd ../web
 pnpm i

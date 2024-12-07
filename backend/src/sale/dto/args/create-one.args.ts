@@ -13,12 +13,16 @@ export class SaleItemCreateNestedManyWithoutSaleInputCustom extends PickType(
 
 @InputType()
 export class SaleCreateInputCustom extends GeneratedSaleCreateInput {
-  @Field(() => SaleItemCreateNestedManyWithoutSaleInputCustom)
-  saleItems!: SaleItemCreateNestedManyWithoutSaleInputCustom;
+  @Field(() => {
+    return SaleItemCreateNestedManyWithoutSaleInputCustom;
+  })
+    saleItems!: SaleItemCreateNestedManyWithoutSaleInputCustom;
 }
 
 @ArgsType()
 export class CreateOneSaleArgsCustom extends GeneratedCreateOneSaleArgs {
-  @Field(() => SaleCreateInputCustom, { nullable: false })
-  data!: SaleCreateInputCustom;
+  @Field(() => {
+    return SaleCreateInputCustom;
+  }, { nullable: false })
+    data!: SaleCreateInputCustom;
 }

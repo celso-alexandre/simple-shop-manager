@@ -34,7 +34,7 @@ export class ProductService {
           type: 'INITIAL',
         },
       });
-      return product
+      return product;
     });
   }
 
@@ -44,7 +44,7 @@ export class ProductService {
         data: { updatedAt: new Date() },
         where: { id: args.where.id },
         select: { qty: true },
-      })
+      });
       const product = await this.prisma.product.update(args);
       const balanceDiff = product.qty - prodBefore.qty;
       if (!product.controlsQty || !balanceDiff) {
@@ -57,7 +57,7 @@ export class ProductService {
           type: 'MANUAL',
         },
       });
-      return product
+      return product;
     });
   }
 

@@ -19,21 +19,29 @@ import { Sale } from './dto';
 import { SalesOutput } from './dto/output';
 import { SaleService } from './sale.service';
 
-@Resolver(() => Sale)
+@Resolver(() => {
+  return Sale;
+})
 export class SaleResolver {
   constructor(private readonly service: SaleService) {}
 
-  @Query(() => Sale, { name: 'sale' })
+  @Query(() => {
+    return Sale;
+  }, { name: 'sale' })
   findUnique(@Args() args: FindUniqueSaleArgs) {
     return this.service.findUnique(args);
   }
 
-  @Query(() => SalesOutput, { name: 'sales' })
+  @Query(() => {
+    return SalesOutput;
+  }, { name: 'sales' })
   findMany(@Args() args: FindManySaleArgs) {
     return this.service.findMany(args);
   }
 
-  @Mutation(() => Sale, { name: 'createSale' })
+  @Mutation(() => {
+    return Sale;
+  }, { name: 'createSale' })
   createOne(@Args() args: CreateOneSaleArgsCustom) {
     return this.service.createOne(args);
   }
@@ -43,17 +51,23 @@ export class SaleResolver {
   //   return this.service.createMany(args);
   // }
 
-  @Mutation(() => Sale, { name: 'updateSale' })
+  @Mutation(() => {
+    return Sale;
+  }, { name: 'updateSale' })
   updateOne(@Args() args: UpdateOneSaleArgs) {
     return this.service.updateOne(args);
   }
 
-  @Mutation(() => Sale, { name: 'deleteSale' })
+  @Mutation(() => {
+    return Sale;
+  }, { name: 'deleteSale' })
   deleteOne(@Args() args: DeleteOneSaleArgs) {
     return this.service.deleteOne(args);
   }
 
-  @ResolveField(() => User, { name: 'blameUser', nullable: true })
+  @ResolveField(() => {
+    return User;
+  }, { name: 'blameUser', nullable: true })
   forBlameUser(@Parent() parent: Sale) {
     return this.service.forBlameUser(parent);
   }
@@ -64,27 +78,37 @@ export class SaleResolver {
     return value || 0;
   }
 
-  @ResolveField(() => SaleItemsOutput, { name: 'saleItems' })
+  @ResolveField(() => {
+    return SaleItemsOutput;
+  }, { name: 'saleItems' })
   forSaleItems(@Parent() parent: Sale, @Args() args: FindManySaleItemArgs) {
     return this.service.forSaleItems(parent, args);
   }
 
-  @ResolveField(() => Number, { name: 'totalCostValueDecimal' })
+  @ResolveField(() => {
+    return Number;
+  }, { name: 'totalCostValueDecimal' })
   forTotalCostValueDecimal(@Parent() { totalCostValue }: Sale) {
     return this.normalizeFloat(totalCostValue / 100);
   }
 
-  @ResolveField(() => Number, { name: 'totalValueDecimal' })
+  @ResolveField(() => {
+    return Number;
+  }, { name: 'totalValueDecimal' })
   forTotalValueDecimal(@Parent() { totalValue }: Sale) {
     return this.normalizeFloat(totalValue / 100);
   }
 
-  @ResolveField(() => Number, { name: 'netMarginValue' })
+  @ResolveField(() => {
+    return Number;
+  }, { name: 'netMarginValue' })
   forNetMarginValue(@Parent() { totalValue, totalCostValue }: Sale) {
     return this.normalizeFloat(totalValue - totalCostValue);
   }
 
-  @ResolveField(() => Number, { name: 'netMarginPercent' })
+  @ResolveField(() => {
+    return Number;
+  }, { name: 'netMarginPercent' })
   forNetMarginPercent(@Parent() { totalValue, totalCostValue }: Sale) {
     return this.normalizeFloat((totalValue - totalCostValue) / totalCostValue);
   }

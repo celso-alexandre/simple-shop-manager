@@ -10,12 +10,16 @@ export class SaleItemUpdateManyWithoutSaleNestedInputCustom extends GeneratedSal
 
 @InputType()
 export class SaleUpdateInputCustom extends GeneratedSaleUpdateInput {
-  @Field(() => SaleItemUpdateManyWithoutSaleNestedInputCustom)
-  saleItems!: SaleItemUpdateManyWithoutSaleNestedInputCustom;
+  @Field(() => {
+    return SaleItemUpdateManyWithoutSaleNestedInputCustom;
+  })
+    saleItems!: SaleItemUpdateManyWithoutSaleNestedInputCustom;
 }
 
 @ArgsType()
 export class UpdateOneSaleArgs extends GeneratedUpdateOneSaleArgs {
-  @Field(() => SaleUpdateInputCustom, { nullable: false })
-  data!: SaleUpdateInputCustom;
+  @Field(() => {
+    return SaleUpdateInputCustom;
+  }, { nullable: false })
+    data!: SaleUpdateInputCustom;
 }

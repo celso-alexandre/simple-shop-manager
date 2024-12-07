@@ -7,8 +7,7 @@ type RelationKeys = Uncapitalize<keyof typeof Prisma.ModelName>;
 @Injectable()
 export class PrismaService
   extends PrismaClient<Prisma.PrismaClientOptions, 'query'>
-  implements OnModuleInit
-{
+  implements OnModuleInit {
   constructor() {
     super({
       log: [
@@ -23,8 +22,7 @@ export class PrismaService
   async onModuleInit() {
     await this.$connect();
   }
-
-  // eslint-disable-next-line class-methods-use-this
+   
   async findManyPaginated<T extends RelationKeys, K extends PrismaClient[T]>(
     delegate: K,
     args: Parameters<K['findMany']>[0],
@@ -93,6 +91,8 @@ export class PrismaService
   }
 
   enableShutdownHooks(app: INestApplication) {
-    this.$on('beforeExit' as any, () => app.close());
+    this.$on('beforeExit' as any, () => {
+      return app.close();
+    });
   }
 }

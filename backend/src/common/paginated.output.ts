@@ -4,39 +4,53 @@ import { Field, ObjectType, Int } from '@nestjs/graphql';
 export function PaginatedOutput<T extends Type>(classRef: T): any {
   @ObjectType(`${classRef.name}Paginated`, { isAbstract: true })
   abstract class PageInfo {
-    @Field(() => Int, {
+    @Field(() => {
+      return Int;
+    }, {
       nullable: true,
       description: 'Count for query results without skip, take and cursor',
     })
-    total?: number;
+      total?: number;
 
-    @Field(() => Int, { nullable: true, description: 'Number of current page' })
-    currentPage?: number;
+    @Field(() => {
+      return Int;
+    }, { nullable: true, description: 'Number of current page' })
+      currentPage?: number;
 
-    @Field(() => Int, { nullable: true, description: 'Number of last page' })
-    lastPage?: number;
+    @Field(() => {
+      return Int;
+    }, { nullable: true, description: 'Number of last page' })
+      lastPage?: number;
 
-    @Field(() => Boolean, {
+    @Field(() => {
+      return Boolean;
+    }, {
       nullable: true,
       description:
         'Boolean to use on a cursor-based pagination. E.g: Mobile scroll',
     })
-    hasNextPage?: number;
+      hasNextPage?: number;
 
-    @Field(() => Int, { nullable: true })
-    nextCursor?: number;
+    @Field(() => {
+      return Int;
+    }, { nullable: true })
+      nextCursor?: number;
   }
 
   @ObjectType({ isAbstract: true })
   abstract class Pagination {
-    @Field(() => [classRef])
-    nodes: Array<T>;
+    @Field(() => {
+      return [classRef];
+    })
+      nodes: Array<T>;
 
-    @Field(() => PageInfo, {
+    @Field(() => {
+      return PageInfo;
+    }, {
       nullable: true,
       description: 'Pagination info for findMany requests',
     })
-    pageInfo?: PageInfo;
+      pageInfo?: PageInfo;
   }
 
   return Pagination;

@@ -10,31 +10,43 @@ import { SalePaidCost } from './dto';
 import { SalePaidCostOutput } from './dto/output';
 import { SalePaidCostService } from './sale-paid-cost.service';
 
-@Resolver(() => SalePaidCost)
+@Resolver(() => {
+  return SalePaidCost;
+})
 export class SalePaidCostResolver {
   constructor(private readonly service: SalePaidCostService) {}
 
-  @Query(() => SalePaidCost, { name: 'salePaidCost' })
+  @Query(() => {
+    return SalePaidCost;
+  }, { name: 'salePaidCost' })
   findUnique(@Args() args: FindUniqueSalePaidCostArgs) {
     return this.service.findUnique(args);
   }
 
-  @Query(() => SalePaidCostOutput, { name: 'salePaidCost' })
+  @Query(() => {
+    return SalePaidCostOutput;
+  }, { name: 'salePaidCost' })
   findMany(@Args() args: FindManySalePaidCostArgs) {
     return this.service.findMany(args);
   }
 
-  @Mutation(() => SalePaidCost, { name: 'createSalePaidCost' })
+  @Mutation(() => {
+    return SalePaidCost;
+  }, { name: 'createSalePaidCost' })
   createOne(@Args() args: CreateOneSalePaidCostArgs) {
     return this.service.createOne(args);
   }
 
-  @Mutation(() => SalePaidCost, { name: 'deleteSalePaidCost' })
+  @Mutation(() => {
+    return SalePaidCost;
+  }, { name: 'deleteSalePaidCost' })
   deleteOne(@Args() args: DeleteOneSalePaidCostArgs) {
     return this.service.deleteOne(args);
   }
 
-  @Mutation(() => SalePaidCost, { name: 'confirmSalePaidCost' })
+  @Mutation(() => {
+    return SalePaidCost;
+  }, { name: 'confirmSalePaidCost' })
   updateOne(@Args() args: UpdateOneSalePaidCostArgs) {
     return this.service.confirmOne(args);
   }
