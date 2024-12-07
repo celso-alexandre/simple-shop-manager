@@ -1,7 +1,7 @@
 import { Button, Col, DatePicker, Form, Input, InputNumber, Switch } from 'antd';
 import dayjs from 'dayjs';
 import _ from 'lodash';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { BiTrashAlt } from 'react-icons/bi';
 import { FiPlus } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
@@ -56,6 +56,25 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
 
     Object.assign(nodes[index], saleItemOverride(item, data.product));
     props.form.setFieldsValue({ saleItems: { nodes } });
+    getValuesAndUpdateTotals();
+  }
+
+  const [totals, setTotals] = useState({
+    totalValue: 0,
+  });
+  function updateTotals(values?: SalesFormNode) {
+    setTotals(
+      (values?.saleItems?.nodes ?? [])?.reduce((acc, item) => {
+        return {
+          totalValue: acc.totalValue + (item?.totalValue || 0),
+        };
+      }, { totalValue: 0 })
+    );
+  }
+  function getValuesAndUpdateTotals() {
+    const values = props.form?.getFieldsValue();
+    updateTotals(values);
+    return values;
   }
 
   function setSaleItemProduct(index: number) {
@@ -101,129 +120,179 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
   }
 
   return (
-    <Form initialValues={defaultInitialValues} onFinish={onFinish} style={{ width: '100%' }} layout="inline" {...props}>
-      <Form.Item hidden name={nameof<SalesFormNode>(x => x.id)}>
-        <Input />
-      </Form.Item>
-
-      <Col>
-        <Form.Item name={nameof<SalesFormNode>(x => x.date)}>
-          <label>Data</label>
-          <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" />
+    <div>
+    <div>
+      <Form 
+        initialValues={defaultInitialValues}
+        onFinish={onFinish}
+        style={{ width: '100%' }}
+        layout="inline"
+        onValuesChange={(_, values) => {
+          updateTotals(values);
+        }}
+        {...props}
+      >
+        <Form.Item hidden name={nameof<SalesFormNode>(x => x.id)}>
+          <Input />
         </Form.Item>
-      </Col>
 
-      <Col span={24} style={{ height: 20 }} />
+        <Col>
+          <label>Data</label>
+          <Form.Item name={nameof<SalesFormNode>(x => x.date)}>
+            <DatePicker style={{ width: '100%' }} format="DD/MM/YYYY" />
+          </Form.Item>
+        </Col>
 
-      <Form.List name={nameof.split<SalesFormNode>(x => x.saleItems.nodes)}>
-        {(fields, { add, remove }) =>
-          fields.map(field => {
-            type SaleItemKeys = keyof SalesFormNode['saleItems']['nodes'][0];
-            return (
-              <Fragment key={field.key ?? field.name}>
-                  <Form.Item hidden  name={[field.name, 'id' as SaleItemKeys]}>
-                    <InputNumber />
-                  </Form.Item>
+        <Col span={24} style={{ height: 20 }} />
 
-                  <Form.Item
-                    name={[field.name, nameof<SaleItem>(x => x.productId)]}
-                  >
+        <Form.List name={nameof.split<SalesFormNode>(x => x.saleItems.nodes)}>
+          {(fields, { add, remove }) =>
+            fields.map(field => {
+              type SaleItemKeys = keyof SalesFormNode['saleItems']['nodes'][0];
+              return (
+                <Fragment key={field.key ?? field.name}>
+                    <Form.Item hidden name={[field.name, 'id' as SaleItemKeys]}>
+                      <InputNumber />
+                    </Form.Item>
+
                     <div>
-                      <label>Produto</label>
+                      <div>
+                        <label>Produto</label>
+                      </div>
+                      <Form.Item
+                        name={[field.name, nameof<SaleItem>(x => x.productId)]}
+                        rules={[
+                          { required: true, message: 'Selecione um produto' },
+                        ]}
+                      >
+                        <ProductAsyncSelect
+                          style={{ width: 400 }}
+                          onChange={async () => {
+                            props?.form?.resetFields([
+                              ['saleItems', 'nodes', field.name, 'quantity'],
+                              ['saleItems', 'nodes', field.name, 'totalValue'],
+                              ['saleItems', 'nodes', field.name, 'totalCostValue'],
+                              ['saleItems', 'nodes', field.name, 'providerId'],
+                              ['saleItems', 'nodes', field.name, 'costIsPostPaid'],
+                              ['saleItems', 'nodes', field.name, 'netMarginPercent'],
+                            ])
+                            await setSaleItemProduct(field.name);
+                          }}
+                        />
+                      </Form.Item>
                     </div>
-                    <ProductAsyncSelect
-                      style={{ width: 400 }}
-                      onChange={async () => {
-                        await setSaleItemProduct(field.name);
-                      }}
-                    />
-                  </Form.Item>
 
-                  <Form.Item
-                    name={[field.name, nameof<SaleItem>(x => x.quantity)]}
-                  >
                     <div>
-                      <label>Quantidade</label>
+                      <div>
+                        <label>Quantidade</label>
+                      </div>
+                      <Form.Item
+                        name={[field.name, nameof<SaleItem>(x => x.quantity)]}
+                        rules={[
+                          { required: true, message: 'Informe a quantidade' },
+                        ]}
+                      >                    
+                        <InputNumber
+                          disabled={!props.form?.getFieldValue(['saleItems', 'nodes', field.name, 'productId'])}
+                          precision={0}
+                          min={1}
+                          onChange={async quantity => {
+                            await setSaleItemQty(field.name, quantity ?? 0);
+                          }}
+                        />
+                      </Form.Item>
                     </div>
-                    <InputNumber
-                      precision={0}
-                      min={1}
-                      onChange={async quantity => {
-                        await setSaleItemQty(field.name, quantity ?? 0);
-                      }}
-                    />
-                  </Form.Item>
 
-                  <Form.Item
-                    name={[field.name, nameof<SaleItem>(x => x.totalValue)]}
-                  >
                     <div>
-                      <label>Valor</label>
+                      <div>
+                        <label>Valor</label>
+                      </div>
+                      <Form.Item
+                        name={[field.name, nameof<SaleItem>(x => x.totalValue)]}
+                        rules={[
+                          { required: true, message: 'Informe o valor' },
+                        ]}
+                      >                    
+                        <InputNumberMoney
+                          disabled={!props.form?.getFieldValue(['saleItems', 'nodes', field.name, 'productId'])}
+                          onChange={async value => {
+                            await setTotalValue(field.name, +(value ?? 0));
+                          }}
+                        />
+                      </Form.Item>
                     </div>
-                    <InputNumberMoney
-                      onChange={async value => {
-                        await setTotalValue(field.name, +(value ?? 0));
-                      }}
-                    />
-                  </Form.Item>
 
-                  <Form.Item
-                    name={[field.name, nameof<SaleItem>(x => x.providerId)]}
-                    style={{ width: 220 }}
-                  >
                     <div>
-                      <label>Fornecedor</label>
+                      <div>
+                        <label>Fornecedor</label>
+                      </div>
+                      <Form.Item
+                        name={[field.name, nameof<SaleItem>(x => x.providerId)]}
+                        style={{ width: 220 }}
+                      >                    
+                        <ProviderAsyncSelect disabled={!props.form?.getFieldValue(['saleItems', 'nodes', field.name, 'productId'])} style={{ width: '100%' }} />
+                      </Form.Item>
                     </div>
-                    <ProviderAsyncSelect style={{ width: '100%' }} />
-                  </Form.Item>
 
-                  <Form.Item
-                    name={[field.name, nameof<SaleItem>(x => x.costIsPostPaid)]}
-                    valuePropName="checked"
-                  >
                     <div>
-                      <label>Consignado?</label>
+                      <div>
+                        <label>Consignado?</label>
+                      </div>
+                      <Form.Item
+                        name={[field.name, nameof<SaleItem>(x => x.costIsPostPaid)]}
+                        valuePropName="checked"
+                      >                    
+                        <Switch disabled={!props.form?.getFieldValue(['saleItems', 'nodes', field.name, 'productId'])} />
+                      </Form.Item>
                     </div>
-                    <Switch />
-                  </Form.Item>
 
-                  <Form.Item
-                    style={{ maxWidth: 150 }}
-                    name={[field.name, nameof<SaleItem>(x => x.netMarginPercent)]}
-                    tooltip={`Custo: ${formatMoneyFromDecimal(
-                      props.form?.getFieldValue([
-                        'saleItems',
-                        'nodes',
-                        field.name,
-                        'totalCostValue',
-                      ])
-                    )}`}
-                  >
-                    <div>
-                      <label>M Líquida</label>
+                    <div style={{ marginLeft: '2em' }}>
+                      <div>
+                        <label>M Líquida</label>
+                      </div>
+                      <Form.Item
+                        style={{ maxWidth: 150 }}
+                        name={[field.name, nameof<SaleItem>(x => x.netMarginPercent)]}
+                        tooltip={`Custo: ${formatMoneyFromDecimal(
+                          props.form?.getFieldValue([
+                            'saleItems',
+                            'nodes',
+                            field.name,
+                            'totalCostValue',
+                          ])
+                        )}`}
+                      >
+                        <InputNumberPercent disabled />
+                      </Form.Item>
                     </div>
-                    <InputNumberPercent disabled />
-                  </Form.Item>
 
-                <div style={{ width: 100, display: 'flex', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-                    <Button onClick={add}>
-                      <FiPlus />
-                    </Button>
-                  </div>
-                  {fields.length > 1 && (
-                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-                      <Button onClick={() => remove(field.name)}>
-                        <BiTrashAlt />
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </Fragment>
-            );
-          })
-        }
-      </Form.List>
-    </Form>
+                    {(field.name === fields.length - 1) && <div style={{ display: 'flex', justifyContent: 'space-between', height: 0, marginTop: 22, width: '100px' }}>
+                      <div>
+                        <Button onClick={async () => {
+                          await props?.form?.validateFields();
+                          add();
+                        }}>
+                          <FiPlus />
+                        </Button>
+                      </div>
+                      {fields.length > 1 && (
+                        <div>
+                          <Button onClick={() => remove(field.name)}>
+                            <BiTrashAlt />
+                          </Button>
+                        </div>
+                      )}
+                    </div>}
+                </Fragment>
+              );
+            })
+          }
+        </Form.List>
+      </Form>
+    </div>
+    <div style={{marginTop: '2em'}}>
+      Total: {formatMoneyFromDecimal(totals?.totalValue)}
+    </div>
+  </div>
   );
 }

@@ -10,11 +10,10 @@ export function serializeIntAsDecimal<T extends number | undefined>(value: T) {
 }
 
 export function formatMoneyFromDecimal<T extends number | undefined>(value: T) {
-  if (!value) return value;
   return Intl.NumberFormat(undefined, {
     style: 'currency',
     currency: 'BRL',
-  }).format(value);
+  }).format(value || 0);
 }
 
 export function formatMoneyFromInt<T extends number | undefined>(value: T) {
