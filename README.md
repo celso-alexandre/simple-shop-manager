@@ -10,7 +10,10 @@
 - [ ] List me margin on every sale and its summup
 - [ ] Allow to register a new product on sale
 - [ ] Stock management
-   - [ ] Allow to adjust stock on sale
+   - [x] Adjust stock in product edit page
+   - [x] Auto-debit product stock quantity on sale (if product "controlsQty" = true)
+   - [x] Correctly handle sale edit regarding stock
+   - [x] Mantain a history of stock changes
    - [ ] Arrival of new product (allow to quickly increment balance of multiple products at once)
 
 ## Screenshots
