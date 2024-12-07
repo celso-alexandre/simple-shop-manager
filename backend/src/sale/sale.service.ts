@@ -11,6 +11,7 @@ import type {
   UpdateOneSaleArgs,
 } from './dto';
 import { ProductMovementCreateWithoutSaleInput } from '../prisma/@generated';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class SaleService {
@@ -123,12 +124,44 @@ export class SaleService {
             create: data.saleItems.create?.map((item) => ({
               totalCostValue: 0,
               ...item,
+              ProductMovement: undefined
             })),
           },
         },
         include: { saleItems: { include: { product: true } } },
       });
       this.validateSale(sale);
+
+      let productMovements: Parameters<PrismaClient['productMovement']['createMany']>[0]['data'] = [];
+      for (const item of sale.saleItems) {
+        if (!item.product.controlsQty) {
+          continue;
+        }
+        productMovements.push({
+          type: 'SALE',
+          quantity: item.quantity * -1,
+          productId: item.product.id,
+        });
+      }
+      const promises: Promise<any>[] = [];
+      promises.push(
+        prisma.productMovement.createMany({
+          data: productMovements,
+        })
+      );
+
+      promises.push(
+        ...sale.saleItems.map((item) => prisma.product.update({
+          where: { id: item.product.id },
+          data: {
+            qty: {
+              decrement: item.quantity,
+            },
+          },
+        })),
+      );
+
+      await Promise.all(promises);
 
       const saleItems = {
         update: sale.saleItems.map((item) => ({
@@ -148,6 +181,12 @@ export class SaleService {
 
   updateOne(args: UpdateOneSaleArgs) {
     return this.prisma.$transaction(async (prisma) => {
+      const saleBefore = await prisma.sale.update({
+        data: { updatedAt: new Date() },
+        where: { id: args.where.id },
+        include: { saleItems: { include: { product: true } } },
+      })
+
       const sale = await prisma.sale.update({
         ...args,
         data: {
@@ -171,13 +210,51 @@ export class SaleService {
       });
       this.validateSale(sale);
 
+      const promises: Promise<any>[] = [];
+      let productMovements: Parameters<PrismaClient['productMovement']['createMany']>[0]['data'] = [];
+      for (const item of sale.saleItems) {
+        if (!item.product.controlsQty) {
+          continue;
+        }
+
+        const saleItemBefore = saleBefore.saleItems.find(saleItem => saleItem.id === item.id);
+        const prevQty = saleItemBefore?.quantity || 0;
+        const qtyDiff = prevQty - item.quantity;
+        if (!qtyDiff) {
+          continue;
+        }
+
+        productMovements.push({
+          type: 'SALE_EDIT',
+          quantity: qtyDiff,
+          productId: item.product.id,
+        });
+
+        promises.push(
+          prisma.product.update({
+            where: { id: item.product.id },
+            data: {
+              qty: {
+                [qtyDiff >= 0 ? 'increment' : 'decrement']: Math.abs(qtyDiff),
+              },
+            },
+          }),
+        );
+      }
+      promises.push(
+        prisma.productMovement.createMany({
+          data: productMovements,
+        })
+      );
+
+      await Promise.all(promises);
+
       const saleItems = {
         update: sale.saleItems.map((item) => ({
           where: { id: item.id },
           data: this.generateSaleItemTotals(item),
         })),
       };
-
       return prisma.sale.update({
         where: { id: sale.id },
         data: {

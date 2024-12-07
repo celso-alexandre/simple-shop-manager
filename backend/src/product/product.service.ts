@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
 import type {
-  CreateManyProductArgs,
   CreateOneProductArgs,
   DeleteOneProductArgs,
   FindManyProductArgs,
@@ -23,16 +22,43 @@ export class ProductService {
   }
 
   createOne(args: CreateOneProductArgs) {
-    return this.prisma.product.create(args);
-  }
-
-  async createMany(args: CreateManyProductArgs) {
-    await this.prisma.product.createMany(args);
-    return true;
+    return this.prisma.$transaction(async (prisma) => {
+      const product = await this.prisma.product.create(args);
+      if (!product.controlsQty || !product.qty) {
+        return product;
+      }
+      await prisma.productMovement.create({
+        data: {
+          Product: { connect: { id: product.id } },
+          quantity: product.qty,
+          type: 'INITIAL',
+        },
+      });
+      return product
+    });
   }
 
   updateOne(args: UpdateOneProductArgs) {
-    return this.prisma.product.update(args);
+    return this.prisma.$transaction(async (prisma) => {
+      const prodBefore = await this.prisma.product.update({
+        data: { updatedAt: new Date() },
+        where: { id: args.where.id },
+        select: { qty: true },
+      })
+      const product = await this.prisma.product.update(args);
+      const balanceDiff = product.qty - prodBefore.qty;
+      if (!product.controlsQty || !balanceDiff) {
+        return product;
+      }
+      await prisma.productMovement.create({
+        data: {
+          Product: { connect: { id: product.id } },
+          quantity: balanceDiff,
+          type: 'MANUAL',
+        },
+      });
+      return product
+    });
   }
 
   deleteOne(args: DeleteOneProductArgs) {

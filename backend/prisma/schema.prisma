@@ -114,8 +114,10 @@ model Product {
 }
 
 enum ProductMovementType {
-  SALE
+  INITIAL
   MANUAL
+  SALE
+  SALE_EDIT
 }
 
 model ProductMovement {
@@ -129,8 +131,6 @@ model ProductMovement {
   type        ProductMovementType
   /// Quantity (positive for input, negative for output)
   quantity    Int
-  /// Movement type
-  movement    String
   /// FK: User.id - User to blame for
   blameUserId String?             @db.ObjectId
 

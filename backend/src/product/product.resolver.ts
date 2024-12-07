@@ -39,11 +39,6 @@ export class ProductResolver {
     return this.service.createOne(args);
   }
 
-  @Mutation(() => Boolean, { name: 'createProducts' })
-  createMany(@Args() args: CreateManyProductArgs) {
-    return this.service.createMany(args);
-  }
-
   @Mutation(() => Product, { name: 'updateProduct' })
   updateOne(@Args() args: UpdateOneProductArgs) {
     return this.service.updateOne(args);
