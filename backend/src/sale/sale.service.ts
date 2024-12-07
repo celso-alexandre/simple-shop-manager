@@ -10,7 +10,6 @@ import type {
   Sale,
   UpdateOneSaleArgs,
 } from './dto';
-import { ProductMovementCreateWithoutSaleInput } from '../prisma/@generated';
 import { PrismaClient } from '@prisma/client';
 
 @Injectable()
