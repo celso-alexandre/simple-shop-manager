@@ -69,9 +69,9 @@ export function ProviderEdit() {
           <Col span={24}>
             <Typography.Paragraph>
               {data?.provider?.products?.nodes?.map(node => (
-                <Link style={{ marginRight: 10 }} key={node.id} to={`/product/${node.id}`}>
+                <a style={{ marginRight: 10 }} key={node.id} href={`/product/${node.id}`}>
                   {node.name}
-                </Link>
+                </a>
               ))}
             </Typography.Paragraph>
           </Col>

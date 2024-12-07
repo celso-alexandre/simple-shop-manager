@@ -46,11 +46,11 @@ export function SalesTable(props: TableProps<SalesNode>) {
       render: (value, record) => {
         return (
           <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-            <Link to={`/sale/${record.id}`}>
+            <a href={`/sale/${record.id}`}>
               <Button size="middle" type="primary">
                 Editar
               </Button>
-            </Link>
+            </a>
             <Button
               style={{ background: '#f33', color: '#fff' }}
               onClick={() => deleteSale({ variables: { where: { id: record.id } } })}

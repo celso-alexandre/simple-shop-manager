@@ -103,7 +103,14 @@ export function SaleEdit() {
     <>
       <Title title={data?.sale?.id ?? 'Venda não encontrada'} />
 
-      <SalesForm initialValues={initialValues} form={form} onFinish={values => onSubmit(values, update, data)} />
+      <SalesForm
+        initialValues={initialValues}
+        form={form}
+        onFinish={async (values) => {
+          await form.validateFields();
+          onSubmit(values, update, data);
+        }}
+      />
 
       <Row style={{ marginTop: '20px' }}>
         <Button size="large" type="primary" onClick={() => form.submit()}>

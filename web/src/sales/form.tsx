@@ -29,10 +29,11 @@ const defaultInitialValues: SalesFormNode = {
 };
 
 export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form<SalesFormNode>>[0]) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   async function onFinish(values: SalesFormNode) {
     if (finish) await finish(values);
-    navigate('/sales');
+    // navigate('/sales');
+    window.location.href = '/sales';
   }
   const [getProduct] = useProductLazyQuery();
 
@@ -266,23 +267,25 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
                       </Form.Item>
                     </div>
 
-                    {(field.name === fields.length - 1) && <div style={{ display: 'flex', justifyContent: 'space-between', height: 0, marginTop: 22, width: '100px' }}>
-                      <div>
-                        <Button onClick={async () => {
-                          await props?.form?.validateFields();
-                          add();
-                        }}>
-                          <FiPlus />
-                        </Button>
-                      </div>
-                      {fields.length > 1 && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', height: 0, marginTop: 22, width: '100px' }}>
+                      {(field.name === fields.length - 1) && (
+                        <div>
+                          <Button onClick={async () => {
+                            await props?.form?.validateFields();
+                            add();
+                          }}>
+                            <FiPlus />
+                          </Button>
+                        </div>
+                      )}
+                      {field.name > 1 && (
                         <div>
                           <Button onClick={() => remove(field.name)}>
                             <BiTrashAlt />
                           </Button>
                         </div>
                       )}
-                    </div>}
+                    </div>
                 </Fragment>
               );
             })
@@ -290,7 +293,7 @@ export function SalesForm({ onFinish: finish, ...props }: Parameters<typeof Form
         </Form.List>
       </Form>
     </div>
-    <div style={{marginTop: '2em'}}>
+    <div style={{ marginTop: '5em' }}>
       Total: {formatMoneyFromDecimal(totals?.totalValue)}
     </div>
   </div>

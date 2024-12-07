@@ -7,7 +7,7 @@ import { formatPercentFromDecimal, formatMoneyFromDecimal, formatMoneyFromInt } 
 import { BooleanTag } from '../components/tag';
 
 export function ProductsTable(props: TableProps<ProductsNode>) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const columns: typeof props.columns = [
     {
@@ -81,7 +81,10 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
       render: (value, record) => {
         return (
           <div>
-            <Button onClick={() => navigate(`/product/${record.id}`)} size="middle" type="primary">
+            <Button onClick={() => {
+              // navigate(`/product/${record.id}`)
+              window.location.href = `/product/${record.id}`;
+            }} size="middle" type="primary">
               Editar
             </Button>
           </div>

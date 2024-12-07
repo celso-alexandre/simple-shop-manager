@@ -1,13 +1,13 @@
 import { Col, Form, Input } from 'antd';
-import { useNavigate } from 'react-router-dom';
 import type { ProvidersFormNode } from '.';
 import { InputPhone } from '../components/input-phone';
 
 export function ProvidersForm({ onFinish: finish, ...props }: Parameters<typeof Form<ProvidersFormNode>>[0]) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   async function onFinish(values: ProvidersFormNode) {
     if (finish) await finish(values);
-    navigate('/providers');
+    // navigate('/providers');
+    window.location.href = '/providers';
   }
   return (
     <Form onFinish={onFinish} style={{ width: '100%' }} layout="inline" {...props}>

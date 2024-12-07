@@ -1,11 +1,10 @@
 import { Button, Table } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
-import { useNavigate } from 'react-router-dom';
 import { ProvidersNode } from '.';
 
 export function ProvidersTable(props: TableProps<ProvidersNode>) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const columns: typeof props.columns = [
     {
@@ -37,7 +36,10 @@ export function ProvidersTable(props: TableProps<ProvidersNode>) {
       render: (value, record) => {
         return (
           <div>
-            <Button onClick={() => navigate(`/provider/${record.id}`)} size="middle" type="primary">
+            <Button onClick={() => {
+              // navigate(`/provider/${record.id}`)
+              window.location.href = `/provider/${record.id}`;
+            }} size="middle" type="primary">
               Editar
             </Button>
           </div>

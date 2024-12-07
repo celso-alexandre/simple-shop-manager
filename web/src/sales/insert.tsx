@@ -6,7 +6,6 @@ import { useCreateSaleMutation, SalesDocument, SaleDocument } from '../graphql/_
 import { serializeDecimalAsInt } from '../helpers';
 import { SalesForm } from './form';
 import { saleDto } from './helper';
-import dayjs from 'dayjs';
 
 async function onSubmit(data: SalesFormNode, create: ReturnType<typeof useCreateSaleMutation>[0]) {
   const { date, saleItems } = saleDto(data);
@@ -48,7 +47,14 @@ export function SaleInsert() {
       />
 
       <Row style={{ marginTop: '20px' }}>
-        <Button size="large" type="primary" onClick={() => form.submit()}>
+        <Button
+          size="large"
+          type="primary"
+          onClick={async () => {
+            await form.validateFields()
+            form.submit()
+          }}
+        >
           Salvar
         </Button>
       </Row>

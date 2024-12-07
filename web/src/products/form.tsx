@@ -10,7 +10,8 @@ export function ProductsForm({ onFinish: finish, ...props }: Parameters<typeof F
   const navigate = useNavigate();
   async function onFinish(values: ProductsFormNode) {
     if (finish) await finish(values);
-    navigate('/products');
+    // navigate('/products');
+    window.location.href = '/products';
   }
   return (
     <Form onFinish={onFinish} style={{ width: '100%' }} {...props}>

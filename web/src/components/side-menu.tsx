@@ -35,12 +35,12 @@ export function SideMenu() {
       children: [
         {
           key: '/sales',
-          label: <Link to="/sales">Listar Vendas</Link>,
+          label: <a href="/sales">Listar Vendas</a>,
           icon: <BiListUl />,
         },
         {
           key: '/sale',
-          label: <Link to="/sale">Nova Venda</Link>,
+          label: <a href="/sale">Nova Venda</a>,
           icon: <BiListPlus />,
         },
       ],
@@ -52,12 +52,12 @@ export function SideMenu() {
       children: [
         {
           key: '/products',
-          label: <Link to="/products">Listar Produtos</Link>,
+          label: <a href="/products">Listar Produtos</a>,
           icon: <BiListUl />,
         },
         {
           key: '/product',
-          label: <Link to="/product">Novo Produto</Link>,
+          label: <a href="/product">Novo Produto</a>,
           icon: <BiListPlus />,
         },
         {
@@ -73,12 +73,12 @@ export function SideMenu() {
       children: [
         {
           key: '/providers',
-          label: <Link to="/providers">Listar Fornecedores</Link>,
+          label: <a href="/providers">Listar Fornecedores</a>,
           icon: <BiListUl />,
         },
         {
           key: '/provider',
-          label: <Link to="/provider">Novo Fornecedor</Link>,
+          label: <a href="/provider">Novo Fornecedor</a>,
           icon: <BiListPlus />,
         },
         {
@@ -89,7 +89,7 @@ export function SideMenu() {
     },
     {
       key: '/users',
-      label: <Link to="/users">Administradores</Link>,
+      label: <a href="/users">Administradores</a>,
       icon: <FiUsers />,
     },
   ];
