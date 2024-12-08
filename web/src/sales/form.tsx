@@ -9,7 +9,7 @@ import {
 } from 'antd';
 import dayjs from 'dayjs';
 import _ from 'lodash';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { BiTrashAlt } from 'react-icons/bi';
 import { FiPlus } from 'react-icons/fi';
 import type { SaleItem, SalesFormNode } from '.';
@@ -149,6 +149,11 @@ export function SalesForm({
       };
     });
   }
+
+  useEffect(() => {
+    if (!props?.initialValues?.id) return;
+    updateTotals(props?.initialValues as any);
+  }, [props?.initialValues?.id]);
 
   return (
     <div>
