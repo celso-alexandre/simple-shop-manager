@@ -14,6 +14,7 @@
    - [x] Correctly handle sale edit regarding stock
    - [x] Mantain a history of stock changes
    - [ ] Arrival of new product (allow to quickly increment balance of multiple products at once) / stock manual adjustment in batch (maybe one screen for both cases)
+   - [ ] Arrival of new product should allow to update both unit cost and balance
 
 ## Screenshots
 ### Sale
