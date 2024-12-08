@@ -11,13 +11,14 @@ COPY tsconfig.build.json ./
 COPY nest-cli.json ./
 
 RUN npm pkg delete scripts.postinstall
-RUN npm install -g pnpm && \
-    pnpm install --ignore-scripts --frozen-lockfile && \
-    pnpm prisma generate && \
-    pnpm build && \
-    cp -r dist/* . && \
-    pnpm prune --prod && \
-    rm -rf src dist tsconfig.json package.json pnpm-lock.yaml
+RUN npm install -g pnpm
+RUN pnpm install --ignore-scripts --frozen-lockfile
+RUN pnpm prisma generate
+RUN pnpm build
+RUN cp -r dist/* .
+RUN pnpm prune --prod
+RUN rm -rf src dist tsconfig.json package.json pnpm-lock.yaml
+# RUN find /app -name "*.d.ts" -type f -delete
 
 # Stage 2: Run application
 FROM node:22-alpine
