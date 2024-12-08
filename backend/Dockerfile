@@ -1,5 +1,5 @@
 # Stage 1: Install dependencies and build
-FROM node:22 AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 
 ADD src ./src
@@ -11,24 +11,16 @@ COPY tsconfig.build.json ./
 COPY nest-cli.json ./
 
 RUN npm pkg delete scripts.postinstall
-RUN npm install -g pnpm
-RUN pnpm install --ignore-scripts --frozen-lockfile
-RUN pnpm prisma generate
-
-RUN pnpm build
-RUN rm -rf src
-RUN cp -r dist/* .
-RUN rm -rf dist
+RUN npm install -g pnpm && \
+    pnpm install --ignore-scripts --frozen-lockfile && \
+    pnpm prisma generate && \
+    pnpm build && \
+    cp -r dist/* . && \
+    pnpm prune --prod && \
+    rm -rf src dist tsconfig.json package.json pnpm-lock.yaml
 
 # Stage 2: Run application
 FROM node:22-alpine
 WORKDIR /app
 COPY --from=builder /app .
-RUN npm install -g pnpm
-# RUN rm -rf node_modules
-RUN pnpm install --ignore-scripts --frozen-lockfile
-RUN ./node_modules/.bin/prisma generate
-# RUN pnpm install --ignore-scripts --frozen-lockfile --prod
-COPY .env ./
 CMD ["node", "main.js"]
-# CMD ["ash", "-c", "while true; do sleep 1000; done"]
