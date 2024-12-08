@@ -118,6 +118,7 @@ enum ProductMovementType {
   MANUAL
   SALE
   SALE_EDIT
+  SALE_DELETE
 }
 
 model ProductMovement {
@@ -145,7 +146,7 @@ model ProductMovement {
   /// @HideField({ output: true })
   Product   Product   @relation(fields: [productId], references: [id])
   /// @HideField({ output: true })
-  SaleItem  SaleItem? @relation(fields: [saleItemId], references: [id])
+  SaleItem  SaleItem? @relation(fields: [saleItemId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 }
 
 model Sale {
@@ -211,7 +212,7 @@ model SaleItem {
   /// @HideField({ output: true })
   blameUser       User?             @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
-  sale            Sale?             @relation(fields: [saleId], references: [id])
+  sale            Sale?             @relation(fields: [saleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   /// @HideField({ output: true })
   provider        Provider?         @relation(fields: [providerId], references: [id])
   /// @HideField({ output: true })

@@ -147,15 +147,19 @@ export class SaleService {
         productMovements.push({
           type: 'SALE',
           quantity: item.quantity * -1,
-          productId: item.product.id
+          productId: item.product.id,
+          saleItemId: item.id
         });
       }
       const promises: Promise<any>[] = [];
-      promises.push(
-        prisma.productMovement.createMany({
-          data: productMovements
-        })
-      );
+
+      if (productMovements.length) {
+        promises.push(
+          prisma.productMovement.createMany({
+            data: productMovements
+          })
+        );
+      }
 
       promises.push(
         ...sale.saleItems.map((item) => {
@@ -199,7 +203,9 @@ export class SaleService {
       const saleBefore = await prisma.sale.update({
         data: { updatedAt: new Date() },
         where: { id: args.where.id },
-        include: { saleItems: { include: { product: true } } }
+        include: {
+          saleItems: { include: { product: true, ProductMovement: true } }
+        }
       });
 
       const sale = await prisma.sale.update({
@@ -225,7 +231,9 @@ export class SaleService {
             })
           }
         },
-        include: { saleItems: { include: { product: true } } }
+        include: {
+          saleItems: { include: { product: true, ProductMovement: true } }
+        }
       });
       this.validateSale(sale);
 
@@ -233,8 +241,20 @@ export class SaleService {
       const productMovements: Parameters<
         PrismaClient['productMovement']['createMany']
       >[0]['data'] = [];
+
+      const saleItemsQtyDiff = new Map<
+        string,
+        {
+          saleItemId: string;
+          qtyDiff: number;
+          productId: string;
+        }
+      >();
+
       for (const item of sale.saleItems) {
-        if (!item.product.controlsQty) {
+        // not sure if !item.ProductMovement?.length!item.ProductMovement?.length is good: !item.ProductMovement?.length
+        // it ensures that if the product moved stock before, it keeps doing that in updates
+        if (!item.product.controlsQty && !item.ProductMovement?.length) {
           continue;
         }
 
@@ -250,25 +270,72 @@ export class SaleService {
         productMovements.push({
           type: 'SALE_EDIT',
           quantity: qtyDiff,
-          productId: item.product.id
+          productId: item.product.id,
+          saleItemId: item.id
         });
 
+        const currentQtyDiff = saleItemsQtyDiff.get(item.id);
+        saleItemsQtyDiff.set(item.id, {
+          saleItemId: item.id,
+          productId: item.product.id,
+          qtyDiff: (currentQtyDiff?.qtyDiff || 0) + qtyDiff
+        });
+      }
+
+      // Iteration over sale items that were removed only
+      for (const item of saleBefore.saleItems) {
+        if (!item.product.controlsQty && !item.ProductMovement?.length) {
+          continue;
+        }
+
+        // If the product still exists in the sale, it means it was not removed
+        // the previous loop already took care of the quantity difference
+        const saleItemAfter = sale.saleItems.find((saleItem) => {
+          return saleItem.id === item.id;
+        });
+        if (saleItemAfter) {
+          continue;
+        }
+
+        productMovements.push({
+          type: 'SALE_DELETE',
+          quantity: item.quantity,
+          productId: item.product.id,
+          saleItemId: item.id
+        });
+
+        const currentQtyDiff = saleItemsQtyDiff.get(item.id);
+        saleItemsQtyDiff.set(item.id, {
+          saleItemId: item.id,
+          productId: item.product.id,
+          qtyDiff: (currentQtyDiff?.qtyDiff || 0) + item.quantity
+        });
+      }
+
+      if (productMovements.length) {
+        promises.push(
+          prisma.productMovement.createMany({
+            data: productMovements
+          })
+        );
+      }
+
+      for (const [, qtyDiff] of saleItemsQtyDiff) {
         promises.push(
           prisma.product.update({
-            where: { id: item.product.id },
+            where: {
+              id: qtyDiff.productId
+            },
             data: {
               qty: {
-                [qtyDiff >= 0 ? 'increment' : 'decrement']: Math.abs(qtyDiff)
+                [qtyDiff.qtyDiff >= 0 ? 'increment' : 'decrement']: Math.abs(
+                  qtyDiff.qtyDiff
+                )
               }
             }
           })
         );
       }
-      promises.push(
-        prisma.productMovement.createMany({
-          data: productMovements
-        })
-      );
 
       await Promise.all(promises);
 
@@ -295,7 +362,40 @@ export class SaleService {
   }
 
   deleteOne(args: DeleteOneSaleArgs) {
-    return this.prisma.sale.delete(args);
+    return this.prisma.$transaction(async (prisma) => {
+      const saleBefore = await prisma.sale.update({
+        data: { updatedAt: new Date() },
+        where: { id: args.where.id },
+        include: {
+          saleItems: { include: { product: true, ProductMovement: true } }
+        }
+      });
+
+      const promises: Promise<any>[] = [];
+      for (const item of saleBefore.saleItems) {
+        promises.push(
+          prisma.productMovement.create({
+            data: {
+              type: 'SALE_DELETE',
+              quantity: item.quantity,
+              productId: item.product.id,
+              saleItemId: item.id
+            }
+          }),
+          prisma.product.update({
+            where: { id: item.product.id },
+            data: {
+              qty: {
+                increment: item.quantity
+              }
+            }
+          })
+        );
+      }
+      await Promise.all(promises);
+
+      return prisma.sale.delete(args);
+    });
   }
 
   forBlameUser({ id }: Sale) {
