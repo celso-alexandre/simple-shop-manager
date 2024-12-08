@@ -13,7 +13,6 @@ export function ProductsForm({
   );
   async function onFinish(values: ProductsFormNode) {
     if (finish) await finish(values);
-    // navigate('/products');
     window.location.href = '/products';
   }
   return (

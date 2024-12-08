@@ -6,10 +6,8 @@ export function ProvidersForm({
   onFinish: finish,
   ...props
 }: Parameters<typeof Form<ProvidersFormNode>>[0]) {
-  // const navigate = useNavigate();
   async function onFinish(values: ProvidersFormNode) {
     if (finish) await finish(values);
-    // navigate('/providers');
     window.location.href = '/providers';
   }
   return (

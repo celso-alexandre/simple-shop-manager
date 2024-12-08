@@ -4,8 +4,6 @@ import dayjs from 'dayjs';
 import { ProvidersNode } from '.';
 
 export function ProvidersTable(props: TableProps<ProvidersNode>) {
-  // const navigate = useNavigate();
-
   const columns: typeof props.columns = [
     {
       title: 'ID',
@@ -54,7 +52,6 @@ export function ProvidersTable(props: TableProps<ProvidersNode>) {
           <div>
             <Button
               onClick={() => {
-                // navigate(`/provider/${record.id}`)
                 window.location.href = `/provider/${record.id}`;
               }}
               size="middle"

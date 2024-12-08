@@ -46,10 +46,8 @@ export function SalesForm({
   onFinish: finish,
   ...props
 }: Parameters<typeof Form<SalesFormNode>>[0]) {
-  // const navigate = useNavigate();
   async function onFinish(values: SalesFormNode) {
     if (finish) await finish(values);
-    // navigate('/sales');
     window.location.href = '/sales';
   }
   const [getProduct] = useProductLazyQuery();

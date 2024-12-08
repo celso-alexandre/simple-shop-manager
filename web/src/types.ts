@@ -41,6 +41,17 @@ export type DateTimeFilter = {
   notIn?: InputMaybe<Array<Scalars['DateTime']['input']>>;
 };
 
+export type EnumProductMovementGroupTypeFieldUpdateOperationsInput = {
+  set?: InputMaybe<ProductMovementGroupType>;
+};
+
+export type EnumProductMovementGroupTypeFilter = {
+  equals?: InputMaybe<ProductMovementGroupType>;
+  in?: InputMaybe<Array<ProductMovementGroupType>>;
+  not?: InputMaybe<NestedEnumProductMovementGroupTypeFilter>;
+  notIn?: InputMaybe<Array<ProductMovementGroupType>>;
+};
+
 export type EnumProductMovementTypeFieldUpdateOperationsInput = {
   set?: InputMaybe<ProductMovementType>;
 };
@@ -83,29 +94,20 @@ export enum MainExceptionKeys {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  confirmSalePaidCost: SalePaidCost;
   createProduct: Product;
   createProvider: Provider;
   createProviders: Scalars['Boolean']['output'];
   createSale: Sale;
-  createSalePaidCost: SalePaidCost;
   createUser: User;
   createUsers: Scalars['Boolean']['output'];
   deleteProduct: Product;
   deleteProvider: Provider;
   deleteSale: Sale;
-  deleteSalePaidCost: SalePaidCost;
   deleteUser: User;
   updateProduct: Product;
   updateProvider: Provider;
   updateSale: Sale;
   updateUser: User;
-};
-
-
-export type MutationConfirmSalePaidCostArgs = {
-  data: SalePaidCostUpdateInput;
-  where: SalePaidCostWhereUniqueInput;
 };
 
 
@@ -126,11 +128,6 @@ export type MutationCreateProvidersArgs = {
 
 export type MutationCreateSaleArgs = {
   data: SaleCreateInputCustom;
-};
-
-
-export type MutationCreateSalePaidCostArgs = {
-  data: SalePaidCostCreateInput;
 };
 
 
@@ -156,11 +153,6 @@ export type MutationDeleteProviderArgs = {
 
 export type MutationDeleteSaleArgs = {
   where: SaleWhereUniqueInput;
-};
-
-
-export type MutationDeleteSalePaidCostArgs = {
-  where: SalePaidCostWhereUniqueInput;
 };
 
 
@@ -206,6 +198,13 @@ export type NestedDateTimeFilter = {
   lte?: InputMaybe<Scalars['DateTime']['input']>;
   not?: InputMaybe<NestedDateTimeFilter>;
   notIn?: InputMaybe<Array<Scalars['DateTime']['input']>>;
+};
+
+export type NestedEnumProductMovementGroupTypeFilter = {
+  equals?: InputMaybe<ProductMovementGroupType>;
+  in?: InputMaybe<Array<ProductMovementGroupType>>;
+  not?: InputMaybe<NestedEnumProductMovementGroupTypeFilter>;
+  notIn?: InputMaybe<Array<ProductMovementGroupType>>;
 };
 
 export type NestedEnumProductMovementTypeFilter = {
@@ -511,24 +510,6 @@ export type ProductMinAggregate = {
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
 };
 
-export type ProductMovement = {
-  __typename?: 'ProductMovement';
-  /** FK: User.id - User to blame for */
-  blameUserId?: Maybe<Scalars['String']['output']>;
-  createdAt: Scalars['DateTime']['output'];
-  /** ID */
-  id: Scalars['ID']['output'];
-  /** FK: Product.id */
-  productId: Scalars['String']['output'];
-  /** Quantity (positive for input, negative for output) */
-  quantity: Scalars['Int']['output'];
-  /** Sale */
-  saleItemId?: Maybe<Scalars['String']['output']>;
-  /** Type of movement */
-  type: ProductMovementType;
-  updatedAt: Scalars['DateTime']['output'];
-};
-
 export type ProductMovementAvgAggregate = {
   __typename?: 'ProductMovementAvgAggregate';
   quantity?: Maybe<Scalars['Float']['output']>;
@@ -541,6 +522,7 @@ export type ProductMovementCountAggregate = {
   createdAt: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
   productId: Scalars['Int']['output'];
+  productMovementGroupId: Scalars['Int']['output'];
   quantity: Scalars['Int']['output'];
   saleItemId: Scalars['Int']['output'];
   type: Scalars['Int']['output'];
@@ -550,6 +532,7 @@ export type ProductMovementCountAggregate = {
 export type ProductMovementCreateManyBlameUserInput = {
   id?: InputMaybe<Scalars['String']['input']>;
   productId: Scalars['String']['input'];
+  productMovementGroupId?: InputMaybe<Scalars['String']['input']>;
   quantity: Scalars['Int']['input'];
   saleItemId?: InputMaybe<Scalars['String']['input']>;
   type: ProductMovementType;
@@ -562,6 +545,7 @@ export type ProductMovementCreateManyBlameUserInputEnvelope = {
 export type ProductMovementCreateManyProductInput = {
   blameUserId?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
+  productMovementGroupId?: InputMaybe<Scalars['String']['input']>;
   quantity: Scalars['Int']['input'];
   saleItemId?: InputMaybe<Scalars['String']['input']>;
   type: ProductMovementType;
@@ -571,10 +555,24 @@ export type ProductMovementCreateManyProductInputEnvelope = {
   data: Array<ProductMovementCreateManyProductInput>;
 };
 
+export type ProductMovementCreateManyProductMovementGroupInput = {
+  blameUserId?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  productId: Scalars['String']['input'];
+  quantity: Scalars['Int']['input'];
+  saleItemId?: InputMaybe<Scalars['String']['input']>;
+  type: ProductMovementType;
+};
+
+export type ProductMovementCreateManyProductMovementGroupInputEnvelope = {
+  data: Array<ProductMovementCreateManyProductMovementGroupInput>;
+};
+
 export type ProductMovementCreateManySaleItemInput = {
   blameUserId?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   productId: Scalars['String']['input'];
+  productMovementGroupId?: InputMaybe<Scalars['String']['input']>;
   quantity: Scalars['Int']['input'];
   type: ProductMovementType;
 };
@@ -597,6 +595,13 @@ export type ProductMovementCreateNestedManyWithoutProductInput = {
   createMany?: InputMaybe<ProductMovementCreateManyProductInputEnvelope>;
 };
 
+export type ProductMovementCreateNestedManyWithoutProductMovementGroupInput = {
+  connect?: InputMaybe<Array<ProductMovementWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<ProductMovementCreateOrConnectWithoutProductMovementGroupInput>>;
+  create?: InputMaybe<Array<ProductMovementCreateWithoutProductMovementGroupInput>>;
+  createMany?: InputMaybe<ProductMovementCreateManyProductMovementGroupInputEnvelope>;
+};
+
 export type ProductMovementCreateNestedManyWithoutSaleItemInput = {
   connect?: InputMaybe<Array<ProductMovementWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<Array<ProductMovementCreateOrConnectWithoutSaleItemInput>>;
@@ -614,6 +619,11 @@ export type ProductMovementCreateOrConnectWithoutProductInput = {
   where: ProductMovementWhereUniqueInput;
 };
 
+export type ProductMovementCreateOrConnectWithoutProductMovementGroupInput = {
+  create: ProductMovementCreateWithoutProductMovementGroupInput;
+  where: ProductMovementWhereUniqueInput;
+};
+
 export type ProductMovementCreateOrConnectWithoutSaleItemInput = {
   create: ProductMovementCreateWithoutSaleItemInput;
   where: ProductMovementWhereUniqueInput;
@@ -621,6 +631,7 @@ export type ProductMovementCreateOrConnectWithoutSaleItemInput = {
 
 export type ProductMovementCreateWithoutBlameUserInput = {
   Product: ProductCreateNestedOneWithoutProductMovementInput;
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupCreateNestedOneWithoutProductMovementInput>;
   SaleItem?: InputMaybe<SaleItemCreateNestedOneWithoutProductMovementInput>;
   id?: InputMaybe<Scalars['String']['input']>;
   quantity: Scalars['Int']['input'];
@@ -628,6 +639,16 @@ export type ProductMovementCreateWithoutBlameUserInput = {
 };
 
 export type ProductMovementCreateWithoutProductInput = {
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupCreateNestedOneWithoutProductMovementInput>;
+  SaleItem?: InputMaybe<SaleItemCreateNestedOneWithoutProductMovementInput>;
+  blameUser?: InputMaybe<UserCreateNestedOneWithoutProductMovementInput>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  quantity: Scalars['Int']['input'];
+  type: ProductMovementType;
+};
+
+export type ProductMovementCreateWithoutProductMovementGroupInput = {
+  Product: ProductCreateNestedOneWithoutProductMovementInput;
   SaleItem?: InputMaybe<SaleItemCreateNestedOneWithoutProductMovementInput>;
   blameUser?: InputMaybe<UserCreateNestedOneWithoutProductMovementInput>;
   id?: InputMaybe<Scalars['String']['input']>;
@@ -637,10 +658,223 @@ export type ProductMovementCreateWithoutProductInput = {
 
 export type ProductMovementCreateWithoutSaleItemInput = {
   Product: ProductCreateNestedOneWithoutProductMovementInput;
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupCreateNestedOneWithoutProductMovementInput>;
   blameUser?: InputMaybe<UserCreateNestedOneWithoutProductMovementInput>;
   id?: InputMaybe<Scalars['String']['input']>;
   quantity: Scalars['Int']['input'];
   type: ProductMovementType;
+};
+
+export type ProductMovementGroupCount = {
+  __typename?: 'ProductMovementGroupCount';
+  ProductMovement: Scalars['Int']['output'];
+};
+
+export type ProductMovementGroupCountAggregate = {
+  __typename?: 'ProductMovementGroupCountAggregate';
+  _all: Scalars['Int']['output'];
+  createdAt: Scalars['Int']['output'];
+  documentId: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  providerId: Scalars['Int']['output'];
+  type: Scalars['Int']['output'];
+};
+
+export type ProductMovementGroupCreateManyProviderInput = {
+  documentId?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  type: ProductMovementGroupType;
+};
+
+export type ProductMovementGroupCreateManyProviderInputEnvelope = {
+  data: Array<ProductMovementGroupCreateManyProviderInput>;
+};
+
+export type ProductMovementGroupCreateNestedManyWithoutProviderInput = {
+  connect?: InputMaybe<Array<ProductMovementGroupWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<ProductMovementGroupCreateOrConnectWithoutProviderInput>>;
+  create?: InputMaybe<Array<ProductMovementGroupCreateWithoutProviderInput>>;
+  createMany?: InputMaybe<ProductMovementGroupCreateManyProviderInputEnvelope>;
+};
+
+export type ProductMovementGroupCreateNestedOneWithoutProductMovementInput = {
+  connect?: InputMaybe<ProductMovementGroupWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<ProductMovementGroupCreateOrConnectWithoutProductMovementInput>;
+  create?: InputMaybe<ProductMovementGroupCreateWithoutProductMovementInput>;
+};
+
+export type ProductMovementGroupCreateOrConnectWithoutProductMovementInput = {
+  create: ProductMovementGroupCreateWithoutProductMovementInput;
+  where: ProductMovementGroupWhereUniqueInput;
+};
+
+export type ProductMovementGroupCreateOrConnectWithoutProviderInput = {
+  create: ProductMovementGroupCreateWithoutProviderInput;
+  where: ProductMovementGroupWhereUniqueInput;
+};
+
+export type ProductMovementGroupCreateWithoutProductMovementInput = {
+  Provider?: InputMaybe<ProviderCreateNestedOneWithoutProductMovementGroupInput>;
+  documentId?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  type: ProductMovementGroupType;
+};
+
+export type ProductMovementGroupCreateWithoutProviderInput = {
+  ProductMovement?: InputMaybe<ProductMovementCreateNestedManyWithoutProductMovementGroupInput>;
+  documentId?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  type: ProductMovementGroupType;
+};
+
+export type ProductMovementGroupListRelationFilter = {
+  every?: InputMaybe<ProductMovementGroupWhereInput>;
+  none?: InputMaybe<ProductMovementGroupWhereInput>;
+  some?: InputMaybe<ProductMovementGroupWhereInput>;
+};
+
+export type ProductMovementGroupMaxAggregate = {
+  __typename?: 'ProductMovementGroupMaxAggregate';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  documentId?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  providerId?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<ProductMovementGroupType>;
+};
+
+export type ProductMovementGroupMinAggregate = {
+  __typename?: 'ProductMovementGroupMinAggregate';
+  createdAt?: Maybe<Scalars['DateTime']['output']>;
+  documentId?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  providerId?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<ProductMovementGroupType>;
+};
+
+export type ProductMovementGroupNullableScalarRelationFilter = {
+  is?: InputMaybe<ProductMovementGroupWhereInput>;
+  isNot?: InputMaybe<ProductMovementGroupWhereInput>;
+};
+
+export type ProductMovementGroupOrderByRelationAggregateInput = {
+  _count?: InputMaybe<SortOrder>;
+};
+
+export type ProductMovementGroupScalarWhereInput = {
+  AND?: InputMaybe<Array<ProductMovementGroupScalarWhereInput>>;
+  NOT?: InputMaybe<Array<ProductMovementGroupScalarWhereInput>>;
+  OR?: InputMaybe<Array<ProductMovementGroupScalarWhereInput>>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  documentId?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  providerId?: InputMaybe<StringNullableFilter>;
+  type?: InputMaybe<EnumProductMovementGroupTypeFilter>;
+};
+
+export enum ProductMovementGroupType {
+  Manual = 'MANUAL',
+  Receival = 'RECEIVAL'
+}
+
+export type ProductMovementGroupTypeProviderIdDocumentIdCompoundUniqueInput = {
+  documentId: Scalars['String']['input'];
+  providerId: Scalars['String']['input'];
+  type: ProductMovementGroupType;
+};
+
+export type ProductMovementGroupUpdateManyMutationInput = {
+  documentId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumProductMovementGroupTypeFieldUpdateOperationsInput>;
+};
+
+export type ProductMovementGroupUpdateManyWithWhereWithoutProviderInput = {
+  data: ProductMovementGroupUpdateManyMutationInput;
+  where: ProductMovementGroupScalarWhereInput;
+};
+
+export type ProductMovementGroupUpdateManyWithoutProviderNestedInput = {
+  connect?: InputMaybe<Array<ProductMovementGroupWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<ProductMovementGroupCreateOrConnectWithoutProviderInput>>;
+  create?: InputMaybe<Array<ProductMovementGroupCreateWithoutProviderInput>>;
+  createMany?: InputMaybe<ProductMovementGroupCreateManyProviderInputEnvelope>;
+  delete?: InputMaybe<Array<ProductMovementGroupWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<ProductMovementGroupScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<ProductMovementGroupWhereUniqueInput>>;
+  set?: InputMaybe<Array<ProductMovementGroupWhereUniqueInput>>;
+  update?: InputMaybe<Array<ProductMovementGroupUpdateWithWhereUniqueWithoutProviderInput>>;
+  updateMany?: InputMaybe<Array<ProductMovementGroupUpdateManyWithWhereWithoutProviderInput>>;
+  upsert?: InputMaybe<Array<ProductMovementGroupUpsertWithWhereUniqueWithoutProviderInput>>;
+};
+
+export type ProductMovementGroupUpdateOneWithoutProductMovementNestedInput = {
+  connect?: InputMaybe<ProductMovementGroupWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<ProductMovementGroupCreateOrConnectWithoutProductMovementInput>;
+  create?: InputMaybe<ProductMovementGroupCreateWithoutProductMovementInput>;
+  delete?: InputMaybe<ProductMovementGroupWhereInput>;
+  disconnect?: InputMaybe<Scalars['Boolean']['input']>;
+  update?: InputMaybe<ProductMovementGroupUpdateToOneWithWhereWithoutProductMovementInput>;
+  upsert?: InputMaybe<ProductMovementGroupUpsertWithoutProductMovementInput>;
+};
+
+export type ProductMovementGroupUpdateToOneWithWhereWithoutProductMovementInput = {
+  data: ProductMovementGroupUpdateWithoutProductMovementInput;
+  where?: InputMaybe<ProductMovementGroupWhereInput>;
+};
+
+export type ProductMovementGroupUpdateWithWhereUniqueWithoutProviderInput = {
+  data: ProductMovementGroupUpdateWithoutProviderInput;
+  where: ProductMovementGroupWhereUniqueInput;
+};
+
+export type ProductMovementGroupUpdateWithoutProductMovementInput = {
+  Provider?: InputMaybe<ProviderUpdateOneWithoutProductMovementGroupNestedInput>;
+  documentId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumProductMovementGroupTypeFieldUpdateOperationsInput>;
+};
+
+export type ProductMovementGroupUpdateWithoutProviderInput = {
+  ProductMovement?: InputMaybe<ProductMovementUpdateManyWithoutProductMovementGroupNestedInput>;
+  documentId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumProductMovementGroupTypeFieldUpdateOperationsInput>;
+};
+
+export type ProductMovementGroupUpsertWithWhereUniqueWithoutProviderInput = {
+  create: ProductMovementGroupCreateWithoutProviderInput;
+  update: ProductMovementGroupUpdateWithoutProviderInput;
+  where: ProductMovementGroupWhereUniqueInput;
+};
+
+export type ProductMovementGroupUpsertWithoutProductMovementInput = {
+  create: ProductMovementGroupCreateWithoutProductMovementInput;
+  update: ProductMovementGroupUpdateWithoutProductMovementInput;
+  where?: InputMaybe<ProductMovementGroupWhereInput>;
+};
+
+export type ProductMovementGroupWhereInput = {
+  AND?: InputMaybe<Array<ProductMovementGroupWhereInput>>;
+  NOT?: InputMaybe<Array<ProductMovementGroupWhereInput>>;
+  OR?: InputMaybe<Array<ProductMovementGroupWhereInput>>;
+  ProductMovement?: InputMaybe<ProductMovementListRelationFilter>;
+  Provider?: InputMaybe<ProviderNullableScalarRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  documentId?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<StringFilter>;
+  providerId?: InputMaybe<StringNullableFilter>;
+  type?: InputMaybe<EnumProductMovementGroupTypeFilter>;
+};
+
+export type ProductMovementGroupWhereUniqueInput = {
+  AND?: InputMaybe<Array<ProductMovementGroupWhereInput>>;
+  NOT?: InputMaybe<Array<ProductMovementGroupWhereInput>>;
+  OR?: InputMaybe<Array<ProductMovementGroupWhereInput>>;
+  ProductMovement?: InputMaybe<ProductMovementListRelationFilter>;
+  Provider?: InputMaybe<ProviderNullableScalarRelationFilter>;
+  createdAt?: InputMaybe<DateTimeFilter>;
+  documentId?: InputMaybe<StringNullableFilter>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  providerId?: InputMaybe<StringNullableFilter>;
+  type?: InputMaybe<EnumProductMovementGroupTypeFilter>;
+  type_providerId_documentId?: InputMaybe<ProductMovementGroupTypeProviderIdDocumentIdCompoundUniqueInput>;
 };
 
 export type ProductMovementListRelationFilter = {
@@ -655,6 +889,7 @@ export type ProductMovementMaxAggregate = {
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   productId?: Maybe<Scalars['String']['output']>;
+  productMovementGroupId?: Maybe<Scalars['String']['output']>;
   quantity?: Maybe<Scalars['Int']['output']>;
   saleItemId?: Maybe<Scalars['String']['output']>;
   type?: Maybe<ProductMovementType>;
@@ -667,6 +902,7 @@ export type ProductMovementMinAggregate = {
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   productId?: Maybe<Scalars['String']['output']>;
+  productMovementGroupId?: Maybe<Scalars['String']['output']>;
   quantity?: Maybe<Scalars['Int']['output']>;
   saleItemId?: Maybe<Scalars['String']['output']>;
   type?: Maybe<ProductMovementType>;
@@ -685,6 +921,7 @@ export type ProductMovementScalarWhereInput = {
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
   productId?: InputMaybe<StringFilter>;
+  productMovementGroupId?: InputMaybe<StringNullableFilter>;
   quantity?: InputMaybe<IntFilter>;
   saleItemId?: InputMaybe<StringNullableFilter>;
   type?: InputMaybe<EnumProductMovementTypeFilter>;
@@ -700,6 +937,7 @@ export enum ProductMovementType {
   Initial = 'INITIAL',
   Manual = 'MANUAL',
   Sale = 'SALE',
+  SaleDelete = 'SALE_DELETE',
   SaleEdit = 'SALE_EDIT'
 }
 
@@ -714,6 +952,11 @@ export type ProductMovementUpdateManyWithWhereWithoutBlameUserInput = {
 };
 
 export type ProductMovementUpdateManyWithWhereWithoutProductInput = {
+  data: ProductMovementUpdateManyMutationInput;
+  where: ProductMovementScalarWhereInput;
+};
+
+export type ProductMovementUpdateManyWithWhereWithoutProductMovementGroupInput = {
   data: ProductMovementUpdateManyMutationInput;
   where: ProductMovementScalarWhereInput;
 };
@@ -735,6 +978,20 @@ export type ProductMovementUpdateManyWithoutBlameUserNestedInput = {
   update?: InputMaybe<Array<ProductMovementUpdateWithWhereUniqueWithoutBlameUserInput>>;
   updateMany?: InputMaybe<Array<ProductMovementUpdateManyWithWhereWithoutBlameUserInput>>;
   upsert?: InputMaybe<Array<ProductMovementUpsertWithWhereUniqueWithoutBlameUserInput>>;
+};
+
+export type ProductMovementUpdateManyWithoutProductMovementGroupNestedInput = {
+  connect?: InputMaybe<Array<ProductMovementWhereUniqueInput>>;
+  connectOrCreate?: InputMaybe<Array<ProductMovementCreateOrConnectWithoutProductMovementGroupInput>>;
+  create?: InputMaybe<Array<ProductMovementCreateWithoutProductMovementGroupInput>>;
+  createMany?: InputMaybe<ProductMovementCreateManyProductMovementGroupInputEnvelope>;
+  delete?: InputMaybe<Array<ProductMovementWhereUniqueInput>>;
+  deleteMany?: InputMaybe<Array<ProductMovementScalarWhereInput>>;
+  disconnect?: InputMaybe<Array<ProductMovementWhereUniqueInput>>;
+  set?: InputMaybe<Array<ProductMovementWhereUniqueInput>>;
+  update?: InputMaybe<Array<ProductMovementUpdateWithWhereUniqueWithoutProductMovementGroupInput>>;
+  updateMany?: InputMaybe<Array<ProductMovementUpdateManyWithWhereWithoutProductMovementGroupInput>>;
+  upsert?: InputMaybe<Array<ProductMovementUpsertWithWhereUniqueWithoutProductMovementGroupInput>>;
 };
 
 export type ProductMovementUpdateManyWithoutProductNestedInput = {
@@ -775,6 +1032,11 @@ export type ProductMovementUpdateWithWhereUniqueWithoutProductInput = {
   where: ProductMovementWhereUniqueInput;
 };
 
+export type ProductMovementUpdateWithWhereUniqueWithoutProductMovementGroupInput = {
+  data: ProductMovementUpdateWithoutProductMovementGroupInput;
+  where: ProductMovementWhereUniqueInput;
+};
+
 export type ProductMovementUpdateWithWhereUniqueWithoutSaleItemInput = {
   data: ProductMovementUpdateWithoutSaleItemInput;
   where: ProductMovementWhereUniqueInput;
@@ -782,12 +1044,22 @@ export type ProductMovementUpdateWithWhereUniqueWithoutSaleItemInput = {
 
 export type ProductMovementUpdateWithoutBlameUserInput = {
   Product?: InputMaybe<ProductUpdateOneRequiredWithoutProductMovementNestedInput>;
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupUpdateOneWithoutProductMovementNestedInput>;
   SaleItem?: InputMaybe<SaleItemUpdateOneWithoutProductMovementNestedInput>;
   quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumProductMovementTypeFieldUpdateOperationsInput>;
 };
 
 export type ProductMovementUpdateWithoutProductInput = {
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupUpdateOneWithoutProductMovementNestedInput>;
+  SaleItem?: InputMaybe<SaleItemUpdateOneWithoutProductMovementNestedInput>;
+  blameUser?: InputMaybe<UserUpdateOneWithoutProductMovementNestedInput>;
+  quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
+  type?: InputMaybe<EnumProductMovementTypeFieldUpdateOperationsInput>;
+};
+
+export type ProductMovementUpdateWithoutProductMovementGroupInput = {
+  Product?: InputMaybe<ProductUpdateOneRequiredWithoutProductMovementNestedInput>;
   SaleItem?: InputMaybe<SaleItemUpdateOneWithoutProductMovementNestedInput>;
   blameUser?: InputMaybe<UserUpdateOneWithoutProductMovementNestedInput>;
   quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
@@ -796,6 +1068,7 @@ export type ProductMovementUpdateWithoutProductInput = {
 
 export type ProductMovementUpdateWithoutSaleItemInput = {
   Product?: InputMaybe<ProductUpdateOneRequiredWithoutProductMovementNestedInput>;
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupUpdateOneWithoutProductMovementNestedInput>;
   blameUser?: InputMaybe<UserUpdateOneWithoutProductMovementNestedInput>;
   quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumProductMovementTypeFieldUpdateOperationsInput>;
@@ -813,6 +1086,12 @@ export type ProductMovementUpsertWithWhereUniqueWithoutProductInput = {
   where: ProductMovementWhereUniqueInput;
 };
 
+export type ProductMovementUpsertWithWhereUniqueWithoutProductMovementGroupInput = {
+  create: ProductMovementCreateWithoutProductMovementGroupInput;
+  update: ProductMovementUpdateWithoutProductMovementGroupInput;
+  where: ProductMovementWhereUniqueInput;
+};
+
 export type ProductMovementUpsertWithWhereUniqueWithoutSaleItemInput = {
   create: ProductMovementCreateWithoutSaleItemInput;
   update: ProductMovementUpdateWithoutSaleItemInput;
@@ -824,12 +1103,14 @@ export type ProductMovementWhereInput = {
   NOT?: InputMaybe<Array<ProductMovementWhereInput>>;
   OR?: InputMaybe<Array<ProductMovementWhereInput>>;
   Product?: InputMaybe<ProductScalarRelationFilter>;
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupNullableScalarRelationFilter>;
   SaleItem?: InputMaybe<SaleItemNullableScalarRelationFilter>;
   blameUser?: InputMaybe<UserNullableScalarRelationFilter>;
   blameUserId?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<StringFilter>;
   productId?: InputMaybe<StringFilter>;
+  productMovementGroupId?: InputMaybe<StringNullableFilter>;
   quantity?: InputMaybe<IntFilter>;
   saleItemId?: InputMaybe<StringNullableFilter>;
   type?: InputMaybe<EnumProductMovementTypeFilter>;
@@ -841,12 +1122,14 @@ export type ProductMovementWhereUniqueInput = {
   NOT?: InputMaybe<Array<ProductMovementWhereInput>>;
   OR?: InputMaybe<Array<ProductMovementWhereInput>>;
   Product?: InputMaybe<ProductScalarRelationFilter>;
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupNullableScalarRelationFilter>;
   SaleItem?: InputMaybe<SaleItemNullableScalarRelationFilter>;
   blameUser?: InputMaybe<UserNullableScalarRelationFilter>;
   blameUserId?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   id?: InputMaybe<Scalars['String']['input']>;
   productId?: InputMaybe<StringFilter>;
+  productMovementGroupId?: InputMaybe<StringNullableFilter>;
   quantity?: InputMaybe<IntFilter>;
   saleItemId?: InputMaybe<StringNullableFilter>;
   type?: InputMaybe<EnumProductMovementTypeFilter>;
@@ -1191,6 +1474,7 @@ export type ProviderProductsArgs = {
 
 export type ProviderCount = {
   __typename?: 'ProviderCount';
+  ProductMovementGroup: Scalars['Int']['output'];
   products: Scalars['Int']['output'];
   saleItems: Scalars['Int']['output'];
 };
@@ -1209,6 +1493,7 @@ export type ProviderCountAggregate = {
 };
 
 export type ProviderCreateInput = {
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupCreateNestedManyWithoutProviderInput>;
   blameUser?: InputMaybe<UserCreateNestedOneWithoutProvidersInput>;
   document?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
@@ -1247,6 +1532,12 @@ export type ProviderCreateNestedManyWithoutBlameUserInput = {
   createMany?: InputMaybe<ProviderCreateManyBlameUserInputEnvelope>;
 };
 
+export type ProviderCreateNestedOneWithoutProductMovementGroupInput = {
+  connect?: InputMaybe<ProviderWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<ProviderCreateOrConnectWithoutProductMovementGroupInput>;
+  create?: InputMaybe<ProviderCreateWithoutProductMovementGroupInput>;
+};
+
 export type ProviderCreateNestedOneWithoutProductsInput = {
   connect?: InputMaybe<ProviderWhereUniqueInput>;
   connectOrCreate?: InputMaybe<ProviderCreateOrConnectWithoutProductsInput>;
@@ -1264,6 +1555,11 @@ export type ProviderCreateOrConnectWithoutBlameUserInput = {
   where: ProviderWhereUniqueInput;
 };
 
+export type ProviderCreateOrConnectWithoutProductMovementGroupInput = {
+  create: ProviderCreateWithoutProductMovementGroupInput;
+  where: ProviderWhereUniqueInput;
+};
+
 export type ProviderCreateOrConnectWithoutProductsInput = {
   create: ProviderCreateWithoutProductsInput;
   where: ProviderWhereUniqueInput;
@@ -1275,6 +1571,18 @@ export type ProviderCreateOrConnectWithoutSaleItemsInput = {
 };
 
 export type ProviderCreateWithoutBlameUserInput = {
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupCreateNestedManyWithoutProviderInput>;
+  document?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  products?: InputMaybe<ProductCreateNestedManyWithoutProviderInput>;
+  saleItems?: InputMaybe<SaleItemCreateNestedManyWithoutProviderInput>;
+  whatsapp?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ProviderCreateWithoutProductMovementGroupInput = {
+  blameUser?: InputMaybe<UserCreateNestedOneWithoutProvidersInput>;
   document?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
@@ -1285,6 +1593,7 @@ export type ProviderCreateWithoutBlameUserInput = {
 };
 
 export type ProviderCreateWithoutProductsInput = {
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupCreateNestedManyWithoutProviderInput>;
   blameUser?: InputMaybe<UserCreateNestedOneWithoutProvidersInput>;
   document?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
@@ -1295,6 +1604,7 @@ export type ProviderCreateWithoutProductsInput = {
 };
 
 export type ProviderCreateWithoutSaleItemsInput = {
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupCreateNestedManyWithoutProviderInput>;
   blameUser?: InputMaybe<UserCreateNestedOneWithoutProvidersInput>;
   document?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
@@ -1344,6 +1654,7 @@ export type ProviderOrderByRelationAggregateInput = {
 };
 
 export type ProviderOrderByWithRelationInput = {
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupOrderByRelationAggregateInput>;
   blameUser?: InputMaybe<UserOrderByWithRelationInput>;
   blameUserId?: InputMaybe<SortOrder>;
   createdAt?: InputMaybe<SortOrder>;
@@ -1396,6 +1707,7 @@ export type ProviderScalarWhereInput = {
 };
 
 export type ProviderUpdateInput = {
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupUpdateManyWithoutProviderNestedInput>;
   blameUser?: InputMaybe<UserUpdateOneWithoutProvidersNestedInput>;
   document?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   email?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -1431,6 +1743,16 @@ export type ProviderUpdateManyWithoutBlameUserNestedInput = {
   upsert?: InputMaybe<Array<ProviderUpsertWithWhereUniqueWithoutBlameUserInput>>;
 };
 
+export type ProviderUpdateOneWithoutProductMovementGroupNestedInput = {
+  connect?: InputMaybe<ProviderWhereUniqueInput>;
+  connectOrCreate?: InputMaybe<ProviderCreateOrConnectWithoutProductMovementGroupInput>;
+  create?: InputMaybe<ProviderCreateWithoutProductMovementGroupInput>;
+  delete?: InputMaybe<ProviderWhereInput>;
+  disconnect?: InputMaybe<Scalars['Boolean']['input']>;
+  update?: InputMaybe<ProviderUpdateToOneWithWhereWithoutProductMovementGroupInput>;
+  upsert?: InputMaybe<ProviderUpsertWithoutProductMovementGroupInput>;
+};
+
 export type ProviderUpdateOneWithoutProductsNestedInput = {
   connect?: InputMaybe<ProviderWhereUniqueInput>;
   connectOrCreate?: InputMaybe<ProviderCreateOrConnectWithoutProductsInput>;
@@ -1451,6 +1773,11 @@ export type ProviderUpdateOneWithoutSaleItemsNestedInput = {
   upsert?: InputMaybe<ProviderUpsertWithoutSaleItemsInput>;
 };
 
+export type ProviderUpdateToOneWithWhereWithoutProductMovementGroupInput = {
+  data: ProviderUpdateWithoutProductMovementGroupInput;
+  where?: InputMaybe<ProviderWhereInput>;
+};
+
 export type ProviderUpdateToOneWithWhereWithoutProductsInput = {
   data: ProviderUpdateWithoutProductsInput;
   where?: InputMaybe<ProviderWhereInput>;
@@ -1467,6 +1794,17 @@ export type ProviderUpdateWithWhereUniqueWithoutBlameUserInput = {
 };
 
 export type ProviderUpdateWithoutBlameUserInput = {
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupUpdateManyWithoutProviderNestedInput>;
+  document?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  email?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+  name?: InputMaybe<StringFieldUpdateOperationsInput>;
+  products?: InputMaybe<ProductUpdateManyWithoutProviderNestedInput>;
+  saleItems?: InputMaybe<SaleItemUpdateManyWithoutProviderNestedInput>;
+  whatsapp?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
+};
+
+export type ProviderUpdateWithoutProductMovementGroupInput = {
+  blameUser?: InputMaybe<UserUpdateOneWithoutProvidersNestedInput>;
   document?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   email?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
@@ -1476,6 +1814,7 @@ export type ProviderUpdateWithoutBlameUserInput = {
 };
 
 export type ProviderUpdateWithoutProductsInput = {
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupUpdateManyWithoutProviderNestedInput>;
   blameUser?: InputMaybe<UserUpdateOneWithoutProvidersNestedInput>;
   document?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   email?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -1485,6 +1824,7 @@ export type ProviderUpdateWithoutProductsInput = {
 };
 
 export type ProviderUpdateWithoutSaleItemsInput = {
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupUpdateManyWithoutProviderNestedInput>;
   blameUser?: InputMaybe<UserUpdateOneWithoutProvidersNestedInput>;
   document?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   email?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
@@ -1497,6 +1837,12 @@ export type ProviderUpsertWithWhereUniqueWithoutBlameUserInput = {
   create: ProviderCreateWithoutBlameUserInput;
   update: ProviderUpdateWithoutBlameUserInput;
   where: ProviderWhereUniqueInput;
+};
+
+export type ProviderUpsertWithoutProductMovementGroupInput = {
+  create: ProviderCreateWithoutProductMovementGroupInput;
+  update: ProviderUpdateWithoutProductMovementGroupInput;
+  where?: InputMaybe<ProviderWhereInput>;
 };
 
 export type ProviderUpsertWithoutProductsInput = {
@@ -1515,6 +1861,7 @@ export type ProviderWhereInput = {
   AND?: InputMaybe<Array<ProviderWhereInput>>;
   NOT?: InputMaybe<Array<ProviderWhereInput>>;
   OR?: InputMaybe<Array<ProviderWhereInput>>;
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupListRelationFilter>;
   blameUser?: InputMaybe<UserNullableScalarRelationFilter>;
   blameUserId?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
@@ -1532,6 +1879,7 @@ export type ProviderWhereUniqueInput = {
   AND?: InputMaybe<Array<ProviderWhereInput>>;
   NOT?: InputMaybe<Array<ProviderWhereInput>>;
   OR?: InputMaybe<Array<ProviderWhereInput>>;
+  ProductMovementGroup?: InputMaybe<ProductMovementGroupListRelationFilter>;
   blameUser?: InputMaybe<UserNullableScalarRelationFilter>;
   blameUserId?: InputMaybe<StringNullableFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
@@ -1561,7 +1909,6 @@ export type Query = {
   sale: Sale;
   saleItem: SaleItem;
   saleItems: SaleItemsOutput;
-  salePaidCost: SalePaidCostOutput;
   sales: SalesOutput;
   user: User;
   users: UsersOutput;
@@ -1615,16 +1962,6 @@ export type QuerySaleItemsArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   take?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<SaleItemWhereInput>;
-};
-
-
-export type QuerySalePaidCostArgs = {
-  cursor?: InputMaybe<SalePaidCostWhereUniqueInput>;
-  distinct?: InputMaybe<Array<SalePaidCostScalarFieldEnum>>;
-  orderBy?: InputMaybe<Array<SalePaidCostOrderByWithRelationInput>>;
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  take?: InputMaybe<Scalars['Int']['input']>;
-  where?: InputMaybe<SalePaidCostWhereInput>;
 };
 
 
@@ -1766,7 +2103,6 @@ export type SaleCreateWithoutSaleItemsInput = {
 
 export type SaleItem = {
   __typename?: 'SaleItem';
-  ProductMovement?: Maybe<Array<ProductMovement>>;
   _count: SaleItemCount;
   blameUser?: Maybe<User>;
   /** FK: User.id - User to blame for */
@@ -1908,23 +2244,6 @@ export type SaleItemCreateManySaleInputEnvelope = {
   data: Array<SaleItemCreateManySaleInput>;
 };
 
-export type SaleItemCreateManySalePaidCostInput = {
-  blameUserId?: InputMaybe<Scalars['String']['input']>;
-  costIsPostPaid: Scalars['Boolean']['input'];
-  id?: InputMaybe<Scalars['String']['input']>;
-  productId: Scalars['String']['input'];
-  providerId?: InputMaybe<Scalars['String']['input']>;
-  quantity: Scalars['Int']['input'];
-  saleCostIsPaid?: InputMaybe<Scalars['Boolean']['input']>;
-  saleCostIsSelected?: InputMaybe<Scalars['Boolean']['input']>;
-  saleId: Scalars['String']['input'];
-  totalValue: Scalars['Int']['input'];
-};
-
-export type SaleItemCreateManySalePaidCostInputEnvelope = {
-  data: Array<SaleItemCreateManySalePaidCostInput>;
-};
-
 export type SaleItemCreateNestedManyWithoutBlameUserInput = {
   connect?: InputMaybe<Array<SaleItemWhereUniqueInput>>;
   connectOrCreate?: InputMaybe<Array<SaleItemCreateOrConnectWithoutBlameUserInput>>;
@@ -1955,13 +2274,6 @@ export type SaleItemCreateNestedManyWithoutSaleInput = {
 
 export type SaleItemCreateNestedManyWithoutSaleInputCustom = {
   create?: InputMaybe<Array<SaleItemCreateWithoutSaleInput>>;
-};
-
-export type SaleItemCreateNestedManyWithoutSalePaidCostInput = {
-  connect?: InputMaybe<Array<SaleItemWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<SaleItemCreateOrConnectWithoutSalePaidCostInput>>;
-  create?: InputMaybe<Array<SaleItemCreateWithoutSalePaidCostInput>>;
-  createMany?: InputMaybe<SaleItemCreateManySalePaidCostInputEnvelope>;
 };
 
 export type SaleItemCreateNestedOneWithoutProductMovementInput = {
@@ -1995,11 +2307,6 @@ export type SaleItemCreateOrConnectWithoutSaleInput = {
   where: SaleItemWhereUniqueInput;
 };
 
-export type SaleItemCreateOrConnectWithoutSalePaidCostInput = {
-  create: SaleItemCreateWithoutSalePaidCostInput;
-  where: SaleItemWhereUniqueInput;
-};
-
 export type SaleItemCreateWithoutBlameUserInput = {
   ProductMovement?: InputMaybe<ProductMovementCreateNestedManyWithoutSaleItemInput>;
   costIsPostPaid: Scalars['Boolean']['input'];
@@ -2010,7 +2317,7 @@ export type SaleItemCreateWithoutBlameUserInput = {
   sale?: InputMaybe<SaleCreateNestedOneWithoutSaleItemsInput>;
   saleCostIsPaid?: InputMaybe<Scalars['Boolean']['input']>;
   saleCostIsSelected?: InputMaybe<Scalars['Boolean']['input']>;
-  salePaidCost?: InputMaybe<SalePaidCostCreateNestedOneWithoutSaleItemInput>;
+  salePaidCostId?: InputMaybe<Scalars['String']['input']>;
   totalValue: Scalars['Int']['input'];
 };
 
@@ -2024,7 +2331,7 @@ export type SaleItemCreateWithoutProductInput = {
   sale?: InputMaybe<SaleCreateNestedOneWithoutSaleItemsInput>;
   saleCostIsPaid?: InputMaybe<Scalars['Boolean']['input']>;
   saleCostIsSelected?: InputMaybe<Scalars['Boolean']['input']>;
-  salePaidCost?: InputMaybe<SalePaidCostCreateNestedOneWithoutSaleItemInput>;
+  salePaidCostId?: InputMaybe<Scalars['String']['input']>;
   totalValue: Scalars['Int']['input'];
 };
 
@@ -2038,7 +2345,7 @@ export type SaleItemCreateWithoutProductMovementInput = {
   sale?: InputMaybe<SaleCreateNestedOneWithoutSaleItemsInput>;
   saleCostIsPaid?: InputMaybe<Scalars['Boolean']['input']>;
   saleCostIsSelected?: InputMaybe<Scalars['Boolean']['input']>;
-  salePaidCost?: InputMaybe<SalePaidCostCreateNestedOneWithoutSaleItemInput>;
+  salePaidCostId?: InputMaybe<Scalars['String']['input']>;
   totalValue: Scalars['Int']['input'];
 };
 
@@ -2052,7 +2359,7 @@ export type SaleItemCreateWithoutProviderInput = {
   sale?: InputMaybe<SaleCreateNestedOneWithoutSaleItemsInput>;
   saleCostIsPaid?: InputMaybe<Scalars['Boolean']['input']>;
   saleCostIsSelected?: InputMaybe<Scalars['Boolean']['input']>;
-  salePaidCost?: InputMaybe<SalePaidCostCreateNestedOneWithoutSaleItemInput>;
+  salePaidCostId?: InputMaybe<Scalars['String']['input']>;
   totalValue: Scalars['Int']['input'];
 };
 
@@ -2066,21 +2373,7 @@ export type SaleItemCreateWithoutSaleInput = {
   quantity: Scalars['Int']['input'];
   saleCostIsPaid?: InputMaybe<Scalars['Boolean']['input']>;
   saleCostIsSelected?: InputMaybe<Scalars['Boolean']['input']>;
-  salePaidCost?: InputMaybe<SalePaidCostCreateNestedOneWithoutSaleItemInput>;
-  totalValue: Scalars['Int']['input'];
-};
-
-export type SaleItemCreateWithoutSalePaidCostInput = {
-  ProductMovement?: InputMaybe<ProductMovementCreateNestedManyWithoutSaleItemInput>;
-  blameUser?: InputMaybe<UserCreateNestedOneWithoutSaleItemsInput>;
-  costIsPostPaid: Scalars['Boolean']['input'];
-  id?: InputMaybe<Scalars['String']['input']>;
-  product: ProductCreateNestedOneWithoutSaleItemsInput;
-  provider?: InputMaybe<ProviderCreateNestedOneWithoutSaleItemsInput>;
-  quantity: Scalars['Int']['input'];
-  sale?: InputMaybe<SaleCreateNestedOneWithoutSaleItemsInput>;
-  saleCostIsPaid?: InputMaybe<Scalars['Boolean']['input']>;
-  saleCostIsSelected?: InputMaybe<Scalars['Boolean']['input']>;
+  salePaidCostId?: InputMaybe<Scalars['String']['input']>;
   totalValue: Scalars['Int']['input'];
 };
 
@@ -2151,7 +2444,6 @@ export type SaleItemOrderByWithRelationInput = {
   saleCostIsPaid?: InputMaybe<SortOrder>;
   saleCostIsSelected?: InputMaybe<SortOrder>;
   saleId?: InputMaybe<SortOrder>;
-  salePaidCost?: InputMaybe<SalePaidCostOrderByWithRelationInput>;
   salePaidCostId?: InputMaybe<SortOrder>;
   totalCostValue?: InputMaybe<SortOrder>;
   totalValue?: InputMaybe<SortOrder>;
@@ -2220,6 +2512,7 @@ export type SaleItemUpdateManyMutationInput = {
   quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
   saleCostIsPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
   saleCostIsSelected?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  salePaidCostId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
 };
 
@@ -2239,11 +2532,6 @@ export type SaleItemUpdateManyWithWhereWithoutProviderInput = {
 };
 
 export type SaleItemUpdateManyWithWhereWithoutSaleInput = {
-  data: SaleItemUpdateManyMutationInput;
-  where: SaleItemScalarWhereInput;
-};
-
-export type SaleItemUpdateManyWithWhereWithoutSalePaidCostInput = {
   data: SaleItemUpdateManyMutationInput;
   where: SaleItemScalarWhereInput;
 };
@@ -2318,20 +2606,6 @@ export type SaleItemUpdateManyWithoutSaleNestedInputCustom = {
   upsert?: InputMaybe<Array<SaleItemUpsertWithWhereUniqueWithoutSaleInput>>;
 };
 
-export type SaleItemUpdateManyWithoutSalePaidCostNestedInput = {
-  connect?: InputMaybe<Array<SaleItemWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<SaleItemCreateOrConnectWithoutSalePaidCostInput>>;
-  create?: InputMaybe<Array<SaleItemCreateWithoutSalePaidCostInput>>;
-  createMany?: InputMaybe<SaleItemCreateManySalePaidCostInputEnvelope>;
-  delete?: InputMaybe<Array<SaleItemWhereUniqueInput>>;
-  deleteMany?: InputMaybe<Array<SaleItemScalarWhereInput>>;
-  disconnect?: InputMaybe<Array<SaleItemWhereUniqueInput>>;
-  set?: InputMaybe<Array<SaleItemWhereUniqueInput>>;
-  update?: InputMaybe<Array<SaleItemUpdateWithWhereUniqueWithoutSalePaidCostInput>>;
-  updateMany?: InputMaybe<Array<SaleItemUpdateManyWithWhereWithoutSalePaidCostInput>>;
-  upsert?: InputMaybe<Array<SaleItemUpsertWithWhereUniqueWithoutSalePaidCostInput>>;
-};
-
 export type SaleItemUpdateOneWithoutProductMovementNestedInput = {
   connect?: InputMaybe<SaleItemWhereUniqueInput>;
   connectOrCreate?: InputMaybe<SaleItemCreateOrConnectWithoutProductMovementInput>;
@@ -2367,11 +2641,6 @@ export type SaleItemUpdateWithWhereUniqueWithoutSaleInput = {
   where: SaleItemWhereUniqueInput;
 };
 
-export type SaleItemUpdateWithWhereUniqueWithoutSalePaidCostInput = {
-  data: SaleItemUpdateWithoutSalePaidCostInput;
-  where: SaleItemWhereUniqueInput;
-};
-
 export type SaleItemUpdateWithoutBlameUserInput = {
   ProductMovement?: InputMaybe<ProductMovementUpdateManyWithoutSaleItemNestedInput>;
   costIsPostPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -2381,7 +2650,7 @@ export type SaleItemUpdateWithoutBlameUserInput = {
   sale?: InputMaybe<SaleUpdateOneWithoutSaleItemsNestedInput>;
   saleCostIsPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
   saleCostIsSelected?: InputMaybe<BoolFieldUpdateOperationsInput>;
-  salePaidCost?: InputMaybe<SalePaidCostUpdateOneWithoutSaleItemNestedInput>;
+  salePaidCostId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
 };
 
@@ -2394,7 +2663,7 @@ export type SaleItemUpdateWithoutProductInput = {
   sale?: InputMaybe<SaleUpdateOneWithoutSaleItemsNestedInput>;
   saleCostIsPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
   saleCostIsSelected?: InputMaybe<BoolFieldUpdateOperationsInput>;
-  salePaidCost?: InputMaybe<SalePaidCostUpdateOneWithoutSaleItemNestedInput>;
+  salePaidCostId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
 };
 
@@ -2407,7 +2676,7 @@ export type SaleItemUpdateWithoutProductMovementInput = {
   sale?: InputMaybe<SaleUpdateOneWithoutSaleItemsNestedInput>;
   saleCostIsPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
   saleCostIsSelected?: InputMaybe<BoolFieldUpdateOperationsInput>;
-  salePaidCost?: InputMaybe<SalePaidCostUpdateOneWithoutSaleItemNestedInput>;
+  salePaidCostId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
 };
 
@@ -2420,7 +2689,7 @@ export type SaleItemUpdateWithoutProviderInput = {
   sale?: InputMaybe<SaleUpdateOneWithoutSaleItemsNestedInput>;
   saleCostIsPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
   saleCostIsSelected?: InputMaybe<BoolFieldUpdateOperationsInput>;
-  salePaidCost?: InputMaybe<SalePaidCostUpdateOneWithoutSaleItemNestedInput>;
+  salePaidCostId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
 };
 
@@ -2433,20 +2702,7 @@ export type SaleItemUpdateWithoutSaleInput = {
   quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
   saleCostIsPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
   saleCostIsSelected?: InputMaybe<BoolFieldUpdateOperationsInput>;
-  salePaidCost?: InputMaybe<SalePaidCostUpdateOneWithoutSaleItemNestedInput>;
-  totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
-};
-
-export type SaleItemUpdateWithoutSalePaidCostInput = {
-  ProductMovement?: InputMaybe<ProductMovementUpdateManyWithoutSaleItemNestedInput>;
-  blameUser?: InputMaybe<UserUpdateOneWithoutSaleItemsNestedInput>;
-  costIsPostPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
-  product?: InputMaybe<ProductUpdateOneRequiredWithoutSaleItemsNestedInput>;
-  provider?: InputMaybe<ProviderUpdateOneWithoutSaleItemsNestedInput>;
-  quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
-  sale?: InputMaybe<SaleUpdateOneWithoutSaleItemsNestedInput>;
-  saleCostIsPaid?: InputMaybe<BoolFieldUpdateOperationsInput>;
-  saleCostIsSelected?: InputMaybe<BoolFieldUpdateOperationsInput>;
+  salePaidCostId?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
 };
 
@@ -2471,12 +2727,6 @@ export type SaleItemUpsertWithWhereUniqueWithoutProviderInput = {
 export type SaleItemUpsertWithWhereUniqueWithoutSaleInput = {
   create: SaleItemCreateWithoutSaleInput;
   update: SaleItemUpdateWithoutSaleInput;
-  where: SaleItemWhereUniqueInput;
-};
-
-export type SaleItemUpsertWithWhereUniqueWithoutSalePaidCostInput = {
-  create: SaleItemCreateWithoutSalePaidCostInput;
-  update: SaleItemUpdateWithoutSalePaidCostInput;
   where: SaleItemWhereUniqueInput;
 };
 
@@ -2505,7 +2755,6 @@ export type SaleItemWhereInput = {
   saleCostIsPaid?: InputMaybe<BoolFilter>;
   saleCostIsSelected?: InputMaybe<BoolFilter>;
   saleId?: InputMaybe<StringFilter>;
-  salePaidCost?: InputMaybe<SalePaidCostNullableScalarRelationFilter>;
   salePaidCostId?: InputMaybe<StringNullableFilter>;
   totalCostValue?: InputMaybe<IntFilter>;
   totalValue?: InputMaybe<IntFilter>;
@@ -2532,7 +2781,6 @@ export type SaleItemWhereUniqueInput = {
   saleCostIsPaid?: InputMaybe<BoolFilter>;
   saleCostIsSelected?: InputMaybe<BoolFilter>;
   saleId?: InputMaybe<StringFilter>;
-  salePaidCost?: InputMaybe<SalePaidCostNullableScalarRelationFilter>;
   salePaidCostId?: InputMaybe<StringNullableFilter>;
   totalCostValue?: InputMaybe<IntFilter>;
   totalValue?: InputMaybe<IntFilter>;
@@ -2608,23 +2856,6 @@ export type SalePaginated = {
   total?: Maybe<Scalars['Int']['output']>;
 };
 
-export type SalePaidCost = {
-  __typename?: 'SalePaidCost';
-  _count: SalePaidCostCount;
-  /** FK: User.id - User to blame for */
-  blameUserId?: Maybe<Scalars['String']['output']>;
-  createdAt: Scalars['DateTime']['output'];
-  /** Sales from that date and backward */
-  endDate: Scalars['DateTime']['output'];
-  /** ID */
-  id: Scalars['ID']['output'];
-  /** Paid Value */
-  paidValue: Scalars['Int']['output'];
-  updatedAt: Scalars['DateTime']['output'];
-  /** Value */
-  value: Scalars['Int']['output'];
-};
-
 export type SalePaidCostAvgAggregate = {
   __typename?: 'SalePaidCostAvgAggregate';
   paidValue?: Maybe<Scalars['Float']['output']>;
@@ -2646,71 +2877,6 @@ export type SalePaidCostCountAggregate = {
   paidValue: Scalars['Int']['output'];
   updatedAt: Scalars['Int']['output'];
   value: Scalars['Int']['output'];
-};
-
-export type SalePaidCostCreateInput = {
-  SaleItem?: InputMaybe<SaleItemCreateNestedManyWithoutSalePaidCostInput>;
-  blameUser?: InputMaybe<UserCreateNestedOneWithoutSalePaidCostInput>;
-  endDate: Scalars['DateTime']['input'];
-  id?: InputMaybe<Scalars['String']['input']>;
-  paidValue: Scalars['Int']['input'];
-  value: Scalars['Int']['input'];
-};
-
-export type SalePaidCostCreateManyBlameUserInput = {
-  endDate: Scalars['DateTime']['input'];
-  id?: InputMaybe<Scalars['String']['input']>;
-  paidValue: Scalars['Int']['input'];
-  value: Scalars['Int']['input'];
-};
-
-export type SalePaidCostCreateManyBlameUserInputEnvelope = {
-  data: Array<SalePaidCostCreateManyBlameUserInput>;
-};
-
-export type SalePaidCostCreateNestedManyWithoutBlameUserInput = {
-  connect?: InputMaybe<Array<SalePaidCostWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<SalePaidCostCreateOrConnectWithoutBlameUserInput>>;
-  create?: InputMaybe<Array<SalePaidCostCreateWithoutBlameUserInput>>;
-  createMany?: InputMaybe<SalePaidCostCreateManyBlameUserInputEnvelope>;
-};
-
-export type SalePaidCostCreateNestedOneWithoutSaleItemInput = {
-  connect?: InputMaybe<SalePaidCostWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<SalePaidCostCreateOrConnectWithoutSaleItemInput>;
-  create?: InputMaybe<SalePaidCostCreateWithoutSaleItemInput>;
-};
-
-export type SalePaidCostCreateOrConnectWithoutBlameUserInput = {
-  create: SalePaidCostCreateWithoutBlameUserInput;
-  where: SalePaidCostWhereUniqueInput;
-};
-
-export type SalePaidCostCreateOrConnectWithoutSaleItemInput = {
-  create: SalePaidCostCreateWithoutSaleItemInput;
-  where: SalePaidCostWhereUniqueInput;
-};
-
-export type SalePaidCostCreateWithoutBlameUserInput = {
-  SaleItem?: InputMaybe<SaleItemCreateNestedManyWithoutSalePaidCostInput>;
-  endDate: Scalars['DateTime']['input'];
-  id?: InputMaybe<Scalars['String']['input']>;
-  paidValue: Scalars['Int']['input'];
-  value: Scalars['Int']['input'];
-};
-
-export type SalePaidCostCreateWithoutSaleItemInput = {
-  blameUser?: InputMaybe<UserCreateNestedOneWithoutSalePaidCostInput>;
-  endDate: Scalars['DateTime']['input'];
-  id?: InputMaybe<Scalars['String']['input']>;
-  paidValue: Scalars['Int']['input'];
-  value: Scalars['Int']['input'];
-};
-
-export type SalePaidCostListRelationFilter = {
-  every?: InputMaybe<SalePaidCostWhereInput>;
-  none?: InputMaybe<SalePaidCostWhereInput>;
-  some?: InputMaybe<SalePaidCostWhereInput>;
 };
 
 export type SalePaidCostMaxAggregate = {
@@ -2735,183 +2901,10 @@ export type SalePaidCostMinAggregate = {
   value?: Maybe<Scalars['Int']['output']>;
 };
 
-export type SalePaidCostNullableScalarRelationFilter = {
-  is?: InputMaybe<SalePaidCostWhereInput>;
-  isNot?: InputMaybe<SalePaidCostWhereInput>;
-};
-
-export type SalePaidCostOrderByRelationAggregateInput = {
-  _count?: InputMaybe<SortOrder>;
-};
-
-export type SalePaidCostOrderByWithRelationInput = {
-  SaleItem?: InputMaybe<SaleItemOrderByRelationAggregateInput>;
-  blameUser?: InputMaybe<UserOrderByWithRelationInput>;
-  blameUserId?: InputMaybe<SortOrder>;
-  createdAt?: InputMaybe<SortOrder>;
-  endDate?: InputMaybe<SortOrder>;
-  id?: InputMaybe<SortOrder>;
-  paidValue?: InputMaybe<SortOrder>;
-  updatedAt?: InputMaybe<SortOrder>;
-  value?: InputMaybe<SortOrder>;
-};
-
-export type SalePaidCostOutput = {
-  __typename?: 'SalePaidCostOutput';
-  nodes: Array<SalePaidCost>;
-  /** Pagination info for findMany requests */
-  pageInfo?: Maybe<SalePaidCostPaginated>;
-};
-
-export type SalePaidCostPaginated = {
-  __typename?: 'SalePaidCostPaginated';
-  /** Number of current page */
-  currentPage?: Maybe<Scalars['Int']['output']>;
-  /** Boolean to use on a cursor-based pagination. E.g: Mobile scroll */
-  hasNextPage?: Maybe<Scalars['Boolean']['output']>;
-  /** Number of last page */
-  lastPage?: Maybe<Scalars['Int']['output']>;
-  nextCursor?: Maybe<Scalars['Int']['output']>;
-  /** Count for query results without skip, take and cursor */
-  total?: Maybe<Scalars['Int']['output']>;
-};
-
-export enum SalePaidCostScalarFieldEnum {
-  BlameUserId = 'blameUserId',
-  CreatedAt = 'createdAt',
-  EndDate = 'endDate',
-  Id = 'id',
-  PaidValue = 'paidValue',
-  UpdatedAt = 'updatedAt',
-  Value = 'value'
-}
-
-export type SalePaidCostScalarWhereInput = {
-  AND?: InputMaybe<Array<SalePaidCostScalarWhereInput>>;
-  NOT?: InputMaybe<Array<SalePaidCostScalarWhereInput>>;
-  OR?: InputMaybe<Array<SalePaidCostScalarWhereInput>>;
-  blameUserId?: InputMaybe<StringNullableFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  endDate?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<StringFilter>;
-  paidValue?: InputMaybe<IntFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-  value?: InputMaybe<IntFilter>;
-};
-
 export type SalePaidCostSumAggregate = {
   __typename?: 'SalePaidCostSumAggregate';
   paidValue?: Maybe<Scalars['Int']['output']>;
   value?: Maybe<Scalars['Int']['output']>;
-};
-
-export type SalePaidCostUpdateInput = {
-  SaleItem?: InputMaybe<SaleItemUpdateManyWithoutSalePaidCostNestedInput>;
-  blameUser?: InputMaybe<UserUpdateOneWithoutSalePaidCostNestedInput>;
-  endDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  paidValue?: InputMaybe<IntFieldUpdateOperationsInput>;
-  value?: InputMaybe<IntFieldUpdateOperationsInput>;
-};
-
-export type SalePaidCostUpdateManyMutationInput = {
-  endDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  paidValue?: InputMaybe<IntFieldUpdateOperationsInput>;
-  value?: InputMaybe<IntFieldUpdateOperationsInput>;
-};
-
-export type SalePaidCostUpdateManyWithWhereWithoutBlameUserInput = {
-  data: SalePaidCostUpdateManyMutationInput;
-  where: SalePaidCostScalarWhereInput;
-};
-
-export type SalePaidCostUpdateManyWithoutBlameUserNestedInput = {
-  connect?: InputMaybe<Array<SalePaidCostWhereUniqueInput>>;
-  connectOrCreate?: InputMaybe<Array<SalePaidCostCreateOrConnectWithoutBlameUserInput>>;
-  create?: InputMaybe<Array<SalePaidCostCreateWithoutBlameUserInput>>;
-  createMany?: InputMaybe<SalePaidCostCreateManyBlameUserInputEnvelope>;
-  delete?: InputMaybe<Array<SalePaidCostWhereUniqueInput>>;
-  deleteMany?: InputMaybe<Array<SalePaidCostScalarWhereInput>>;
-  disconnect?: InputMaybe<Array<SalePaidCostWhereUniqueInput>>;
-  set?: InputMaybe<Array<SalePaidCostWhereUniqueInput>>;
-  update?: InputMaybe<Array<SalePaidCostUpdateWithWhereUniqueWithoutBlameUserInput>>;
-  updateMany?: InputMaybe<Array<SalePaidCostUpdateManyWithWhereWithoutBlameUserInput>>;
-  upsert?: InputMaybe<Array<SalePaidCostUpsertWithWhereUniqueWithoutBlameUserInput>>;
-};
-
-export type SalePaidCostUpdateOneWithoutSaleItemNestedInput = {
-  connect?: InputMaybe<SalePaidCostWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<SalePaidCostCreateOrConnectWithoutSaleItemInput>;
-  create?: InputMaybe<SalePaidCostCreateWithoutSaleItemInput>;
-  delete?: InputMaybe<SalePaidCostWhereInput>;
-  disconnect?: InputMaybe<Scalars['Boolean']['input']>;
-  update?: InputMaybe<SalePaidCostUpdateToOneWithWhereWithoutSaleItemInput>;
-  upsert?: InputMaybe<SalePaidCostUpsertWithoutSaleItemInput>;
-};
-
-export type SalePaidCostUpdateToOneWithWhereWithoutSaleItemInput = {
-  data: SalePaidCostUpdateWithoutSaleItemInput;
-  where?: InputMaybe<SalePaidCostWhereInput>;
-};
-
-export type SalePaidCostUpdateWithWhereUniqueWithoutBlameUserInput = {
-  data: SalePaidCostUpdateWithoutBlameUserInput;
-  where: SalePaidCostWhereUniqueInput;
-};
-
-export type SalePaidCostUpdateWithoutBlameUserInput = {
-  SaleItem?: InputMaybe<SaleItemUpdateManyWithoutSalePaidCostNestedInput>;
-  endDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  paidValue?: InputMaybe<IntFieldUpdateOperationsInput>;
-  value?: InputMaybe<IntFieldUpdateOperationsInput>;
-};
-
-export type SalePaidCostUpdateWithoutSaleItemInput = {
-  blameUser?: InputMaybe<UserUpdateOneWithoutSalePaidCostNestedInput>;
-  endDate?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  paidValue?: InputMaybe<IntFieldUpdateOperationsInput>;
-  value?: InputMaybe<IntFieldUpdateOperationsInput>;
-};
-
-export type SalePaidCostUpsertWithWhereUniqueWithoutBlameUserInput = {
-  create: SalePaidCostCreateWithoutBlameUserInput;
-  update: SalePaidCostUpdateWithoutBlameUserInput;
-  where: SalePaidCostWhereUniqueInput;
-};
-
-export type SalePaidCostUpsertWithoutSaleItemInput = {
-  create: SalePaidCostCreateWithoutSaleItemInput;
-  update: SalePaidCostUpdateWithoutSaleItemInput;
-  where?: InputMaybe<SalePaidCostWhereInput>;
-};
-
-export type SalePaidCostWhereInput = {
-  AND?: InputMaybe<Array<SalePaidCostWhereInput>>;
-  NOT?: InputMaybe<Array<SalePaidCostWhereInput>>;
-  OR?: InputMaybe<Array<SalePaidCostWhereInput>>;
-  SaleItem?: InputMaybe<SaleItemListRelationFilter>;
-  blameUser?: InputMaybe<UserNullableScalarRelationFilter>;
-  blameUserId?: InputMaybe<StringNullableFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  endDate?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<StringFilter>;
-  paidValue?: InputMaybe<IntFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-  value?: InputMaybe<IntFilter>;
-};
-
-export type SalePaidCostWhereUniqueInput = {
-  AND?: InputMaybe<Array<SalePaidCostWhereInput>>;
-  NOT?: InputMaybe<Array<SalePaidCostWhereInput>>;
-  OR?: InputMaybe<Array<SalePaidCostWhereInput>>;
-  SaleItem?: InputMaybe<SaleItemListRelationFilter>;
-  blameUser?: InputMaybe<UserNullableScalarRelationFilter>;
-  blameUserId?: InputMaybe<StringNullableFilter>;
-  createdAt?: InputMaybe<DateTimeFilter>;
-  endDate?: InputMaybe<DateTimeFilter>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  paidValue?: InputMaybe<IntFilter>;
-  updatedAt?: InputMaybe<DateTimeFilter>;
-  value?: InputMaybe<IntFilter>;
 };
 
 export enum SaleScalarFieldEnum {
@@ -3093,7 +3086,6 @@ export type StringNullableFilter = {
 
 export type User = {
   __typename?: 'User';
-  ProductMovement?: Maybe<Array<ProductMovement>>;
   _count: UserCount;
   createdAt: Scalars['DateTime']['output'];
   email: Scalars['String']['output'];
@@ -3107,7 +3099,6 @@ export type User = {
 export type UserCount = {
   __typename?: 'UserCount';
   ProductMovement: Scalars['Int']['output'];
-  SalePaidCost: Scalars['Int']['output'];
   products: Scalars['Int']['output'];
   providers: Scalars['Int']['output'];
   saleItems: Scalars['Int']['output'];
@@ -3126,7 +3117,6 @@ export type UserCountAggregate = {
 
 export type UserCreateInput = {
   ProductMovement?: InputMaybe<ProductMovementCreateNestedManyWithoutBlameUserInput>;
-  SalePaidCost?: InputMaybe<SalePaidCostCreateNestedManyWithoutBlameUserInput>;
   email: Scalars['String']['input'];
   id?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -3166,12 +3156,6 @@ export type UserCreateNestedOneWithoutSaleItemsInput = {
   create?: InputMaybe<UserCreateWithoutSaleItemsInput>;
 };
 
-export type UserCreateNestedOneWithoutSalePaidCostInput = {
-  connect?: InputMaybe<UserWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutSalePaidCostInput>;
-  create?: InputMaybe<UserCreateWithoutSalePaidCostInput>;
-};
-
 export type UserCreateNestedOneWithoutSalesInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
   connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutSalesInput>;
@@ -3198,18 +3182,12 @@ export type UserCreateOrConnectWithoutSaleItemsInput = {
   where: UserWhereUniqueInput;
 };
 
-export type UserCreateOrConnectWithoutSalePaidCostInput = {
-  create: UserCreateWithoutSalePaidCostInput;
-  where: UserWhereUniqueInput;
-};
-
 export type UserCreateOrConnectWithoutSalesInput = {
   create: UserCreateWithoutSalesInput;
   where: UserWhereUniqueInput;
 };
 
 export type UserCreateWithoutProductMovementInput = {
-  SalePaidCost?: InputMaybe<SalePaidCostCreateNestedManyWithoutBlameUserInput>;
   email: Scalars['String']['input'];
   id?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -3221,7 +3199,6 @@ export type UserCreateWithoutProductMovementInput = {
 
 export type UserCreateWithoutProductsInput = {
   ProductMovement?: InputMaybe<ProductMovementCreateNestedManyWithoutBlameUserInput>;
-  SalePaidCost?: InputMaybe<SalePaidCostCreateNestedManyWithoutBlameUserInput>;
   email: Scalars['String']['input'];
   id?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -3232,7 +3209,6 @@ export type UserCreateWithoutProductsInput = {
 
 export type UserCreateWithoutProvidersInput = {
   ProductMovement?: InputMaybe<ProductMovementCreateNestedManyWithoutBlameUserInput>;
-  SalePaidCost?: InputMaybe<SalePaidCostCreateNestedManyWithoutBlameUserInput>;
   email: Scalars['String']['input'];
   id?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -3243,29 +3219,16 @@ export type UserCreateWithoutProvidersInput = {
 
 export type UserCreateWithoutSaleItemsInput = {
   ProductMovement?: InputMaybe<ProductMovementCreateNestedManyWithoutBlameUserInput>;
-  SalePaidCost?: InputMaybe<SalePaidCostCreateNestedManyWithoutBlameUserInput>;
   email: Scalars['String']['input'];
   id?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   products?: InputMaybe<ProductCreateNestedManyWithoutBlameUserInput>;
   providers?: InputMaybe<ProviderCreateNestedManyWithoutBlameUserInput>;
-  sales?: InputMaybe<SaleCreateNestedManyWithoutBlameUserInput>;
-};
-
-export type UserCreateWithoutSalePaidCostInput = {
-  ProductMovement?: InputMaybe<ProductMovementCreateNestedManyWithoutBlameUserInput>;
-  email: Scalars['String']['input'];
-  id?: InputMaybe<Scalars['String']['input']>;
-  name: Scalars['String']['input'];
-  products?: InputMaybe<ProductCreateNestedManyWithoutBlameUserInput>;
-  providers?: InputMaybe<ProviderCreateNestedManyWithoutBlameUserInput>;
-  saleItems?: InputMaybe<SaleItemCreateNestedManyWithoutBlameUserInput>;
   sales?: InputMaybe<SaleCreateNestedManyWithoutBlameUserInput>;
 };
 
 export type UserCreateWithoutSalesInput = {
   ProductMovement?: InputMaybe<ProductMovementCreateNestedManyWithoutBlameUserInput>;
-  SalePaidCost?: InputMaybe<SalePaidCostCreateNestedManyWithoutBlameUserInput>;
   email: Scalars['String']['input'];
   id?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -3299,7 +3262,6 @@ export type UserNullableScalarRelationFilter = {
 
 export type UserOrderByWithRelationInput = {
   ProductMovement?: InputMaybe<ProductMovementOrderByRelationAggregateInput>;
-  SalePaidCost?: InputMaybe<SalePaidCostOrderByRelationAggregateInput>;
   createdAt?: InputMaybe<SortOrder>;
   email?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
@@ -3334,7 +3296,6 @@ export enum UserScalarFieldEnum {
 
 export type UserUpdateInput = {
   ProductMovement?: InputMaybe<ProductMovementUpdateManyWithoutBlameUserNestedInput>;
-  SalePaidCost?: InputMaybe<SalePaidCostUpdateManyWithoutBlameUserNestedInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   products?: InputMaybe<ProductUpdateManyWithoutBlameUserNestedInput>;
@@ -3383,16 +3344,6 @@ export type UserUpdateOneWithoutSaleItemsNestedInput = {
   upsert?: InputMaybe<UserUpsertWithoutSaleItemsInput>;
 };
 
-export type UserUpdateOneWithoutSalePaidCostNestedInput = {
-  connect?: InputMaybe<UserWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutSalePaidCostInput>;
-  create?: InputMaybe<UserCreateWithoutSalePaidCostInput>;
-  delete?: InputMaybe<UserWhereInput>;
-  disconnect?: InputMaybe<Scalars['Boolean']['input']>;
-  update?: InputMaybe<UserUpdateToOneWithWhereWithoutSalePaidCostInput>;
-  upsert?: InputMaybe<UserUpsertWithoutSalePaidCostInput>;
-};
-
 export type UserUpdateOneWithoutSalesNestedInput = {
   connect?: InputMaybe<UserWhereUniqueInput>;
   connectOrCreate?: InputMaybe<UserCreateOrConnectWithoutSalesInput>;
@@ -3423,18 +3374,12 @@ export type UserUpdateToOneWithWhereWithoutSaleItemsInput = {
   where?: InputMaybe<UserWhereInput>;
 };
 
-export type UserUpdateToOneWithWhereWithoutSalePaidCostInput = {
-  data: UserUpdateWithoutSalePaidCostInput;
-  where?: InputMaybe<UserWhereInput>;
-};
-
 export type UserUpdateToOneWithWhereWithoutSalesInput = {
   data: UserUpdateWithoutSalesInput;
   where?: InputMaybe<UserWhereInput>;
 };
 
 export type UserUpdateWithoutProductMovementInput = {
-  SalePaidCost?: InputMaybe<SalePaidCostUpdateManyWithoutBlameUserNestedInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   products?: InputMaybe<ProductUpdateManyWithoutBlameUserNestedInput>;
@@ -3445,7 +3390,6 @@ export type UserUpdateWithoutProductMovementInput = {
 
 export type UserUpdateWithoutProductsInput = {
   ProductMovement?: InputMaybe<ProductMovementUpdateManyWithoutBlameUserNestedInput>;
-  SalePaidCost?: InputMaybe<SalePaidCostUpdateManyWithoutBlameUserNestedInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   providers?: InputMaybe<ProviderUpdateManyWithoutBlameUserNestedInput>;
@@ -3455,7 +3399,6 @@ export type UserUpdateWithoutProductsInput = {
 
 export type UserUpdateWithoutProvidersInput = {
   ProductMovement?: InputMaybe<ProductMovementUpdateManyWithoutBlameUserNestedInput>;
-  SalePaidCost?: InputMaybe<SalePaidCostUpdateManyWithoutBlameUserNestedInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   products?: InputMaybe<ProductUpdateManyWithoutBlameUserNestedInput>;
@@ -3465,27 +3408,15 @@ export type UserUpdateWithoutProvidersInput = {
 
 export type UserUpdateWithoutSaleItemsInput = {
   ProductMovement?: InputMaybe<ProductMovementUpdateManyWithoutBlameUserNestedInput>;
-  SalePaidCost?: InputMaybe<SalePaidCostUpdateManyWithoutBlameUserNestedInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   products?: InputMaybe<ProductUpdateManyWithoutBlameUserNestedInput>;
   providers?: InputMaybe<ProviderUpdateManyWithoutBlameUserNestedInput>;
-  sales?: InputMaybe<SaleUpdateManyWithoutBlameUserNestedInput>;
-};
-
-export type UserUpdateWithoutSalePaidCostInput = {
-  ProductMovement?: InputMaybe<ProductMovementUpdateManyWithoutBlameUserNestedInput>;
-  email?: InputMaybe<StringFieldUpdateOperationsInput>;
-  name?: InputMaybe<StringFieldUpdateOperationsInput>;
-  products?: InputMaybe<ProductUpdateManyWithoutBlameUserNestedInput>;
-  providers?: InputMaybe<ProviderUpdateManyWithoutBlameUserNestedInput>;
-  saleItems?: InputMaybe<SaleItemUpdateManyWithoutBlameUserNestedInput>;
   sales?: InputMaybe<SaleUpdateManyWithoutBlameUserNestedInput>;
 };
 
 export type UserUpdateWithoutSalesInput = {
   ProductMovement?: InputMaybe<ProductMovementUpdateManyWithoutBlameUserNestedInput>;
-  SalePaidCost?: InputMaybe<SalePaidCostUpdateManyWithoutBlameUserNestedInput>;
   email?: InputMaybe<StringFieldUpdateOperationsInput>;
   name?: InputMaybe<StringFieldUpdateOperationsInput>;
   products?: InputMaybe<ProductUpdateManyWithoutBlameUserNestedInput>;
@@ -3517,12 +3448,6 @@ export type UserUpsertWithoutSaleItemsInput = {
   where?: InputMaybe<UserWhereInput>;
 };
 
-export type UserUpsertWithoutSalePaidCostInput = {
-  create: UserCreateWithoutSalePaidCostInput;
-  update: UserUpdateWithoutSalePaidCostInput;
-  where?: InputMaybe<UserWhereInput>;
-};
-
 export type UserUpsertWithoutSalesInput = {
   create: UserCreateWithoutSalesInput;
   update: UserUpdateWithoutSalesInput;
@@ -3534,7 +3459,6 @@ export type UserWhereInput = {
   NOT?: InputMaybe<Array<UserWhereInput>>;
   OR?: InputMaybe<Array<UserWhereInput>>;
   ProductMovement?: InputMaybe<ProductMovementListRelationFilter>;
-  SalePaidCost?: InputMaybe<SalePaidCostListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   email?: InputMaybe<StringFilter>;
   id?: InputMaybe<StringFilter>;
@@ -3551,7 +3475,6 @@ export type UserWhereUniqueInput = {
   NOT?: InputMaybe<Array<UserWhereInput>>;
   OR?: InputMaybe<Array<UserWhereInput>>;
   ProductMovement?: InputMaybe<ProductMovementListRelationFilter>;
-  SalePaidCost?: InputMaybe<SalePaidCostListRelationFilter>;
   createdAt?: InputMaybe<DateTimeFilter>;
   email?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
@@ -3647,6 +3570,8 @@ export type ResolversTypes = {
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   DateTimeFieldUpdateOperationsInput: DateTimeFieldUpdateOperationsInput;
   DateTimeFilter: DateTimeFilter;
+  EnumProductMovementGroupTypeFieldUpdateOperationsInput: EnumProductMovementGroupTypeFieldUpdateOperationsInput;
+  EnumProductMovementGroupTypeFilter: EnumProductMovementGroupTypeFilter;
   EnumProductMovementTypeFieldUpdateOperationsInput: EnumProductMovementTypeFieldUpdateOperationsInput;
   EnumProductMovementTypeFilter: EnumProductMovementTypeFilter;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
@@ -3658,6 +3583,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<{}>;
   NestedBoolFilter: NestedBoolFilter;
   NestedDateTimeFilter: NestedDateTimeFilter;
+  NestedEnumProductMovementGroupTypeFilter: NestedEnumProductMovementGroupTypeFilter;
   NestedEnumProductMovementTypeFilter: NestedEnumProductMovementTypeFilter;
   NestedIntFilter: NestedIntFilter;
   NestedStringFilter: NestedStringFilter;
@@ -3687,24 +3613,58 @@ export type ResolversTypes = {
   ProductListRelationFilter: ProductListRelationFilter;
   ProductMaxAggregate: ResolverTypeWrapper<ProductMaxAggregate>;
   ProductMinAggregate: ResolverTypeWrapper<ProductMinAggregate>;
-  ProductMovement: ResolverTypeWrapper<ProductMovement>;
   ProductMovementAvgAggregate: ResolverTypeWrapper<ProductMovementAvgAggregate>;
   ProductMovementCountAggregate: ResolverTypeWrapper<ProductMovementCountAggregate>;
   ProductMovementCreateManyBlameUserInput: ProductMovementCreateManyBlameUserInput;
   ProductMovementCreateManyBlameUserInputEnvelope: ProductMovementCreateManyBlameUserInputEnvelope;
   ProductMovementCreateManyProductInput: ProductMovementCreateManyProductInput;
   ProductMovementCreateManyProductInputEnvelope: ProductMovementCreateManyProductInputEnvelope;
+  ProductMovementCreateManyProductMovementGroupInput: ProductMovementCreateManyProductMovementGroupInput;
+  ProductMovementCreateManyProductMovementGroupInputEnvelope: ProductMovementCreateManyProductMovementGroupInputEnvelope;
   ProductMovementCreateManySaleItemInput: ProductMovementCreateManySaleItemInput;
   ProductMovementCreateManySaleItemInputEnvelope: ProductMovementCreateManySaleItemInputEnvelope;
   ProductMovementCreateNestedManyWithoutBlameUserInput: ProductMovementCreateNestedManyWithoutBlameUserInput;
   ProductMovementCreateNestedManyWithoutProductInput: ProductMovementCreateNestedManyWithoutProductInput;
+  ProductMovementCreateNestedManyWithoutProductMovementGroupInput: ProductMovementCreateNestedManyWithoutProductMovementGroupInput;
   ProductMovementCreateNestedManyWithoutSaleItemInput: ProductMovementCreateNestedManyWithoutSaleItemInput;
   ProductMovementCreateOrConnectWithoutBlameUserInput: ProductMovementCreateOrConnectWithoutBlameUserInput;
   ProductMovementCreateOrConnectWithoutProductInput: ProductMovementCreateOrConnectWithoutProductInput;
+  ProductMovementCreateOrConnectWithoutProductMovementGroupInput: ProductMovementCreateOrConnectWithoutProductMovementGroupInput;
   ProductMovementCreateOrConnectWithoutSaleItemInput: ProductMovementCreateOrConnectWithoutSaleItemInput;
   ProductMovementCreateWithoutBlameUserInput: ProductMovementCreateWithoutBlameUserInput;
   ProductMovementCreateWithoutProductInput: ProductMovementCreateWithoutProductInput;
+  ProductMovementCreateWithoutProductMovementGroupInput: ProductMovementCreateWithoutProductMovementGroupInput;
   ProductMovementCreateWithoutSaleItemInput: ProductMovementCreateWithoutSaleItemInput;
+  ProductMovementGroupCount: ResolverTypeWrapper<ProductMovementGroupCount>;
+  ProductMovementGroupCountAggregate: ResolverTypeWrapper<ProductMovementGroupCountAggregate>;
+  ProductMovementGroupCreateManyProviderInput: ProductMovementGroupCreateManyProviderInput;
+  ProductMovementGroupCreateManyProviderInputEnvelope: ProductMovementGroupCreateManyProviderInputEnvelope;
+  ProductMovementGroupCreateNestedManyWithoutProviderInput: ProductMovementGroupCreateNestedManyWithoutProviderInput;
+  ProductMovementGroupCreateNestedOneWithoutProductMovementInput: ProductMovementGroupCreateNestedOneWithoutProductMovementInput;
+  ProductMovementGroupCreateOrConnectWithoutProductMovementInput: ProductMovementGroupCreateOrConnectWithoutProductMovementInput;
+  ProductMovementGroupCreateOrConnectWithoutProviderInput: ProductMovementGroupCreateOrConnectWithoutProviderInput;
+  ProductMovementGroupCreateWithoutProductMovementInput: ProductMovementGroupCreateWithoutProductMovementInput;
+  ProductMovementGroupCreateWithoutProviderInput: ProductMovementGroupCreateWithoutProviderInput;
+  ProductMovementGroupListRelationFilter: ProductMovementGroupListRelationFilter;
+  ProductMovementGroupMaxAggregate: ResolverTypeWrapper<ProductMovementGroupMaxAggregate>;
+  ProductMovementGroupMinAggregate: ResolverTypeWrapper<ProductMovementGroupMinAggregate>;
+  ProductMovementGroupNullableScalarRelationFilter: ProductMovementGroupNullableScalarRelationFilter;
+  ProductMovementGroupOrderByRelationAggregateInput: ProductMovementGroupOrderByRelationAggregateInput;
+  ProductMovementGroupScalarWhereInput: ProductMovementGroupScalarWhereInput;
+  ProductMovementGroupType: ProductMovementGroupType;
+  ProductMovementGroupTypeProviderIdDocumentIdCompoundUniqueInput: ProductMovementGroupTypeProviderIdDocumentIdCompoundUniqueInput;
+  ProductMovementGroupUpdateManyMutationInput: ProductMovementGroupUpdateManyMutationInput;
+  ProductMovementGroupUpdateManyWithWhereWithoutProviderInput: ProductMovementGroupUpdateManyWithWhereWithoutProviderInput;
+  ProductMovementGroupUpdateManyWithoutProviderNestedInput: ProductMovementGroupUpdateManyWithoutProviderNestedInput;
+  ProductMovementGroupUpdateOneWithoutProductMovementNestedInput: ProductMovementGroupUpdateOneWithoutProductMovementNestedInput;
+  ProductMovementGroupUpdateToOneWithWhereWithoutProductMovementInput: ProductMovementGroupUpdateToOneWithWhereWithoutProductMovementInput;
+  ProductMovementGroupUpdateWithWhereUniqueWithoutProviderInput: ProductMovementGroupUpdateWithWhereUniqueWithoutProviderInput;
+  ProductMovementGroupUpdateWithoutProductMovementInput: ProductMovementGroupUpdateWithoutProductMovementInput;
+  ProductMovementGroupUpdateWithoutProviderInput: ProductMovementGroupUpdateWithoutProviderInput;
+  ProductMovementGroupUpsertWithWhereUniqueWithoutProviderInput: ProductMovementGroupUpsertWithWhereUniqueWithoutProviderInput;
+  ProductMovementGroupUpsertWithoutProductMovementInput: ProductMovementGroupUpsertWithoutProductMovementInput;
+  ProductMovementGroupWhereInput: ProductMovementGroupWhereInput;
+  ProductMovementGroupWhereUniqueInput: ProductMovementGroupWhereUniqueInput;
   ProductMovementListRelationFilter: ProductMovementListRelationFilter;
   ProductMovementMaxAggregate: ResolverTypeWrapper<ProductMovementMaxAggregate>;
   ProductMovementMinAggregate: ResolverTypeWrapper<ProductMovementMinAggregate>;
@@ -3715,18 +3675,23 @@ export type ResolversTypes = {
   ProductMovementUpdateManyMutationInput: ProductMovementUpdateManyMutationInput;
   ProductMovementUpdateManyWithWhereWithoutBlameUserInput: ProductMovementUpdateManyWithWhereWithoutBlameUserInput;
   ProductMovementUpdateManyWithWhereWithoutProductInput: ProductMovementUpdateManyWithWhereWithoutProductInput;
+  ProductMovementUpdateManyWithWhereWithoutProductMovementGroupInput: ProductMovementUpdateManyWithWhereWithoutProductMovementGroupInput;
   ProductMovementUpdateManyWithWhereWithoutSaleItemInput: ProductMovementUpdateManyWithWhereWithoutSaleItemInput;
   ProductMovementUpdateManyWithoutBlameUserNestedInput: ProductMovementUpdateManyWithoutBlameUserNestedInput;
+  ProductMovementUpdateManyWithoutProductMovementGroupNestedInput: ProductMovementUpdateManyWithoutProductMovementGroupNestedInput;
   ProductMovementUpdateManyWithoutProductNestedInput: ProductMovementUpdateManyWithoutProductNestedInput;
   ProductMovementUpdateManyWithoutSaleItemNestedInput: ProductMovementUpdateManyWithoutSaleItemNestedInput;
   ProductMovementUpdateWithWhereUniqueWithoutBlameUserInput: ProductMovementUpdateWithWhereUniqueWithoutBlameUserInput;
   ProductMovementUpdateWithWhereUniqueWithoutProductInput: ProductMovementUpdateWithWhereUniqueWithoutProductInput;
+  ProductMovementUpdateWithWhereUniqueWithoutProductMovementGroupInput: ProductMovementUpdateWithWhereUniqueWithoutProductMovementGroupInput;
   ProductMovementUpdateWithWhereUniqueWithoutSaleItemInput: ProductMovementUpdateWithWhereUniqueWithoutSaleItemInput;
   ProductMovementUpdateWithoutBlameUserInput: ProductMovementUpdateWithoutBlameUserInput;
   ProductMovementUpdateWithoutProductInput: ProductMovementUpdateWithoutProductInput;
+  ProductMovementUpdateWithoutProductMovementGroupInput: ProductMovementUpdateWithoutProductMovementGroupInput;
   ProductMovementUpdateWithoutSaleItemInput: ProductMovementUpdateWithoutSaleItemInput;
   ProductMovementUpsertWithWhereUniqueWithoutBlameUserInput: ProductMovementUpsertWithWhereUniqueWithoutBlameUserInput;
   ProductMovementUpsertWithWhereUniqueWithoutProductInput: ProductMovementUpsertWithWhereUniqueWithoutProductInput;
+  ProductMovementUpsertWithWhereUniqueWithoutProductMovementGroupInput: ProductMovementUpsertWithWhereUniqueWithoutProductMovementGroupInput;
   ProductMovementUpsertWithWhereUniqueWithoutSaleItemInput: ProductMovementUpsertWithWhereUniqueWithoutSaleItemInput;
   ProductMovementWhereInput: ProductMovementWhereInput;
   ProductMovementWhereUniqueInput: ProductMovementWhereUniqueInput;
@@ -3768,12 +3733,15 @@ export type ResolversTypes = {
   ProviderCreateManyBlameUserInputEnvelope: ProviderCreateManyBlameUserInputEnvelope;
   ProviderCreateManyInput: ProviderCreateManyInput;
   ProviderCreateNestedManyWithoutBlameUserInput: ProviderCreateNestedManyWithoutBlameUserInput;
+  ProviderCreateNestedOneWithoutProductMovementGroupInput: ProviderCreateNestedOneWithoutProductMovementGroupInput;
   ProviderCreateNestedOneWithoutProductsInput: ProviderCreateNestedOneWithoutProductsInput;
   ProviderCreateNestedOneWithoutSaleItemsInput: ProviderCreateNestedOneWithoutSaleItemsInput;
   ProviderCreateOrConnectWithoutBlameUserInput: ProviderCreateOrConnectWithoutBlameUserInput;
+  ProviderCreateOrConnectWithoutProductMovementGroupInput: ProviderCreateOrConnectWithoutProductMovementGroupInput;
   ProviderCreateOrConnectWithoutProductsInput: ProviderCreateOrConnectWithoutProductsInput;
   ProviderCreateOrConnectWithoutSaleItemsInput: ProviderCreateOrConnectWithoutSaleItemsInput;
   ProviderCreateWithoutBlameUserInput: ProviderCreateWithoutBlameUserInput;
+  ProviderCreateWithoutProductMovementGroupInput: ProviderCreateWithoutProductMovementGroupInput;
   ProviderCreateWithoutProductsInput: ProviderCreateWithoutProductsInput;
   ProviderCreateWithoutSaleItemsInput: ProviderCreateWithoutSaleItemsInput;
   ProviderListRelationFilter: ProviderListRelationFilter;
@@ -3789,15 +3757,19 @@ export type ResolversTypes = {
   ProviderUpdateManyMutationInput: ProviderUpdateManyMutationInput;
   ProviderUpdateManyWithWhereWithoutBlameUserInput: ProviderUpdateManyWithWhereWithoutBlameUserInput;
   ProviderUpdateManyWithoutBlameUserNestedInput: ProviderUpdateManyWithoutBlameUserNestedInput;
+  ProviderUpdateOneWithoutProductMovementGroupNestedInput: ProviderUpdateOneWithoutProductMovementGroupNestedInput;
   ProviderUpdateOneWithoutProductsNestedInput: ProviderUpdateOneWithoutProductsNestedInput;
   ProviderUpdateOneWithoutSaleItemsNestedInput: ProviderUpdateOneWithoutSaleItemsNestedInput;
+  ProviderUpdateToOneWithWhereWithoutProductMovementGroupInput: ProviderUpdateToOneWithWhereWithoutProductMovementGroupInput;
   ProviderUpdateToOneWithWhereWithoutProductsInput: ProviderUpdateToOneWithWhereWithoutProductsInput;
   ProviderUpdateToOneWithWhereWithoutSaleItemsInput: ProviderUpdateToOneWithWhereWithoutSaleItemsInput;
   ProviderUpdateWithWhereUniqueWithoutBlameUserInput: ProviderUpdateWithWhereUniqueWithoutBlameUserInput;
   ProviderUpdateWithoutBlameUserInput: ProviderUpdateWithoutBlameUserInput;
+  ProviderUpdateWithoutProductMovementGroupInput: ProviderUpdateWithoutProductMovementGroupInput;
   ProviderUpdateWithoutProductsInput: ProviderUpdateWithoutProductsInput;
   ProviderUpdateWithoutSaleItemsInput: ProviderUpdateWithoutSaleItemsInput;
   ProviderUpsertWithWhereUniqueWithoutBlameUserInput: ProviderUpsertWithWhereUniqueWithoutBlameUserInput;
+  ProviderUpsertWithoutProductMovementGroupInput: ProviderUpsertWithoutProductMovementGroupInput;
   ProviderUpsertWithoutProductsInput: ProviderUpsertWithoutProductsInput;
   ProviderUpsertWithoutSaleItemsInput: ProviderUpsertWithoutSaleItemsInput;
   ProviderWhereInput: ProviderWhereInput;
@@ -3831,27 +3803,22 @@ export type ResolversTypes = {
   SaleItemCreateManyProviderInputEnvelope: SaleItemCreateManyProviderInputEnvelope;
   SaleItemCreateManySaleInput: SaleItemCreateManySaleInput;
   SaleItemCreateManySaleInputEnvelope: SaleItemCreateManySaleInputEnvelope;
-  SaleItemCreateManySalePaidCostInput: SaleItemCreateManySalePaidCostInput;
-  SaleItemCreateManySalePaidCostInputEnvelope: SaleItemCreateManySalePaidCostInputEnvelope;
   SaleItemCreateNestedManyWithoutBlameUserInput: SaleItemCreateNestedManyWithoutBlameUserInput;
   SaleItemCreateNestedManyWithoutProductInput: SaleItemCreateNestedManyWithoutProductInput;
   SaleItemCreateNestedManyWithoutProviderInput: SaleItemCreateNestedManyWithoutProviderInput;
   SaleItemCreateNestedManyWithoutSaleInput: SaleItemCreateNestedManyWithoutSaleInput;
   SaleItemCreateNestedManyWithoutSaleInputCustom: SaleItemCreateNestedManyWithoutSaleInputCustom;
-  SaleItemCreateNestedManyWithoutSalePaidCostInput: SaleItemCreateNestedManyWithoutSalePaidCostInput;
   SaleItemCreateNestedOneWithoutProductMovementInput: SaleItemCreateNestedOneWithoutProductMovementInput;
   SaleItemCreateOrConnectWithoutBlameUserInput: SaleItemCreateOrConnectWithoutBlameUserInput;
   SaleItemCreateOrConnectWithoutProductInput: SaleItemCreateOrConnectWithoutProductInput;
   SaleItemCreateOrConnectWithoutProductMovementInput: SaleItemCreateOrConnectWithoutProductMovementInput;
   SaleItemCreateOrConnectWithoutProviderInput: SaleItemCreateOrConnectWithoutProviderInput;
   SaleItemCreateOrConnectWithoutSaleInput: SaleItemCreateOrConnectWithoutSaleInput;
-  SaleItemCreateOrConnectWithoutSalePaidCostInput: SaleItemCreateOrConnectWithoutSalePaidCostInput;
   SaleItemCreateWithoutBlameUserInput: SaleItemCreateWithoutBlameUserInput;
   SaleItemCreateWithoutProductInput: SaleItemCreateWithoutProductInput;
   SaleItemCreateWithoutProductMovementInput: SaleItemCreateWithoutProductMovementInput;
   SaleItemCreateWithoutProviderInput: SaleItemCreateWithoutProviderInput;
   SaleItemCreateWithoutSaleInput: SaleItemCreateWithoutSaleInput;
-  SaleItemCreateWithoutSalePaidCostInput: SaleItemCreateWithoutSalePaidCostInput;
   SaleItemListRelationFilter: SaleItemListRelationFilter;
   SaleItemMaxAggregate: ResolverTypeWrapper<SaleItemMaxAggregate>;
   SaleItemMinAggregate: ResolverTypeWrapper<SaleItemMinAggregate>;
@@ -3867,31 +3834,26 @@ export type ResolversTypes = {
   SaleItemUpdateManyWithWhereWithoutProductInput: SaleItemUpdateManyWithWhereWithoutProductInput;
   SaleItemUpdateManyWithWhereWithoutProviderInput: SaleItemUpdateManyWithWhereWithoutProviderInput;
   SaleItemUpdateManyWithWhereWithoutSaleInput: SaleItemUpdateManyWithWhereWithoutSaleInput;
-  SaleItemUpdateManyWithWhereWithoutSalePaidCostInput: SaleItemUpdateManyWithWhereWithoutSalePaidCostInput;
   SaleItemUpdateManyWithoutBlameUserNestedInput: SaleItemUpdateManyWithoutBlameUserNestedInput;
   SaleItemUpdateManyWithoutProductNestedInput: SaleItemUpdateManyWithoutProductNestedInput;
   SaleItemUpdateManyWithoutProviderNestedInput: SaleItemUpdateManyWithoutProviderNestedInput;
   SaleItemUpdateManyWithoutSaleNestedInput: SaleItemUpdateManyWithoutSaleNestedInput;
   SaleItemUpdateManyWithoutSaleNestedInputCustom: SaleItemUpdateManyWithoutSaleNestedInputCustom;
-  SaleItemUpdateManyWithoutSalePaidCostNestedInput: SaleItemUpdateManyWithoutSalePaidCostNestedInput;
   SaleItemUpdateOneWithoutProductMovementNestedInput: SaleItemUpdateOneWithoutProductMovementNestedInput;
   SaleItemUpdateToOneWithWhereWithoutProductMovementInput: SaleItemUpdateToOneWithWhereWithoutProductMovementInput;
   SaleItemUpdateWithWhereUniqueWithoutBlameUserInput: SaleItemUpdateWithWhereUniqueWithoutBlameUserInput;
   SaleItemUpdateWithWhereUniqueWithoutProductInput: SaleItemUpdateWithWhereUniqueWithoutProductInput;
   SaleItemUpdateWithWhereUniqueWithoutProviderInput: SaleItemUpdateWithWhereUniqueWithoutProviderInput;
   SaleItemUpdateWithWhereUniqueWithoutSaleInput: SaleItemUpdateWithWhereUniqueWithoutSaleInput;
-  SaleItemUpdateWithWhereUniqueWithoutSalePaidCostInput: SaleItemUpdateWithWhereUniqueWithoutSalePaidCostInput;
   SaleItemUpdateWithoutBlameUserInput: SaleItemUpdateWithoutBlameUserInput;
   SaleItemUpdateWithoutProductInput: SaleItemUpdateWithoutProductInput;
   SaleItemUpdateWithoutProductMovementInput: SaleItemUpdateWithoutProductMovementInput;
   SaleItemUpdateWithoutProviderInput: SaleItemUpdateWithoutProviderInput;
   SaleItemUpdateWithoutSaleInput: SaleItemUpdateWithoutSaleInput;
-  SaleItemUpdateWithoutSalePaidCostInput: SaleItemUpdateWithoutSalePaidCostInput;
   SaleItemUpsertWithWhereUniqueWithoutBlameUserInput: SaleItemUpsertWithWhereUniqueWithoutBlameUserInput;
   SaleItemUpsertWithWhereUniqueWithoutProductInput: SaleItemUpsertWithWhereUniqueWithoutProductInput;
   SaleItemUpsertWithWhereUniqueWithoutProviderInput: SaleItemUpsertWithWhereUniqueWithoutProviderInput;
   SaleItemUpsertWithWhereUniqueWithoutSaleInput: SaleItemUpsertWithWhereUniqueWithoutSaleInput;
-  SaleItemUpsertWithWhereUniqueWithoutSalePaidCostInput: SaleItemUpsertWithWhereUniqueWithoutSalePaidCostInput;
   SaleItemUpsertWithoutProductMovementInput: SaleItemUpsertWithoutProductMovementInput;
   SaleItemWhereInput: SaleItemWhereInput;
   SaleItemWhereUniqueInput: SaleItemWhereUniqueInput;
@@ -3903,43 +3865,12 @@ export type ResolversTypes = {
   SaleOrderByRelationAggregateInput: SaleOrderByRelationAggregateInput;
   SaleOrderByWithRelationInput: SaleOrderByWithRelationInput;
   SalePaginated: ResolverTypeWrapper<SalePaginated>;
-  SalePaidCost: ResolverTypeWrapper<SalePaidCost>;
   SalePaidCostAvgAggregate: ResolverTypeWrapper<SalePaidCostAvgAggregate>;
   SalePaidCostCount: ResolverTypeWrapper<SalePaidCostCount>;
   SalePaidCostCountAggregate: ResolverTypeWrapper<SalePaidCostCountAggregate>;
-  SalePaidCostCreateInput: SalePaidCostCreateInput;
-  SalePaidCostCreateManyBlameUserInput: SalePaidCostCreateManyBlameUserInput;
-  SalePaidCostCreateManyBlameUserInputEnvelope: SalePaidCostCreateManyBlameUserInputEnvelope;
-  SalePaidCostCreateNestedManyWithoutBlameUserInput: SalePaidCostCreateNestedManyWithoutBlameUserInput;
-  SalePaidCostCreateNestedOneWithoutSaleItemInput: SalePaidCostCreateNestedOneWithoutSaleItemInput;
-  SalePaidCostCreateOrConnectWithoutBlameUserInput: SalePaidCostCreateOrConnectWithoutBlameUserInput;
-  SalePaidCostCreateOrConnectWithoutSaleItemInput: SalePaidCostCreateOrConnectWithoutSaleItemInput;
-  SalePaidCostCreateWithoutBlameUserInput: SalePaidCostCreateWithoutBlameUserInput;
-  SalePaidCostCreateWithoutSaleItemInput: SalePaidCostCreateWithoutSaleItemInput;
-  SalePaidCostListRelationFilter: SalePaidCostListRelationFilter;
   SalePaidCostMaxAggregate: ResolverTypeWrapper<SalePaidCostMaxAggregate>;
   SalePaidCostMinAggregate: ResolverTypeWrapper<SalePaidCostMinAggregate>;
-  SalePaidCostNullableScalarRelationFilter: SalePaidCostNullableScalarRelationFilter;
-  SalePaidCostOrderByRelationAggregateInput: SalePaidCostOrderByRelationAggregateInput;
-  SalePaidCostOrderByWithRelationInput: SalePaidCostOrderByWithRelationInput;
-  SalePaidCostOutput: ResolverTypeWrapper<SalePaidCostOutput>;
-  SalePaidCostPaginated: ResolverTypeWrapper<SalePaidCostPaginated>;
-  SalePaidCostScalarFieldEnum: SalePaidCostScalarFieldEnum;
-  SalePaidCostScalarWhereInput: SalePaidCostScalarWhereInput;
   SalePaidCostSumAggregate: ResolverTypeWrapper<SalePaidCostSumAggregate>;
-  SalePaidCostUpdateInput: SalePaidCostUpdateInput;
-  SalePaidCostUpdateManyMutationInput: SalePaidCostUpdateManyMutationInput;
-  SalePaidCostUpdateManyWithWhereWithoutBlameUserInput: SalePaidCostUpdateManyWithWhereWithoutBlameUserInput;
-  SalePaidCostUpdateManyWithoutBlameUserNestedInput: SalePaidCostUpdateManyWithoutBlameUserNestedInput;
-  SalePaidCostUpdateOneWithoutSaleItemNestedInput: SalePaidCostUpdateOneWithoutSaleItemNestedInput;
-  SalePaidCostUpdateToOneWithWhereWithoutSaleItemInput: SalePaidCostUpdateToOneWithWhereWithoutSaleItemInput;
-  SalePaidCostUpdateWithWhereUniqueWithoutBlameUserInput: SalePaidCostUpdateWithWhereUniqueWithoutBlameUserInput;
-  SalePaidCostUpdateWithoutBlameUserInput: SalePaidCostUpdateWithoutBlameUserInput;
-  SalePaidCostUpdateWithoutSaleItemInput: SalePaidCostUpdateWithoutSaleItemInput;
-  SalePaidCostUpsertWithWhereUniqueWithoutBlameUserInput: SalePaidCostUpsertWithWhereUniqueWithoutBlameUserInput;
-  SalePaidCostUpsertWithoutSaleItemInput: SalePaidCostUpsertWithoutSaleItemInput;
-  SalePaidCostWhereInput: SalePaidCostWhereInput;
-  SalePaidCostWhereUniqueInput: SalePaidCostWhereUniqueInput;
   SaleScalarFieldEnum: SaleScalarFieldEnum;
   SaleScalarWhereInput: SaleScalarWhereInput;
   SaleSumAggregate: ResolverTypeWrapper<SaleSumAggregate>;
@@ -3971,19 +3902,16 @@ export type ResolversTypes = {
   UserCreateNestedOneWithoutProductsInput: UserCreateNestedOneWithoutProductsInput;
   UserCreateNestedOneWithoutProvidersInput: UserCreateNestedOneWithoutProvidersInput;
   UserCreateNestedOneWithoutSaleItemsInput: UserCreateNestedOneWithoutSaleItemsInput;
-  UserCreateNestedOneWithoutSalePaidCostInput: UserCreateNestedOneWithoutSalePaidCostInput;
   UserCreateNestedOneWithoutSalesInput: UserCreateNestedOneWithoutSalesInput;
   UserCreateOrConnectWithoutProductMovementInput: UserCreateOrConnectWithoutProductMovementInput;
   UserCreateOrConnectWithoutProductsInput: UserCreateOrConnectWithoutProductsInput;
   UserCreateOrConnectWithoutProvidersInput: UserCreateOrConnectWithoutProvidersInput;
   UserCreateOrConnectWithoutSaleItemsInput: UserCreateOrConnectWithoutSaleItemsInput;
-  UserCreateOrConnectWithoutSalePaidCostInput: UserCreateOrConnectWithoutSalePaidCostInput;
   UserCreateOrConnectWithoutSalesInput: UserCreateOrConnectWithoutSalesInput;
   UserCreateWithoutProductMovementInput: UserCreateWithoutProductMovementInput;
   UserCreateWithoutProductsInput: UserCreateWithoutProductsInput;
   UserCreateWithoutProvidersInput: UserCreateWithoutProvidersInput;
   UserCreateWithoutSaleItemsInput: UserCreateWithoutSaleItemsInput;
-  UserCreateWithoutSalePaidCostInput: UserCreateWithoutSalePaidCostInput;
   UserCreateWithoutSalesInput: UserCreateWithoutSalesInput;
   UserMaxAggregate: ResolverTypeWrapper<UserMaxAggregate>;
   UserMinAggregate: ResolverTypeWrapper<UserMinAggregate>;
@@ -3996,25 +3924,21 @@ export type ResolversTypes = {
   UserUpdateOneWithoutProductsNestedInput: UserUpdateOneWithoutProductsNestedInput;
   UserUpdateOneWithoutProvidersNestedInput: UserUpdateOneWithoutProvidersNestedInput;
   UserUpdateOneWithoutSaleItemsNestedInput: UserUpdateOneWithoutSaleItemsNestedInput;
-  UserUpdateOneWithoutSalePaidCostNestedInput: UserUpdateOneWithoutSalePaidCostNestedInput;
   UserUpdateOneWithoutSalesNestedInput: UserUpdateOneWithoutSalesNestedInput;
   UserUpdateToOneWithWhereWithoutProductMovementInput: UserUpdateToOneWithWhereWithoutProductMovementInput;
   UserUpdateToOneWithWhereWithoutProductsInput: UserUpdateToOneWithWhereWithoutProductsInput;
   UserUpdateToOneWithWhereWithoutProvidersInput: UserUpdateToOneWithWhereWithoutProvidersInput;
   UserUpdateToOneWithWhereWithoutSaleItemsInput: UserUpdateToOneWithWhereWithoutSaleItemsInput;
-  UserUpdateToOneWithWhereWithoutSalePaidCostInput: UserUpdateToOneWithWhereWithoutSalePaidCostInput;
   UserUpdateToOneWithWhereWithoutSalesInput: UserUpdateToOneWithWhereWithoutSalesInput;
   UserUpdateWithoutProductMovementInput: UserUpdateWithoutProductMovementInput;
   UserUpdateWithoutProductsInput: UserUpdateWithoutProductsInput;
   UserUpdateWithoutProvidersInput: UserUpdateWithoutProvidersInput;
   UserUpdateWithoutSaleItemsInput: UserUpdateWithoutSaleItemsInput;
-  UserUpdateWithoutSalePaidCostInput: UserUpdateWithoutSalePaidCostInput;
   UserUpdateWithoutSalesInput: UserUpdateWithoutSalesInput;
   UserUpsertWithoutProductMovementInput: UserUpsertWithoutProductMovementInput;
   UserUpsertWithoutProductsInput: UserUpsertWithoutProductsInput;
   UserUpsertWithoutProvidersInput: UserUpsertWithoutProvidersInput;
   UserUpsertWithoutSaleItemsInput: UserUpsertWithoutSaleItemsInput;
-  UserUpsertWithoutSalePaidCostInput: UserUpsertWithoutSalePaidCostInput;
   UserUpsertWithoutSalesInput: UserUpsertWithoutSalesInput;
   UserWhereInput: UserWhereInput;
   UserWhereUniqueInput: UserWhereUniqueInput;
@@ -4029,6 +3953,8 @@ export type ResolversParentTypes = {
   DateTime: Scalars['DateTime']['output'];
   DateTimeFieldUpdateOperationsInput: DateTimeFieldUpdateOperationsInput;
   DateTimeFilter: DateTimeFilter;
+  EnumProductMovementGroupTypeFieldUpdateOperationsInput: EnumProductMovementGroupTypeFieldUpdateOperationsInput;
+  EnumProductMovementGroupTypeFilter: EnumProductMovementGroupTypeFilter;
   EnumProductMovementTypeFieldUpdateOperationsInput: EnumProductMovementTypeFieldUpdateOperationsInput;
   EnumProductMovementTypeFilter: EnumProductMovementTypeFilter;
   Float: Scalars['Float']['output'];
@@ -4039,6 +3965,7 @@ export type ResolversParentTypes = {
   Mutation: {};
   NestedBoolFilter: NestedBoolFilter;
   NestedDateTimeFilter: NestedDateTimeFilter;
+  NestedEnumProductMovementGroupTypeFilter: NestedEnumProductMovementGroupTypeFilter;
   NestedEnumProductMovementTypeFilter: NestedEnumProductMovementTypeFilter;
   NestedIntFilter: NestedIntFilter;
   NestedStringFilter: NestedStringFilter;
@@ -4068,24 +3995,57 @@ export type ResolversParentTypes = {
   ProductListRelationFilter: ProductListRelationFilter;
   ProductMaxAggregate: ProductMaxAggregate;
   ProductMinAggregate: ProductMinAggregate;
-  ProductMovement: ProductMovement;
   ProductMovementAvgAggregate: ProductMovementAvgAggregate;
   ProductMovementCountAggregate: ProductMovementCountAggregate;
   ProductMovementCreateManyBlameUserInput: ProductMovementCreateManyBlameUserInput;
   ProductMovementCreateManyBlameUserInputEnvelope: ProductMovementCreateManyBlameUserInputEnvelope;
   ProductMovementCreateManyProductInput: ProductMovementCreateManyProductInput;
   ProductMovementCreateManyProductInputEnvelope: ProductMovementCreateManyProductInputEnvelope;
+  ProductMovementCreateManyProductMovementGroupInput: ProductMovementCreateManyProductMovementGroupInput;
+  ProductMovementCreateManyProductMovementGroupInputEnvelope: ProductMovementCreateManyProductMovementGroupInputEnvelope;
   ProductMovementCreateManySaleItemInput: ProductMovementCreateManySaleItemInput;
   ProductMovementCreateManySaleItemInputEnvelope: ProductMovementCreateManySaleItemInputEnvelope;
   ProductMovementCreateNestedManyWithoutBlameUserInput: ProductMovementCreateNestedManyWithoutBlameUserInput;
   ProductMovementCreateNestedManyWithoutProductInput: ProductMovementCreateNestedManyWithoutProductInput;
+  ProductMovementCreateNestedManyWithoutProductMovementGroupInput: ProductMovementCreateNestedManyWithoutProductMovementGroupInput;
   ProductMovementCreateNestedManyWithoutSaleItemInput: ProductMovementCreateNestedManyWithoutSaleItemInput;
   ProductMovementCreateOrConnectWithoutBlameUserInput: ProductMovementCreateOrConnectWithoutBlameUserInput;
   ProductMovementCreateOrConnectWithoutProductInput: ProductMovementCreateOrConnectWithoutProductInput;
+  ProductMovementCreateOrConnectWithoutProductMovementGroupInput: ProductMovementCreateOrConnectWithoutProductMovementGroupInput;
   ProductMovementCreateOrConnectWithoutSaleItemInput: ProductMovementCreateOrConnectWithoutSaleItemInput;
   ProductMovementCreateWithoutBlameUserInput: ProductMovementCreateWithoutBlameUserInput;
   ProductMovementCreateWithoutProductInput: ProductMovementCreateWithoutProductInput;
+  ProductMovementCreateWithoutProductMovementGroupInput: ProductMovementCreateWithoutProductMovementGroupInput;
   ProductMovementCreateWithoutSaleItemInput: ProductMovementCreateWithoutSaleItemInput;
+  ProductMovementGroupCount: ProductMovementGroupCount;
+  ProductMovementGroupCountAggregate: ProductMovementGroupCountAggregate;
+  ProductMovementGroupCreateManyProviderInput: ProductMovementGroupCreateManyProviderInput;
+  ProductMovementGroupCreateManyProviderInputEnvelope: ProductMovementGroupCreateManyProviderInputEnvelope;
+  ProductMovementGroupCreateNestedManyWithoutProviderInput: ProductMovementGroupCreateNestedManyWithoutProviderInput;
+  ProductMovementGroupCreateNestedOneWithoutProductMovementInput: ProductMovementGroupCreateNestedOneWithoutProductMovementInput;
+  ProductMovementGroupCreateOrConnectWithoutProductMovementInput: ProductMovementGroupCreateOrConnectWithoutProductMovementInput;
+  ProductMovementGroupCreateOrConnectWithoutProviderInput: ProductMovementGroupCreateOrConnectWithoutProviderInput;
+  ProductMovementGroupCreateWithoutProductMovementInput: ProductMovementGroupCreateWithoutProductMovementInput;
+  ProductMovementGroupCreateWithoutProviderInput: ProductMovementGroupCreateWithoutProviderInput;
+  ProductMovementGroupListRelationFilter: ProductMovementGroupListRelationFilter;
+  ProductMovementGroupMaxAggregate: ProductMovementGroupMaxAggregate;
+  ProductMovementGroupMinAggregate: ProductMovementGroupMinAggregate;
+  ProductMovementGroupNullableScalarRelationFilter: ProductMovementGroupNullableScalarRelationFilter;
+  ProductMovementGroupOrderByRelationAggregateInput: ProductMovementGroupOrderByRelationAggregateInput;
+  ProductMovementGroupScalarWhereInput: ProductMovementGroupScalarWhereInput;
+  ProductMovementGroupTypeProviderIdDocumentIdCompoundUniqueInput: ProductMovementGroupTypeProviderIdDocumentIdCompoundUniqueInput;
+  ProductMovementGroupUpdateManyMutationInput: ProductMovementGroupUpdateManyMutationInput;
+  ProductMovementGroupUpdateManyWithWhereWithoutProviderInput: ProductMovementGroupUpdateManyWithWhereWithoutProviderInput;
+  ProductMovementGroupUpdateManyWithoutProviderNestedInput: ProductMovementGroupUpdateManyWithoutProviderNestedInput;
+  ProductMovementGroupUpdateOneWithoutProductMovementNestedInput: ProductMovementGroupUpdateOneWithoutProductMovementNestedInput;
+  ProductMovementGroupUpdateToOneWithWhereWithoutProductMovementInput: ProductMovementGroupUpdateToOneWithWhereWithoutProductMovementInput;
+  ProductMovementGroupUpdateWithWhereUniqueWithoutProviderInput: ProductMovementGroupUpdateWithWhereUniqueWithoutProviderInput;
+  ProductMovementGroupUpdateWithoutProductMovementInput: ProductMovementGroupUpdateWithoutProductMovementInput;
+  ProductMovementGroupUpdateWithoutProviderInput: ProductMovementGroupUpdateWithoutProviderInput;
+  ProductMovementGroupUpsertWithWhereUniqueWithoutProviderInput: ProductMovementGroupUpsertWithWhereUniqueWithoutProviderInput;
+  ProductMovementGroupUpsertWithoutProductMovementInput: ProductMovementGroupUpsertWithoutProductMovementInput;
+  ProductMovementGroupWhereInput: ProductMovementGroupWhereInput;
+  ProductMovementGroupWhereUniqueInput: ProductMovementGroupWhereUniqueInput;
   ProductMovementListRelationFilter: ProductMovementListRelationFilter;
   ProductMovementMaxAggregate: ProductMovementMaxAggregate;
   ProductMovementMinAggregate: ProductMovementMinAggregate;
@@ -4095,18 +4055,23 @@ export type ResolversParentTypes = {
   ProductMovementUpdateManyMutationInput: ProductMovementUpdateManyMutationInput;
   ProductMovementUpdateManyWithWhereWithoutBlameUserInput: ProductMovementUpdateManyWithWhereWithoutBlameUserInput;
   ProductMovementUpdateManyWithWhereWithoutProductInput: ProductMovementUpdateManyWithWhereWithoutProductInput;
+  ProductMovementUpdateManyWithWhereWithoutProductMovementGroupInput: ProductMovementUpdateManyWithWhereWithoutProductMovementGroupInput;
   ProductMovementUpdateManyWithWhereWithoutSaleItemInput: ProductMovementUpdateManyWithWhereWithoutSaleItemInput;
   ProductMovementUpdateManyWithoutBlameUserNestedInput: ProductMovementUpdateManyWithoutBlameUserNestedInput;
+  ProductMovementUpdateManyWithoutProductMovementGroupNestedInput: ProductMovementUpdateManyWithoutProductMovementGroupNestedInput;
   ProductMovementUpdateManyWithoutProductNestedInput: ProductMovementUpdateManyWithoutProductNestedInput;
   ProductMovementUpdateManyWithoutSaleItemNestedInput: ProductMovementUpdateManyWithoutSaleItemNestedInput;
   ProductMovementUpdateWithWhereUniqueWithoutBlameUserInput: ProductMovementUpdateWithWhereUniqueWithoutBlameUserInput;
   ProductMovementUpdateWithWhereUniqueWithoutProductInput: ProductMovementUpdateWithWhereUniqueWithoutProductInput;
+  ProductMovementUpdateWithWhereUniqueWithoutProductMovementGroupInput: ProductMovementUpdateWithWhereUniqueWithoutProductMovementGroupInput;
   ProductMovementUpdateWithWhereUniqueWithoutSaleItemInput: ProductMovementUpdateWithWhereUniqueWithoutSaleItemInput;
   ProductMovementUpdateWithoutBlameUserInput: ProductMovementUpdateWithoutBlameUserInput;
   ProductMovementUpdateWithoutProductInput: ProductMovementUpdateWithoutProductInput;
+  ProductMovementUpdateWithoutProductMovementGroupInput: ProductMovementUpdateWithoutProductMovementGroupInput;
   ProductMovementUpdateWithoutSaleItemInput: ProductMovementUpdateWithoutSaleItemInput;
   ProductMovementUpsertWithWhereUniqueWithoutBlameUserInput: ProductMovementUpsertWithWhereUniqueWithoutBlameUserInput;
   ProductMovementUpsertWithWhereUniqueWithoutProductInput: ProductMovementUpsertWithWhereUniqueWithoutProductInput;
+  ProductMovementUpsertWithWhereUniqueWithoutProductMovementGroupInput: ProductMovementUpsertWithWhereUniqueWithoutProductMovementGroupInput;
   ProductMovementUpsertWithWhereUniqueWithoutSaleItemInput: ProductMovementUpsertWithWhereUniqueWithoutSaleItemInput;
   ProductMovementWhereInput: ProductMovementWhereInput;
   ProductMovementWhereUniqueInput: ProductMovementWhereUniqueInput;
@@ -4147,12 +4112,15 @@ export type ResolversParentTypes = {
   ProviderCreateManyBlameUserInputEnvelope: ProviderCreateManyBlameUserInputEnvelope;
   ProviderCreateManyInput: ProviderCreateManyInput;
   ProviderCreateNestedManyWithoutBlameUserInput: ProviderCreateNestedManyWithoutBlameUserInput;
+  ProviderCreateNestedOneWithoutProductMovementGroupInput: ProviderCreateNestedOneWithoutProductMovementGroupInput;
   ProviderCreateNestedOneWithoutProductsInput: ProviderCreateNestedOneWithoutProductsInput;
   ProviderCreateNestedOneWithoutSaleItemsInput: ProviderCreateNestedOneWithoutSaleItemsInput;
   ProviderCreateOrConnectWithoutBlameUserInput: ProviderCreateOrConnectWithoutBlameUserInput;
+  ProviderCreateOrConnectWithoutProductMovementGroupInput: ProviderCreateOrConnectWithoutProductMovementGroupInput;
   ProviderCreateOrConnectWithoutProductsInput: ProviderCreateOrConnectWithoutProductsInput;
   ProviderCreateOrConnectWithoutSaleItemsInput: ProviderCreateOrConnectWithoutSaleItemsInput;
   ProviderCreateWithoutBlameUserInput: ProviderCreateWithoutBlameUserInput;
+  ProviderCreateWithoutProductMovementGroupInput: ProviderCreateWithoutProductMovementGroupInput;
   ProviderCreateWithoutProductsInput: ProviderCreateWithoutProductsInput;
   ProviderCreateWithoutSaleItemsInput: ProviderCreateWithoutSaleItemsInput;
   ProviderListRelationFilter: ProviderListRelationFilter;
@@ -4167,15 +4135,19 @@ export type ResolversParentTypes = {
   ProviderUpdateManyMutationInput: ProviderUpdateManyMutationInput;
   ProviderUpdateManyWithWhereWithoutBlameUserInput: ProviderUpdateManyWithWhereWithoutBlameUserInput;
   ProviderUpdateManyWithoutBlameUserNestedInput: ProviderUpdateManyWithoutBlameUserNestedInput;
+  ProviderUpdateOneWithoutProductMovementGroupNestedInput: ProviderUpdateOneWithoutProductMovementGroupNestedInput;
   ProviderUpdateOneWithoutProductsNestedInput: ProviderUpdateOneWithoutProductsNestedInput;
   ProviderUpdateOneWithoutSaleItemsNestedInput: ProviderUpdateOneWithoutSaleItemsNestedInput;
+  ProviderUpdateToOneWithWhereWithoutProductMovementGroupInput: ProviderUpdateToOneWithWhereWithoutProductMovementGroupInput;
   ProviderUpdateToOneWithWhereWithoutProductsInput: ProviderUpdateToOneWithWhereWithoutProductsInput;
   ProviderUpdateToOneWithWhereWithoutSaleItemsInput: ProviderUpdateToOneWithWhereWithoutSaleItemsInput;
   ProviderUpdateWithWhereUniqueWithoutBlameUserInput: ProviderUpdateWithWhereUniqueWithoutBlameUserInput;
   ProviderUpdateWithoutBlameUserInput: ProviderUpdateWithoutBlameUserInput;
+  ProviderUpdateWithoutProductMovementGroupInput: ProviderUpdateWithoutProductMovementGroupInput;
   ProviderUpdateWithoutProductsInput: ProviderUpdateWithoutProductsInput;
   ProviderUpdateWithoutSaleItemsInput: ProviderUpdateWithoutSaleItemsInput;
   ProviderUpsertWithWhereUniqueWithoutBlameUserInput: ProviderUpsertWithWhereUniqueWithoutBlameUserInput;
+  ProviderUpsertWithoutProductMovementGroupInput: ProviderUpsertWithoutProductMovementGroupInput;
   ProviderUpsertWithoutProductsInput: ProviderUpsertWithoutProductsInput;
   ProviderUpsertWithoutSaleItemsInput: ProviderUpsertWithoutSaleItemsInput;
   ProviderWhereInput: ProviderWhereInput;
@@ -4208,27 +4180,22 @@ export type ResolversParentTypes = {
   SaleItemCreateManyProviderInputEnvelope: SaleItemCreateManyProviderInputEnvelope;
   SaleItemCreateManySaleInput: SaleItemCreateManySaleInput;
   SaleItemCreateManySaleInputEnvelope: SaleItemCreateManySaleInputEnvelope;
-  SaleItemCreateManySalePaidCostInput: SaleItemCreateManySalePaidCostInput;
-  SaleItemCreateManySalePaidCostInputEnvelope: SaleItemCreateManySalePaidCostInputEnvelope;
   SaleItemCreateNestedManyWithoutBlameUserInput: SaleItemCreateNestedManyWithoutBlameUserInput;
   SaleItemCreateNestedManyWithoutProductInput: SaleItemCreateNestedManyWithoutProductInput;
   SaleItemCreateNestedManyWithoutProviderInput: SaleItemCreateNestedManyWithoutProviderInput;
   SaleItemCreateNestedManyWithoutSaleInput: SaleItemCreateNestedManyWithoutSaleInput;
   SaleItemCreateNestedManyWithoutSaleInputCustom: SaleItemCreateNestedManyWithoutSaleInputCustom;
-  SaleItemCreateNestedManyWithoutSalePaidCostInput: SaleItemCreateNestedManyWithoutSalePaidCostInput;
   SaleItemCreateNestedOneWithoutProductMovementInput: SaleItemCreateNestedOneWithoutProductMovementInput;
   SaleItemCreateOrConnectWithoutBlameUserInput: SaleItemCreateOrConnectWithoutBlameUserInput;
   SaleItemCreateOrConnectWithoutProductInput: SaleItemCreateOrConnectWithoutProductInput;
   SaleItemCreateOrConnectWithoutProductMovementInput: SaleItemCreateOrConnectWithoutProductMovementInput;
   SaleItemCreateOrConnectWithoutProviderInput: SaleItemCreateOrConnectWithoutProviderInput;
   SaleItemCreateOrConnectWithoutSaleInput: SaleItemCreateOrConnectWithoutSaleInput;
-  SaleItemCreateOrConnectWithoutSalePaidCostInput: SaleItemCreateOrConnectWithoutSalePaidCostInput;
   SaleItemCreateWithoutBlameUserInput: SaleItemCreateWithoutBlameUserInput;
   SaleItemCreateWithoutProductInput: SaleItemCreateWithoutProductInput;
   SaleItemCreateWithoutProductMovementInput: SaleItemCreateWithoutProductMovementInput;
   SaleItemCreateWithoutProviderInput: SaleItemCreateWithoutProviderInput;
   SaleItemCreateWithoutSaleInput: SaleItemCreateWithoutSaleInput;
-  SaleItemCreateWithoutSalePaidCostInput: SaleItemCreateWithoutSalePaidCostInput;
   SaleItemListRelationFilter: SaleItemListRelationFilter;
   SaleItemMaxAggregate: SaleItemMaxAggregate;
   SaleItemMinAggregate: SaleItemMinAggregate;
@@ -4243,31 +4210,26 @@ export type ResolversParentTypes = {
   SaleItemUpdateManyWithWhereWithoutProductInput: SaleItemUpdateManyWithWhereWithoutProductInput;
   SaleItemUpdateManyWithWhereWithoutProviderInput: SaleItemUpdateManyWithWhereWithoutProviderInput;
   SaleItemUpdateManyWithWhereWithoutSaleInput: SaleItemUpdateManyWithWhereWithoutSaleInput;
-  SaleItemUpdateManyWithWhereWithoutSalePaidCostInput: SaleItemUpdateManyWithWhereWithoutSalePaidCostInput;
   SaleItemUpdateManyWithoutBlameUserNestedInput: SaleItemUpdateManyWithoutBlameUserNestedInput;
   SaleItemUpdateManyWithoutProductNestedInput: SaleItemUpdateManyWithoutProductNestedInput;
   SaleItemUpdateManyWithoutProviderNestedInput: SaleItemUpdateManyWithoutProviderNestedInput;
   SaleItemUpdateManyWithoutSaleNestedInput: SaleItemUpdateManyWithoutSaleNestedInput;
   SaleItemUpdateManyWithoutSaleNestedInputCustom: SaleItemUpdateManyWithoutSaleNestedInputCustom;
-  SaleItemUpdateManyWithoutSalePaidCostNestedInput: SaleItemUpdateManyWithoutSalePaidCostNestedInput;
   SaleItemUpdateOneWithoutProductMovementNestedInput: SaleItemUpdateOneWithoutProductMovementNestedInput;
   SaleItemUpdateToOneWithWhereWithoutProductMovementInput: SaleItemUpdateToOneWithWhereWithoutProductMovementInput;
   SaleItemUpdateWithWhereUniqueWithoutBlameUserInput: SaleItemUpdateWithWhereUniqueWithoutBlameUserInput;
   SaleItemUpdateWithWhereUniqueWithoutProductInput: SaleItemUpdateWithWhereUniqueWithoutProductInput;
   SaleItemUpdateWithWhereUniqueWithoutProviderInput: SaleItemUpdateWithWhereUniqueWithoutProviderInput;
   SaleItemUpdateWithWhereUniqueWithoutSaleInput: SaleItemUpdateWithWhereUniqueWithoutSaleInput;
-  SaleItemUpdateWithWhereUniqueWithoutSalePaidCostInput: SaleItemUpdateWithWhereUniqueWithoutSalePaidCostInput;
   SaleItemUpdateWithoutBlameUserInput: SaleItemUpdateWithoutBlameUserInput;
   SaleItemUpdateWithoutProductInput: SaleItemUpdateWithoutProductInput;
   SaleItemUpdateWithoutProductMovementInput: SaleItemUpdateWithoutProductMovementInput;
   SaleItemUpdateWithoutProviderInput: SaleItemUpdateWithoutProviderInput;
   SaleItemUpdateWithoutSaleInput: SaleItemUpdateWithoutSaleInput;
-  SaleItemUpdateWithoutSalePaidCostInput: SaleItemUpdateWithoutSalePaidCostInput;
   SaleItemUpsertWithWhereUniqueWithoutBlameUserInput: SaleItemUpsertWithWhereUniqueWithoutBlameUserInput;
   SaleItemUpsertWithWhereUniqueWithoutProductInput: SaleItemUpsertWithWhereUniqueWithoutProductInput;
   SaleItemUpsertWithWhereUniqueWithoutProviderInput: SaleItemUpsertWithWhereUniqueWithoutProviderInput;
   SaleItemUpsertWithWhereUniqueWithoutSaleInput: SaleItemUpsertWithWhereUniqueWithoutSaleInput;
-  SaleItemUpsertWithWhereUniqueWithoutSalePaidCostInput: SaleItemUpsertWithWhereUniqueWithoutSalePaidCostInput;
   SaleItemUpsertWithoutProductMovementInput: SaleItemUpsertWithoutProductMovementInput;
   SaleItemWhereInput: SaleItemWhereInput;
   SaleItemWhereUniqueInput: SaleItemWhereUniqueInput;
@@ -4279,42 +4241,12 @@ export type ResolversParentTypes = {
   SaleOrderByRelationAggregateInput: SaleOrderByRelationAggregateInput;
   SaleOrderByWithRelationInput: SaleOrderByWithRelationInput;
   SalePaginated: SalePaginated;
-  SalePaidCost: SalePaidCost;
   SalePaidCostAvgAggregate: SalePaidCostAvgAggregate;
   SalePaidCostCount: SalePaidCostCount;
   SalePaidCostCountAggregate: SalePaidCostCountAggregate;
-  SalePaidCostCreateInput: SalePaidCostCreateInput;
-  SalePaidCostCreateManyBlameUserInput: SalePaidCostCreateManyBlameUserInput;
-  SalePaidCostCreateManyBlameUserInputEnvelope: SalePaidCostCreateManyBlameUserInputEnvelope;
-  SalePaidCostCreateNestedManyWithoutBlameUserInput: SalePaidCostCreateNestedManyWithoutBlameUserInput;
-  SalePaidCostCreateNestedOneWithoutSaleItemInput: SalePaidCostCreateNestedOneWithoutSaleItemInput;
-  SalePaidCostCreateOrConnectWithoutBlameUserInput: SalePaidCostCreateOrConnectWithoutBlameUserInput;
-  SalePaidCostCreateOrConnectWithoutSaleItemInput: SalePaidCostCreateOrConnectWithoutSaleItemInput;
-  SalePaidCostCreateWithoutBlameUserInput: SalePaidCostCreateWithoutBlameUserInput;
-  SalePaidCostCreateWithoutSaleItemInput: SalePaidCostCreateWithoutSaleItemInput;
-  SalePaidCostListRelationFilter: SalePaidCostListRelationFilter;
   SalePaidCostMaxAggregate: SalePaidCostMaxAggregate;
   SalePaidCostMinAggregate: SalePaidCostMinAggregate;
-  SalePaidCostNullableScalarRelationFilter: SalePaidCostNullableScalarRelationFilter;
-  SalePaidCostOrderByRelationAggregateInput: SalePaidCostOrderByRelationAggregateInput;
-  SalePaidCostOrderByWithRelationInput: SalePaidCostOrderByWithRelationInput;
-  SalePaidCostOutput: SalePaidCostOutput;
-  SalePaidCostPaginated: SalePaidCostPaginated;
-  SalePaidCostScalarWhereInput: SalePaidCostScalarWhereInput;
   SalePaidCostSumAggregate: SalePaidCostSumAggregate;
-  SalePaidCostUpdateInput: SalePaidCostUpdateInput;
-  SalePaidCostUpdateManyMutationInput: SalePaidCostUpdateManyMutationInput;
-  SalePaidCostUpdateManyWithWhereWithoutBlameUserInput: SalePaidCostUpdateManyWithWhereWithoutBlameUserInput;
-  SalePaidCostUpdateManyWithoutBlameUserNestedInput: SalePaidCostUpdateManyWithoutBlameUserNestedInput;
-  SalePaidCostUpdateOneWithoutSaleItemNestedInput: SalePaidCostUpdateOneWithoutSaleItemNestedInput;
-  SalePaidCostUpdateToOneWithWhereWithoutSaleItemInput: SalePaidCostUpdateToOneWithWhereWithoutSaleItemInput;
-  SalePaidCostUpdateWithWhereUniqueWithoutBlameUserInput: SalePaidCostUpdateWithWhereUniqueWithoutBlameUserInput;
-  SalePaidCostUpdateWithoutBlameUserInput: SalePaidCostUpdateWithoutBlameUserInput;
-  SalePaidCostUpdateWithoutSaleItemInput: SalePaidCostUpdateWithoutSaleItemInput;
-  SalePaidCostUpsertWithWhereUniqueWithoutBlameUserInput: SalePaidCostUpsertWithWhereUniqueWithoutBlameUserInput;
-  SalePaidCostUpsertWithoutSaleItemInput: SalePaidCostUpsertWithoutSaleItemInput;
-  SalePaidCostWhereInput: SalePaidCostWhereInput;
-  SalePaidCostWhereUniqueInput: SalePaidCostWhereUniqueInput;
   SaleScalarWhereInput: SaleScalarWhereInput;
   SaleSumAggregate: SaleSumAggregate;
   SaleUpdateInputCustom: SaleUpdateInputCustom;
@@ -4344,19 +4276,16 @@ export type ResolversParentTypes = {
   UserCreateNestedOneWithoutProductsInput: UserCreateNestedOneWithoutProductsInput;
   UserCreateNestedOneWithoutProvidersInput: UserCreateNestedOneWithoutProvidersInput;
   UserCreateNestedOneWithoutSaleItemsInput: UserCreateNestedOneWithoutSaleItemsInput;
-  UserCreateNestedOneWithoutSalePaidCostInput: UserCreateNestedOneWithoutSalePaidCostInput;
   UserCreateNestedOneWithoutSalesInput: UserCreateNestedOneWithoutSalesInput;
   UserCreateOrConnectWithoutProductMovementInput: UserCreateOrConnectWithoutProductMovementInput;
   UserCreateOrConnectWithoutProductsInput: UserCreateOrConnectWithoutProductsInput;
   UserCreateOrConnectWithoutProvidersInput: UserCreateOrConnectWithoutProvidersInput;
   UserCreateOrConnectWithoutSaleItemsInput: UserCreateOrConnectWithoutSaleItemsInput;
-  UserCreateOrConnectWithoutSalePaidCostInput: UserCreateOrConnectWithoutSalePaidCostInput;
   UserCreateOrConnectWithoutSalesInput: UserCreateOrConnectWithoutSalesInput;
   UserCreateWithoutProductMovementInput: UserCreateWithoutProductMovementInput;
   UserCreateWithoutProductsInput: UserCreateWithoutProductsInput;
   UserCreateWithoutProvidersInput: UserCreateWithoutProvidersInput;
   UserCreateWithoutSaleItemsInput: UserCreateWithoutSaleItemsInput;
-  UserCreateWithoutSalePaidCostInput: UserCreateWithoutSalePaidCostInput;
   UserCreateWithoutSalesInput: UserCreateWithoutSalesInput;
   UserMaxAggregate: UserMaxAggregate;
   UserMinAggregate: UserMinAggregate;
@@ -4368,25 +4297,21 @@ export type ResolversParentTypes = {
   UserUpdateOneWithoutProductsNestedInput: UserUpdateOneWithoutProductsNestedInput;
   UserUpdateOneWithoutProvidersNestedInput: UserUpdateOneWithoutProvidersNestedInput;
   UserUpdateOneWithoutSaleItemsNestedInput: UserUpdateOneWithoutSaleItemsNestedInput;
-  UserUpdateOneWithoutSalePaidCostNestedInput: UserUpdateOneWithoutSalePaidCostNestedInput;
   UserUpdateOneWithoutSalesNestedInput: UserUpdateOneWithoutSalesNestedInput;
   UserUpdateToOneWithWhereWithoutProductMovementInput: UserUpdateToOneWithWhereWithoutProductMovementInput;
   UserUpdateToOneWithWhereWithoutProductsInput: UserUpdateToOneWithWhereWithoutProductsInput;
   UserUpdateToOneWithWhereWithoutProvidersInput: UserUpdateToOneWithWhereWithoutProvidersInput;
   UserUpdateToOneWithWhereWithoutSaleItemsInput: UserUpdateToOneWithWhereWithoutSaleItemsInput;
-  UserUpdateToOneWithWhereWithoutSalePaidCostInput: UserUpdateToOneWithWhereWithoutSalePaidCostInput;
   UserUpdateToOneWithWhereWithoutSalesInput: UserUpdateToOneWithWhereWithoutSalesInput;
   UserUpdateWithoutProductMovementInput: UserUpdateWithoutProductMovementInput;
   UserUpdateWithoutProductsInput: UserUpdateWithoutProductsInput;
   UserUpdateWithoutProvidersInput: UserUpdateWithoutProvidersInput;
   UserUpdateWithoutSaleItemsInput: UserUpdateWithoutSaleItemsInput;
-  UserUpdateWithoutSalePaidCostInput: UserUpdateWithoutSalePaidCostInput;
   UserUpdateWithoutSalesInput: UserUpdateWithoutSalesInput;
   UserUpsertWithoutProductMovementInput: UserUpsertWithoutProductMovementInput;
   UserUpsertWithoutProductsInput: UserUpsertWithoutProductsInput;
   UserUpsertWithoutProvidersInput: UserUpsertWithoutProvidersInput;
   UserUpsertWithoutSaleItemsInput: UserUpsertWithoutSaleItemsInput;
-  UserUpsertWithoutSalePaidCostInput: UserUpsertWithoutSalePaidCostInput;
   UserUpsertWithoutSalesInput: UserUpsertWithoutSalesInput;
   UserWhereInput: UserWhereInput;
   UserWhereUniqueInput: UserWhereUniqueInput;
@@ -4398,18 +4323,15 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 }
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  confirmSalePaidCost?: Resolver<ResolversTypes['SalePaidCost'], ParentType, ContextType, RequireFields<MutationConfirmSalePaidCostArgs, 'data' | 'where'>>;
   createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'data'>>;
   createProvider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<MutationCreateProviderArgs, 'data'>>;
   createProviders?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateProvidersArgs, 'data'>>;
   createSale?: Resolver<ResolversTypes['Sale'], ParentType, ContextType, RequireFields<MutationCreateSaleArgs, 'data'>>;
-  createSalePaidCost?: Resolver<ResolversTypes['SalePaidCost'], ParentType, ContextType, RequireFields<MutationCreateSalePaidCostArgs, 'data'>>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'data'>>;
   createUsers?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateUsersArgs, 'data'>>;
   deleteProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationDeleteProductArgs, 'where'>>;
   deleteProvider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<MutationDeleteProviderArgs, 'where'>>;
   deleteSale?: Resolver<ResolversTypes['Sale'], ParentType, ContextType, RequireFields<MutationDeleteSaleArgs, 'where'>>;
-  deleteSalePaidCost?: Resolver<ResolversTypes['SalePaidCost'], ParentType, ContextType, RequireFields<MutationDeleteSalePaidCostArgs, 'where'>>;
   deleteUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'where'>>;
   updateProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationUpdateProductArgs, 'data' | 'where'>>;
   updateProvider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<MutationUpdateProviderArgs, 'data' | 'where'>>;
@@ -4503,18 +4425,6 @@ export type ProductMinAggregateResolvers<ContextType = any, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type ProductMovementResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductMovement'] = ResolversParentTypes['ProductMovement']> = {
-  blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  productId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  saleItemId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['ProductMovementType'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type ProductMovementAvgAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductMovementAvgAggregate'] = ResolversParentTypes['ProductMovementAvgAggregate']> = {
   quantity?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -4526,10 +4436,44 @@ export type ProductMovementCountAggregateResolvers<ContextType = any, ParentType
   createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   productId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  productMovementGroupId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   saleItemId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   type?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProductMovementGroupCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductMovementGroupCount'] = ResolversParentTypes['ProductMovementGroupCount']> = {
+  ProductMovement?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProductMovementGroupCountAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductMovementGroupCountAggregate'] = ResolversParentTypes['ProductMovementGroupCountAggregate']> = {
+  _all?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  documentId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  providerId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProductMovementGroupMaxAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductMovementGroupMaxAggregate'] = ResolversParentTypes['ProductMovementGroupMaxAggregate']> = {
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  documentId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['ProductMovementGroupType']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ProductMovementGroupMinAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProductMovementGroupMinAggregate'] = ResolversParentTypes['ProductMovementGroupMinAggregate']> = {
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  documentId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  providerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['ProductMovementGroupType']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4538,6 +4482,7 @@ export type ProductMovementMaxAggregateResolvers<ContextType = any, ParentType e
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   productId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  productMovementGroupId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   quantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   saleItemId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['ProductMovementType']>, ParentType, ContextType>;
@@ -4550,6 +4495,7 @@ export type ProductMovementMinAggregateResolvers<ContextType = any, ParentType e
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   productId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  productMovementGroupId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   quantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   saleItemId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['ProductMovementType']>, ParentType, ContextType>;
@@ -4600,6 +4546,7 @@ export type ProviderResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type ProviderCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProviderCount'] = ResolversParentTypes['ProviderCount']> = {
+  ProductMovementGroup?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   products?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   saleItems?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -4665,7 +4612,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   sale?: Resolver<ResolversTypes['Sale'], ParentType, ContextType, RequireFields<QuerySaleArgs, 'where'>>;
   saleItem?: Resolver<ResolversTypes['SaleItem'], ParentType, ContextType, RequireFields<QuerySaleItemArgs, 'where'>>;
   saleItems?: Resolver<ResolversTypes['SaleItemsOutput'], ParentType, ContextType, Partial<QuerySaleItemsArgs>>;
-  salePaidCost?: Resolver<ResolversTypes['SalePaidCostOutput'], ParentType, ContextType, Partial<QuerySalePaidCostArgs>>;
   sales?: Resolver<ResolversTypes['SalesOutput'], ParentType, ContextType, Partial<QuerySalesArgs>>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'where'>>;
   users?: Resolver<ResolversTypes['UsersOutput'], ParentType, ContextType, Partial<QueryUsersArgs>>;
@@ -4713,7 +4659,6 @@ export type SaleCountAggregateResolvers<ContextType = any, ParentType extends Re
 };
 
 export type SaleItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['SaleItem'] = ResolversParentTypes['SaleItem']> = {
-  ProductMovement?: Resolver<Maybe<Array<ResolversTypes['ProductMovement']>>, ParentType, ContextType>;
   _count?: Resolver<ResolversTypes['SaleItemCount'], ParentType, ContextType>;
   blameUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
   blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -4859,18 +4804,6 @@ export type SalePaginatedResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SalePaidCostResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCost'] = ResolversParentTypes['SalePaidCost']> = {
-  _count?: Resolver<ResolversTypes['SalePaidCostCount'], ParentType, ContextType>;
-  blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  endDate?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  paidValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type SalePaidCostAvgAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostAvgAggregate'] = ResolversParentTypes['SalePaidCostAvgAggregate']> = {
   paidValue?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   value?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
@@ -4916,21 +4849,6 @@ export type SalePaidCostMinAggregateResolvers<ContextType = any, ParentType exte
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SalePaidCostOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostOutput'] = ResolversParentTypes['SalePaidCostOutput']> = {
-  nodes?: Resolver<Array<ResolversTypes['SalePaidCost']>, ParentType, ContextType>;
-  pageInfo?: Resolver<Maybe<ResolversTypes['SalePaidCostPaginated']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type SalePaidCostPaginatedResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostPaginated'] = ResolversParentTypes['SalePaidCostPaginated']> = {
-  currentPage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  hasNextPage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  lastPage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  nextCursor?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  total?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type SalePaidCostSumAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostSumAggregate'] = ResolversParentTypes['SalePaidCostSumAggregate']> = {
   paidValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   value?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -4950,7 +4868,6 @@ export type SalesOutputResolvers<ContextType = any, ParentType extends Resolvers
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
-  ProductMovement?: Resolver<Maybe<Array<ResolversTypes['ProductMovement']>>, ParentType, ContextType>;
   _count?: Resolver<ResolversTypes['UserCount'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -4962,7 +4879,6 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 
 export type UserCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserCount'] = ResolversParentTypes['UserCount']> = {
   ProductMovement?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  SalePaidCost?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   products?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   providers?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   saleItems?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -5022,9 +4938,12 @@ export type Resolvers<ContextType = any> = {
   ProductCountAggregate?: ProductCountAggregateResolvers<ContextType>;
   ProductMaxAggregate?: ProductMaxAggregateResolvers<ContextType>;
   ProductMinAggregate?: ProductMinAggregateResolvers<ContextType>;
-  ProductMovement?: ProductMovementResolvers<ContextType>;
   ProductMovementAvgAggregate?: ProductMovementAvgAggregateResolvers<ContextType>;
   ProductMovementCountAggregate?: ProductMovementCountAggregateResolvers<ContextType>;
+  ProductMovementGroupCount?: ProductMovementGroupCountResolvers<ContextType>;
+  ProductMovementGroupCountAggregate?: ProductMovementGroupCountAggregateResolvers<ContextType>;
+  ProductMovementGroupMaxAggregate?: ProductMovementGroupMaxAggregateResolvers<ContextType>;
+  ProductMovementGroupMinAggregate?: ProductMovementGroupMinAggregateResolvers<ContextType>;
   ProductMovementMaxAggregate?: ProductMovementMaxAggregateResolvers<ContextType>;
   ProductMovementMinAggregate?: ProductMovementMinAggregateResolvers<ContextType>;
   ProductMovementSumAggregate?: ProductMovementSumAggregateResolvers<ContextType>;
@@ -5055,14 +4974,11 @@ export type Resolvers<ContextType = any> = {
   SaleMaxAggregate?: SaleMaxAggregateResolvers<ContextType>;
   SaleMinAggregate?: SaleMinAggregateResolvers<ContextType>;
   SalePaginated?: SalePaginatedResolvers<ContextType>;
-  SalePaidCost?: SalePaidCostResolvers<ContextType>;
   SalePaidCostAvgAggregate?: SalePaidCostAvgAggregateResolvers<ContextType>;
   SalePaidCostCount?: SalePaidCostCountResolvers<ContextType>;
   SalePaidCostCountAggregate?: SalePaidCostCountAggregateResolvers<ContextType>;
   SalePaidCostMaxAggregate?: SalePaidCostMaxAggregateResolvers<ContextType>;
   SalePaidCostMinAggregate?: SalePaidCostMinAggregateResolvers<ContextType>;
-  SalePaidCostOutput?: SalePaidCostOutputResolvers<ContextType>;
-  SalePaidCostPaginated?: SalePaidCostPaginatedResolvers<ContextType>;
   SalePaidCostSumAggregate?: SalePaidCostSumAggregateResolvers<ContextType>;
   SaleSumAggregate?: SaleSumAggregateResolvers<ContextType>;
   SalesOutput?: SalesOutputResolvers<ContextType>;

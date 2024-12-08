@@ -10,7 +10,6 @@ import { ProductModule } from './product/product.module';
 import { ProviderModule } from './provider/provider.module';
 import { SaleModule } from './sale/sale.module';
 import { SaleItemModule } from './sale-item/sale-item.module';
-import { SalePaidCostModule } from './sale-paid-cost/sale-paid-cost.module';
 
 @Module({
   imports: [
@@ -42,8 +41,7 @@ import { SalePaidCostModule } from './sale-paid-cost/sale-paid-cost.module';
     ProductModule,
     ProviderModule,
     SaleModule,
-    SaleItemModule,
-    SalePaidCostModule
+    SaleItemModule
   ]
 })
 export class AppModule {}

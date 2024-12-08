@@ -49,7 +49,7 @@ export class SaleResolver {
     () => {
       return Sale;
     },
-    { name: 'createSale' }
+    { name: 'createSale', nullable: true }
   )
   createOne(@Args() args: CreateOneSaleArgsCustom) {
     return this.service.createOne(args);
@@ -64,7 +64,7 @@ export class SaleResolver {
     () => {
       return Sale;
     },
-    { name: 'updateSale' }
+    { name: 'updateSale', nullable: true }
   )
   updateOne(@Args() args: UpdateOneSaleArgs) {
     return this.service.updateOne(args);
@@ -74,7 +74,7 @@ export class SaleResolver {
     () => {
       return Sale;
     },
-    { name: 'deleteSale' }
+    { name: 'deleteSale', nullable: true }
   )
   deleteOne(@Args() args: DeleteOneSaleArgs) {
     return this.service.deleteOne(args);

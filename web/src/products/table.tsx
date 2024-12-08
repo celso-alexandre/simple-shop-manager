@@ -1,4 +1,4 @@
-import { Button, Table, Tooltip, Typography } from 'antd';
+import { Button, Table, Tooltip } from 'antd';
 import type { TableProps } from 'antd';
 import dayjs from 'dayjs';
 import { ProductsNode } from '.';
@@ -10,8 +10,6 @@ import {
 import { BooleanTag } from '../components/tag';
 
 export function ProductsTable(props: TableProps<ProductsNode>) {
-  // const navigate = useNavigate();
-
   const columns: typeof props.columns = [
     {
       title: 'ID',
@@ -101,13 +99,12 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
       dataIndex: nameof<ProductsNode>((x) => {
         return x.provider;
       }),
-      render: (value, record) => {
+      render: (_value, record) => {
         if (!record.provider) return null;
         return (
-          <Typography.Link
-            href={`/provider/${record.providerId}`}>{`${record.provider?.name} ${
-            record.provider?.whatsapp ?? ''
-          }`}</Typography.Link>
+          <a href={`/provider/${record.providerId}`}>
+            {`${record.provider?.name} ${record.provider?.whatsapp ?? ''}`}
+          </a>
         );
       },
       ellipsis: true,
@@ -121,7 +118,6 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
           <div>
             <Button
               onClick={() => {
-                // navigate(`/product/${record.id}`)
                 window.location.href = `/product/${record.id}`;
               }}
               size="middle"
