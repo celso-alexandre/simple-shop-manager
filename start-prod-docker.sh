@@ -10,6 +10,6 @@ git pull
 
 DOCKER_COMPOSE=$(command -v docker-compose || echo "docker compose")
 
-$DOCKER_COMPOSE down --remove-orphans
 $DOCKER_COMPOSE build
+$DOCKER_COMPOSE down --remove-orphans
 $DOCKER_COMPOSE up -d --force-recreate backend web
