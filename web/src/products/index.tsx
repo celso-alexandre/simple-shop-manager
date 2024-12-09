@@ -11,7 +11,7 @@ import { SortOrder, QueryMode } from '../types';
 import { ProductsTable } from './table';
 import { useProductAggregateQuery } from '../graphql/__generated__/product-aggregate.gql.generated';
 import { formatMoneyFromInt } from '../helpers';
-import { Select } from 'antd/lib';
+import { SelectBoolean } from '../components/select-boolean';
 
 export type ProductsNode = Omit<ProductsQuery['products']['nodes'][0], 'id'> & {
   id?: string;
@@ -77,20 +77,16 @@ export function Products() {
           refetch={refetch}
           loading={loading}
           extraAfter={[
-            <Select
+            <SelectBoolean
               key="controlsQty"
-              className="min-w-48"
-              allowClear
+              title="Controla Qtde?"
               value={query.controlsQty ?? undefined}
               onChange={(value) => {
                 setQuery((prev) => {
                   return { ...prev, controlsQty: value ?? undefined };
                 });
-              }}>
-              <Select.Option value={undefined}>{null}</Select.Option>
-              <Select.Option value={true}>Controla Estoque</Select.Option>
-              <Select.Option value={false}>Não controla Estoque</Select.Option>
-            </Select>,
+              }}
+            />,
           ]}
         />
 
