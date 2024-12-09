@@ -17,7 +17,7 @@ export function formatMoneyFromDecimal<T extends number | undefined>(value: T) {
 }
 
 export function formatMoneyFromInt<T extends number | undefined>(value: T) {
-  if (!value) return value;
+  if (!value) return formatMoneyFromDecimal(0);
   const val = value / decimalToIntMultiplier;
   return formatMoneyFromDecimal(val);
 }
