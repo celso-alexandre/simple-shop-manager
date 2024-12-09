@@ -8,7 +8,7 @@ export type CreateSaleMutationVariables = Types.Exact<{
 }>;
 
 
-export type CreateSaleMutation = { __typename?: 'Mutation', createSale: { __typename?: 'Sale', id: string } };
+export type CreateSaleMutation = { __typename?: 'Mutation', createSale?: { __typename?: 'Sale', id: string } | null };
 
 export type UpdateSaleMutationVariables = Types.Exact<{
   data: Types.SaleUpdateInputCustom;
@@ -16,14 +16,14 @@ export type UpdateSaleMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateSaleMutation = { __typename?: 'Mutation', updateSale: { __typename?: 'Sale', id: string } };
+export type UpdateSaleMutation = { __typename?: 'Mutation', updateSale?: { __typename?: 'Sale', id: string } | null };
 
 export type DeleteSaleMutationVariables = Types.Exact<{
   where: Types.SaleWhereUniqueInput;
 }>;
 
 
-export type DeleteSaleMutation = { __typename?: 'Mutation', deleteSale: { __typename?: 'Sale', id: string } };
+export type DeleteSaleMutation = { __typename?: 'Mutation', deleteSale?: { __typename?: 'Sale', id: string } | null };
 
 export type SaleQueryVariables = Types.Exact<{
   where: Types.SaleWhereUniqueInput;

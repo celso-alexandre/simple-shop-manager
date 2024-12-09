@@ -17,6 +17,15 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type AggregateProduct = {
+  __typename?: 'AggregateProduct';
+  costValue: Scalars['Int']['output'];
+  count?: Maybe<Scalars['Float']['output']>;
+  netValue: Scalars['Int']['output'];
+  priceValue: Scalars['Int']['output'];
+  qty: Scalars['Int']['output'];
+};
+
 export type BoolFieldUpdateOperationsInput = {
   set?: InputMaybe<Scalars['Boolean']['input']>;
 };
@@ -97,16 +106,16 @@ export type Mutation = {
   createProduct: Product;
   createProvider: Provider;
   createProviders: Scalars['Boolean']['output'];
-  createSale: Sale;
+  createSale?: Maybe<Sale>;
   createUser: User;
   createUsers: Scalars['Boolean']['output'];
   deleteProduct: Product;
   deleteProvider: Provider;
-  deleteSale: Sale;
+  deleteSale?: Maybe<Sale>;
   deleteUser: User;
   updateProduct: Product;
   updateProvider: Provider;
-  updateSale: Sale;
+  updateSale?: Maybe<Sale>;
   updateUser: User;
 };
 
@@ -1903,6 +1912,7 @@ export type ProvidersOutput = {
 export type Query = {
   __typename?: 'Query';
   product: Product;
+  productAggregate: AggregateProduct;
   products: ProductsOutput;
   provider: Provider;
   providers: ProvidersOutput;
@@ -2856,57 +2866,6 @@ export type SalePaginated = {
   total?: Maybe<Scalars['Int']['output']>;
 };
 
-export type SalePaidCostAvgAggregate = {
-  __typename?: 'SalePaidCostAvgAggregate';
-  paidValue?: Maybe<Scalars['Float']['output']>;
-  value?: Maybe<Scalars['Float']['output']>;
-};
-
-export type SalePaidCostCount = {
-  __typename?: 'SalePaidCostCount';
-  SaleItem: Scalars['Int']['output'];
-};
-
-export type SalePaidCostCountAggregate = {
-  __typename?: 'SalePaidCostCountAggregate';
-  _all: Scalars['Int']['output'];
-  blameUserId: Scalars['Int']['output'];
-  createdAt: Scalars['Int']['output'];
-  endDate: Scalars['Int']['output'];
-  id: Scalars['Int']['output'];
-  paidValue: Scalars['Int']['output'];
-  updatedAt: Scalars['Int']['output'];
-  value: Scalars['Int']['output'];
-};
-
-export type SalePaidCostMaxAggregate = {
-  __typename?: 'SalePaidCostMaxAggregate';
-  blameUserId?: Maybe<Scalars['String']['output']>;
-  createdAt?: Maybe<Scalars['DateTime']['output']>;
-  endDate?: Maybe<Scalars['DateTime']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  paidValue?: Maybe<Scalars['Int']['output']>;
-  updatedAt?: Maybe<Scalars['DateTime']['output']>;
-  value?: Maybe<Scalars['Int']['output']>;
-};
-
-export type SalePaidCostMinAggregate = {
-  __typename?: 'SalePaidCostMinAggregate';
-  blameUserId?: Maybe<Scalars['String']['output']>;
-  createdAt?: Maybe<Scalars['DateTime']['output']>;
-  endDate?: Maybe<Scalars['DateTime']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  paidValue?: Maybe<Scalars['Int']['output']>;
-  updatedAt?: Maybe<Scalars['DateTime']['output']>;
-  value?: Maybe<Scalars['Int']['output']>;
-};
-
-export type SalePaidCostSumAggregate = {
-  __typename?: 'SalePaidCostSumAggregate';
-  paidValue?: Maybe<Scalars['Int']['output']>;
-  value?: Maybe<Scalars['Int']['output']>;
-};
-
 export enum SaleScalarFieldEnum {
   BlameUserId = 'blameUserId',
   CreatedAt = 'createdAt',
@@ -3564,6 +3523,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AggregateProduct: ResolverTypeWrapper<AggregateProduct>;
   BoolFieldUpdateOperationsInput: BoolFieldUpdateOperationsInput;
   BoolFilter: BoolFilter;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
@@ -3865,12 +3825,6 @@ export type ResolversTypes = {
   SaleOrderByRelationAggregateInput: SaleOrderByRelationAggregateInput;
   SaleOrderByWithRelationInput: SaleOrderByWithRelationInput;
   SalePaginated: ResolverTypeWrapper<SalePaginated>;
-  SalePaidCostAvgAggregate: ResolverTypeWrapper<SalePaidCostAvgAggregate>;
-  SalePaidCostCount: ResolverTypeWrapper<SalePaidCostCount>;
-  SalePaidCostCountAggregate: ResolverTypeWrapper<SalePaidCostCountAggregate>;
-  SalePaidCostMaxAggregate: ResolverTypeWrapper<SalePaidCostMaxAggregate>;
-  SalePaidCostMinAggregate: ResolverTypeWrapper<SalePaidCostMinAggregate>;
-  SalePaidCostSumAggregate: ResolverTypeWrapper<SalePaidCostSumAggregate>;
   SaleScalarFieldEnum: SaleScalarFieldEnum;
   SaleScalarWhereInput: SaleScalarWhereInput;
   SaleSumAggregate: ResolverTypeWrapper<SaleSumAggregate>;
@@ -3947,6 +3901,7 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AggregateProduct: AggregateProduct;
   BoolFieldUpdateOperationsInput: BoolFieldUpdateOperationsInput;
   BoolFilter: BoolFilter;
   Boolean: Scalars['Boolean']['output'];
@@ -4241,12 +4196,6 @@ export type ResolversParentTypes = {
   SaleOrderByRelationAggregateInput: SaleOrderByRelationAggregateInput;
   SaleOrderByWithRelationInput: SaleOrderByWithRelationInput;
   SalePaginated: SalePaginated;
-  SalePaidCostAvgAggregate: SalePaidCostAvgAggregate;
-  SalePaidCostCount: SalePaidCostCount;
-  SalePaidCostCountAggregate: SalePaidCostCountAggregate;
-  SalePaidCostMaxAggregate: SalePaidCostMaxAggregate;
-  SalePaidCostMinAggregate: SalePaidCostMinAggregate;
-  SalePaidCostSumAggregate: SalePaidCostSumAggregate;
   SaleScalarWhereInput: SaleScalarWhereInput;
   SaleSumAggregate: SaleSumAggregate;
   SaleUpdateInputCustom: SaleUpdateInputCustom;
@@ -4318,6 +4267,15 @@ export type ResolversParentTypes = {
   UsersOutput: UsersOutput;
 };
 
+export type AggregateProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['AggregateProduct'] = ResolversParentTypes['AggregateProduct']> = {
+  costValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  count?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  netValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  priceValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  qty?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
   name: 'DateTime';
 }
@@ -4326,16 +4284,16 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'data'>>;
   createProvider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<MutationCreateProviderArgs, 'data'>>;
   createProviders?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateProvidersArgs, 'data'>>;
-  createSale?: Resolver<ResolversTypes['Sale'], ParentType, ContextType, RequireFields<MutationCreateSaleArgs, 'data'>>;
+  createSale?: Resolver<Maybe<ResolversTypes['Sale']>, ParentType, ContextType, RequireFields<MutationCreateSaleArgs, 'data'>>;
   createUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'data'>>;
   createUsers?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateUsersArgs, 'data'>>;
   deleteProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationDeleteProductArgs, 'where'>>;
   deleteProvider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<MutationDeleteProviderArgs, 'where'>>;
-  deleteSale?: Resolver<ResolversTypes['Sale'], ParentType, ContextType, RequireFields<MutationDeleteSaleArgs, 'where'>>;
+  deleteSale?: Resolver<Maybe<ResolversTypes['Sale']>, ParentType, ContextType, RequireFields<MutationDeleteSaleArgs, 'where'>>;
   deleteUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationDeleteUserArgs, 'where'>>;
   updateProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationUpdateProductArgs, 'data' | 'where'>>;
   updateProvider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<MutationUpdateProviderArgs, 'data' | 'where'>>;
-  updateSale?: Resolver<ResolversTypes['Sale'], ParentType, ContextType, RequireFields<MutationUpdateSaleArgs, 'data' | 'where'>>;
+  updateSale?: Resolver<Maybe<ResolversTypes['Sale']>, ParentType, ContextType, RequireFields<MutationUpdateSaleArgs, 'data' | 'where'>>;
   updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'data' | 'where'>>;
 };
 
@@ -4606,6 +4564,7 @@ export type ProvidersOutputResolvers<ContextType = any, ParentType extends Resol
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   product?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<QueryProductArgs, 'where'>>;
+  productAggregate?: Resolver<ResolversTypes['AggregateProduct'], ParentType, ContextType>;
   products?: Resolver<ResolversTypes['ProductsOutput'], ParentType, ContextType, Partial<QueryProductsArgs>>;
   provider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<QueryProviderArgs, 'where'>>;
   providers?: Resolver<ResolversTypes['ProvidersOutput'], ParentType, ContextType, Partial<QueryProvidersArgs>>;
@@ -4804,57 +4763,6 @@ export type SalePaginatedResolvers<ContextType = any, ParentType extends Resolve
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export type SalePaidCostAvgAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostAvgAggregate'] = ResolversParentTypes['SalePaidCostAvgAggregate']> = {
-  paidValue?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  value?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type SalePaidCostCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostCount'] = ResolversParentTypes['SalePaidCostCount']> = {
-  SaleItem?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type SalePaidCostCountAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostCountAggregate'] = ResolversParentTypes['SalePaidCostCountAggregate']> = {
-  _all?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  blameUserId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  endDate?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  paidValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type SalePaidCostMaxAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostMaxAggregate'] = ResolversParentTypes['SalePaidCostMaxAggregate']> = {
-  blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  endDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  paidValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  value?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type SalePaidCostMinAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostMinAggregate'] = ResolversParentTypes['SalePaidCostMinAggregate']> = {
-  blameUserId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  endDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  paidValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  value?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type SalePaidCostSumAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SalePaidCostSumAggregate'] = ResolversParentTypes['SalePaidCostSumAggregate']> = {
-  paidValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  value?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
 export type SaleSumAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['SaleSumAggregate'] = ResolversParentTypes['SaleSumAggregate']> = {
   totalCostValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   totalValue?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -4930,6 +4838,7 @@ export type UsersOutputResolvers<ContextType = any, ParentType extends Resolvers
 };
 
 export type Resolvers<ContextType = any> = {
+  AggregateProduct?: AggregateProductResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
@@ -4974,12 +4883,6 @@ export type Resolvers<ContextType = any> = {
   SaleMaxAggregate?: SaleMaxAggregateResolvers<ContextType>;
   SaleMinAggregate?: SaleMinAggregateResolvers<ContextType>;
   SalePaginated?: SalePaginatedResolvers<ContextType>;
-  SalePaidCostAvgAggregate?: SalePaidCostAvgAggregateResolvers<ContextType>;
-  SalePaidCostCount?: SalePaidCostCountResolvers<ContextType>;
-  SalePaidCostCountAggregate?: SalePaidCostCountAggregateResolvers<ContextType>;
-  SalePaidCostMaxAggregate?: SalePaidCostMaxAggregateResolvers<ContextType>;
-  SalePaidCostMinAggregate?: SalePaidCostMinAggregateResolvers<ContextType>;
-  SalePaidCostSumAggregate?: SalePaidCostSumAggregateResolvers<ContextType>;
   SaleSumAggregate?: SaleSumAggregateResolvers<ContextType>;
   SalesOutput?: SalesOutputResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
