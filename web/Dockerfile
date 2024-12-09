@@ -10,6 +10,7 @@ COPY index.html ./
 COPY tsconfig.json ./
 COPY tsconfig.node.json ./
 COPY vite.config.ts ./
+COPY postcss.config.js tailwind.config.js ./
 COPY .env ./
 
 RUN npm install -g pnpm
