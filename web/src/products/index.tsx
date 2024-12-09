@@ -7,11 +7,12 @@ import {
   useProductsQuery,
 } from '../graphql/__generated__/products.gql.generated';
 import { useQueryParamsWithDebounce } from '../helpers/use-query-params-with-debounce';
-import { SortOrder, QueryMode } from '../types';
+import { SortOrder, QueryMode, ProductWhereInput } from '../types';
 import { ProductsTable } from './table';
 import { useProductAggregateQuery } from '../graphql/__generated__/product-aggregate.gql.generated';
 import { formatMoneyFromInt } from '../helpers';
 import { SelectBoolean } from '../components/select-boolean';
+import { useMemo } from 'react';
 
 export type ProductsNode = Omit<ProductsQuery['products']['nodes'][0], 'id'> & {
   id?: string;
@@ -39,28 +40,37 @@ export function Products() {
       controlsQty: BooleanParam,
     });
   const { search, controlsQty } = query;
+  const where: ProductWhereInput = useMemo(() => {
+    const w: ProductWhereInput = {
+      AND: [],
+    };
+    if (search) {
+      w.AND.push({
+        OR: [
+          { name: { contains: search, mode: QueryMode.Insensitive } },
+          { brandName: { contains: search, mode: QueryMode.Insensitive } },
+          {
+            provider: {
+              is: {
+                name: { contains: search, mode: QueryMode.Insensitive },
+              },
+            },
+          },
+        ],
+      });
+    }
+
+    if (typeof controlsQty === 'boolean') {
+      w.AND.push({ controlsQty: { equals: controlsQty } });
+    }
+
+    if (!w.AND.length) delete w.AND;
+    return w;
+  }, [query]);
   const { data, loading, refetch } = useProductsQuery({
     variables: {
       orderBy: { id: SortOrder.Desc },
-      where: {
-        controlsQty:
-          typeof controlsQty !== 'boolean'
-            ? undefined
-            : { equals: controlsQty },
-        OR: !search
-          ? undefined
-          : [
-              { name: { contains: search, mode: QueryMode.Insensitive } },
-              { brandName: { contains: search, mode: QueryMode.Insensitive } },
-              {
-                provider: {
-                  is: {
-                    name: { contains: search, mode: QueryMode.Insensitive },
-                  },
-                },
-              },
-            ],
-      },
+      where,
     },
   });
 
@@ -83,7 +93,10 @@ export function Products() {
               value={query.controlsQty ?? undefined}
               onChange={(value) => {
                 setQuery((prev) => {
-                  return { ...prev, controlsQty: value ?? undefined };
+                  return {
+                    ...prev,
+                    controlsQty: value ?? undefined,
+                  };
                 });
               }}
             />,

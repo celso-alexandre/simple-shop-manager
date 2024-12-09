@@ -9,5 +9,11 @@ async function runSeed() {
   for (const sql of Sql) {
     await runRaw(sql);
   }
+
+  // await prisma.product.updateMany({
+  //   data: {
+  //     controlsQty: false
+  //   }
+  // });
 }
 runSeed();

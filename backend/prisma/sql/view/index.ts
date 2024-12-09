@@ -1,3 +1,5 @@
-import { VwProduct } from './vw-product';
+// import { VwProduct } from './vw-product';
 
-export const View = [...VwProduct];
+export const View = [
+  // ...VwProduct
+];
