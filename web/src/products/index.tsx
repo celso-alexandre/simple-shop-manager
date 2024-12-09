@@ -1,5 +1,5 @@
 import { Col } from 'antd';
-import { QueryParamConfig, StringParam } from 'use-query-params';
+import { BooleanParam, QueryParamConfig, StringParam } from 'use-query-params';
 import { Filter } from '../components/filter';
 import { Title } from '../components/title';
 import {
@@ -11,6 +11,7 @@ import { SortOrder, QueryMode } from '../types';
 import { ProductsTable } from './table';
 import { useProductAggregateQuery } from '../graphql/__generated__/product-aggregate.gql.generated';
 import { formatMoneyFromInt } from '../helpers';
+import { Select } from 'antd/lib';
 
 export type ProductsNode = Omit<ProductsQuery['products']['nodes'][0], 'id'> & {
   id?: string;
@@ -29,17 +30,23 @@ export type ProductsFormNode = Pick<
 >;
 export type ProductsQueryParams = {
   search: QueryParamConfig<string | null | undefined>;
+  controlsQty: QueryParamConfig<boolean | null | undefined>;
 };
 export function Products() {
-  const [query, , queryObj, setQueryDebounced] =
+  const [query, setQuery, queryObj, setQueryDebounced] =
     useQueryParamsWithDebounce<ProductsQueryParams>({
       search: StringParam,
+      controlsQty: BooleanParam,
     });
-  const { search } = query;
+  const { search, controlsQty } = query;
   const { data, loading, refetch } = useProductsQuery({
     variables: {
       orderBy: { id: SortOrder.Desc },
       where: {
+        controlsQty:
+          typeof controlsQty !== 'boolean'
+            ? undefined
+            : { equals: controlsQty },
         OR: !search
           ? undefined
           : [
@@ -69,6 +76,22 @@ export function Products() {
           setQuery={setQueryDebounced}
           refetch={refetch}
           loading={loading}
+          extraAfter={[
+            <Select
+              key="controlsQty"
+              className="min-w-48"
+              allowClear
+              value={query.controlsQty ?? undefined}
+              onChange={(value) => {
+                setQuery((prev) => {
+                  return { ...prev, controlsQty: value ?? undefined };
+                });
+              }}>
+              <Select.Option value={undefined}>{null}</Select.Option>
+              <Select.Option value={true}>Controla Estoque</Select.Option>
+              <Select.Option value={false}>Não controla Estoque</Select.Option>
+            </Select>,
+          ]}
         />
 
         <Col span={24} style={{ height: 20 }} />
