@@ -75,7 +75,7 @@ export function Products() {
 
         <ProductsTable loading={loading} dataSource={data?.products.nodes} />
 
-        <div className="mt-4 grid grid-cols-1 gap-x-28 sm:gap-x-12 lg:grid-cols-5">
+        <div className="mt-4 grid grid-cols-1 gap-x-28 sm:gap-x-12 lg:grid-cols-5 2xl:grid-cols-5">
           <div className="flex justify-between">
             <span className="font-semibold text-gray-700">Bruto</span>
             <span className="text-gray-900">
