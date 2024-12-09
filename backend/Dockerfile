@@ -15,13 +15,12 @@ RUN npm install -g pnpm
 RUN pnpm install --ignore-scripts --frozen-lockfile
 RUN pnpm prisma generate
 RUN pnpm build
-RUN cp -r dist/* .
 RUN pnpm prune --prod
-RUN rm -rf src dist tsconfig.json package.json pnpm-lock.yaml
+RUN rm -rf src prisma tsconfig.json package.json pnpm-lock.yaml
 # RUN find /app -name "*.d.ts" -type f -delete
 
 # Stage 2: Run application
 FROM node:22-alpine
 WORKDIR /app
 COPY --from=builder /app .
-CMD ["node", "main.js"]
+CMD ["node", "dist/src/main.js"]
