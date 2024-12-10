@@ -15,6 +15,7 @@ RUN npm install -g pnpm
 RUN pnpm install --ignore-scripts --frozen-lockfile
 RUN apk update && apk add --no-cache openssl
 # RUN export PRISMA_BINARY_TARGET="native"; pnpm prisma generate
+RUN rm -rf src/prisma/@generated
 RUN ./node_modules/.bin/prisma generate
 RUN pnpm build
 RUN pnpm prune --prod
