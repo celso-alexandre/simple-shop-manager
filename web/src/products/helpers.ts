@@ -11,5 +11,6 @@ export function productDto(product: ProductsFormNode): ProductsFormNode {
     providerId: product.providerId,
     controlsQty: product.controlsQty,
     qty: product.qty,
+    netMarginPercent: product.netMarginPercent,
   };
 }

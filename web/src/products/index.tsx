@@ -28,7 +28,9 @@ export type ProductsFormNode = Pick<
   | 'providerId'
   | 'controlsQty'
   | 'qty'
->;
+> & {
+  netMarginPercent: number;
+};
 export type ProductsQueryParams = {
   search: QueryParamConfig<string | null | undefined>;
   controlsQty: QueryParamConfig<boolean | null | undefined>;

@@ -3,6 +3,8 @@ import type { ProductsFormNode } from '.';
 import { InputNumberMoney } from '../components/input-number-money';
 import { ProviderAsyncSelect } from '../components/provider-async-select.component';
 import { useState } from 'react';
+import { addMargin, preciseParseFloat } from '../helpers';
+import { InputDecimalPercent } from '../components/input-decimal-percent';
 
 export function ProductsForm({
   onFinish: finish,
@@ -51,7 +53,41 @@ export function ProductsForm({
             return x.costValue;
           })}
           label="Custo">
-          <InputNumberMoney style={{ width: '100%' }} />
+          <InputNumberMoney
+            style={{ width: '100%' }}
+            onChange={(val) => {
+              const priceValue =
+                preciseParseFloat(props.form?.getFieldValue('priceValue'), 2) ||
+                0;
+              const costValue = preciseParseFloat(val, 2) || 0;
+              if (!priceValue || !costValue) {
+                props.form?.setFieldValue('netMarginPercent', 0);
+                return;
+              }
+              props.form?.setFieldValue(
+                'netMarginPercent',
+                priceValue / costValue - 1
+              );
+            }}
+          />
+        </Form.Item>
+      </Col>
+
+      <Col>
+        <Form.Item
+          name={nameof<ProductsFormNode>((x) => {
+            return x.netMarginPercent;
+          })}
+          label="M Líquida">
+          <InputDecimalPercent
+            onChange={(val) => {
+              const costValue = props.form?.getFieldValue('costValue') || 0;
+              props.form?.setFieldValue(
+                'priceValue',
+                addMargin(costValue, preciseParseFloat(val as any, 2), 2)
+              );
+            }}
+          />
         </Form.Item>
       </Col>
 
@@ -61,7 +97,21 @@ export function ProductsForm({
             return x.priceValue;
           })}
           label="Preço">
-          <InputNumberMoney style={{ width: '100%' }} />
+          <InputNumberMoney
+            style={{ width: '100%' }}
+            onChange={(val) => {
+              const priceValue = parseFloat(val as any) || 0;
+              const costValue = props.form?.getFieldValue('costValue') || 0;
+              if (!priceValue || !costValue) {
+                props.form?.setFieldValue('netMarginPercent', 0);
+                return;
+              }
+              props.form?.setFieldValue(
+                'netMarginPercent',
+                priceValue / costValue - 1
+              );
+            }}
+          />
         </Form.Item>
       </Col>
 

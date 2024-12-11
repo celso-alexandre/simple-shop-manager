@@ -64,6 +64,7 @@ export function ProductEdit() {
       priceValue: serializeIntAsDecimal(data.product.priceValue),
       controlsQty: data.product.controlsQty ?? false,
       qty: data.product.qty ?? 0,
+      netMarginPercent: data.product.netMarginPercent ?? 0,
     };
   }, [data]);
 

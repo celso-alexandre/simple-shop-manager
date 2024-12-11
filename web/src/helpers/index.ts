@@ -25,7 +25,7 @@ export function formatMoneyFromInt<T extends number | undefined>(value: T) {
 export function formatPercentFromDecimal<T extends number | undefined>(
   value: T
 ) {
-  if (!value) return value;
+  if (!value) return '';
   return Intl.NumberFormat(undefined, {
     style: 'percent',
     minimumFractionDigits: 2,
@@ -73,4 +73,34 @@ export function getPercentPretty(cost: number, value: number) {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(cost / value);
+}
+
+export function preciseParseFloat(
+  value: string | number,
+  precision: number
+): number {
+  const v = typeof value === 'string' ? parseFloat(value) : value;
+  return parseFloat(v.toFixed(precision));
+}
+
+export function addMargin(
+  cost: number,
+  netMarginPercDec: number,
+  precision: number
+): number {
+  const sellingPrice = cost * (1 + netMarginPercDec);
+  const rounded = preciseParseFloat(sellingPrice, precision);
+
+  // console.log(
+  //   'cost',
+  //   cost,
+  //   'netMarginPercDec',
+  //   netMarginPercDec,
+  //   'sellingPrice',
+  //   sellingPrice,
+  //   'rounded',
+  //   rounded
+  // );
+
+  return rounded;
 }
