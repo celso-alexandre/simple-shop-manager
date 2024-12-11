@@ -51,8 +51,8 @@ export function SaleInsert() {
 
       <SalesForm
         form={form}
-        onFinish={(values) => {
-          onSubmit(values, create);
+        onFinish={async (values) => {
+          await onSubmit(values, create);
         }}
       />
 

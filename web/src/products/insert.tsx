@@ -46,8 +46,8 @@ export function ProductInsert() {
 
       <ProductsForm
         form={form}
-        onFinish={(values) => {
-          onSubmit(values, create);
+        onFinish={async (values) => {
+          await onSubmit(values, create);
         }}
       />
 

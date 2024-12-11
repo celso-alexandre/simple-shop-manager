@@ -77,8 +77,8 @@ export function ProductEdit() {
       <ProductsForm
         initialValues={initialValues}
         form={form}
-        onFinish={(values) => {
-          onSubmit(values, update);
+        onFinish={async (values) => {
+          await onSubmit(values, update);
         }}
       />
 

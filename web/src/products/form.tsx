@@ -14,15 +14,18 @@ export function ProductsForm({
     props?.initialValues?.controlsQty || false
   );
   const [priceIsBelowCost, setPriceIsBelowCost] = useState(false);
+
   async function onFinish(values: ProductsFormNode) {
     if (finish) await finish(values);
     window.location.href = '/products';
   }
+
   useEffect(() => {
     const costValue = props?.initialValues?.costValue || 0;
     const priceValue = props?.initialValues?.priceValue || 0;
     setPriceIsBelowCost(priceValue < costValue);
   }, [props.initialValues]);
+
   return (
     <Form onFinish={onFinish} className="w-full" {...props}>
       <Form.Item
@@ -53,12 +56,19 @@ export function ProductsForm({
         </Form.Item>
       </Col>
 
-      <Col>
+      <div
+        className="flex gap-8 pl-4 pt-2"
+        style={{
+          border: priceIsBelowCost ? '2px solid red' : '2px solid #ccc',
+          borderRadius: '8px',
+        }}>
         <Form.Item
           name={nameof<ProductsFormNode>((x) => {
             return x.costValue;
           })}
-          label="Custo">
+          label="Custo"
+          style={{ width: 250 }}
+          labelCol={{ span: 24 }}>
           <InputNumberMoney
             className="w-full"
             onChange={(val) => {
@@ -78,16 +88,16 @@ export function ProductsForm({
             }}
           />
         </Form.Item>
-      </Col>
 
-      <Col>
         <Form.Item
           name={nameof<ProductsFormNode>((x) => {
             return x.netMarginPercent;
           })}
-          label="M Líquida">
+          label="M Líquida"
+          style={{ width: 250 }}
+          labelCol={{ span: 24 }}>
           <InputDecimalPercent
-            className="min-w-24"
+            className="w-full"
             onChange={(val) => {
               const costValue = props.form?.getFieldValue('costValue') || 0;
               const newPriceValue = addMargin(
@@ -96,23 +106,28 @@ export function ProductsForm({
                 2
               );
               setPriceIsBelowCost(newPriceValue < costValue);
+              // console.log('newPriceValue', newPriceValue);
               props.form?.setFieldValue('priceValue', newPriceValue);
             }}
           />
         </Form.Item>
-      </Col>
 
-      <Col>
         <Form.Item
           name={nameof<ProductsFormNode>((x) => {
             return x.priceValue;
           })}
-          label={`Preço Venda${priceIsBelowCost ? ' **margem negativa**' : ''}`}
-          className={`rounded-md p-3 ${
-            priceIsBelowCost
-              ? 'border-2 border-red-500'
-              : 'border-2 border-blue-500'
-          }`}>
+          label="Preço Venda"
+          style={{ width: 250 }}
+          labelCol={{ span: 24 }}
+          extra={
+            priceIsBelowCost ? (
+              <div className="mt-2 p-0 text-xs text-red-500">
+                ** Margem negativa
+              </div>
+            ) : (
+              <div />
+            )
+          }>
           <InputNumberMoney
             className="w-full"
             onChange={(val) => {
@@ -130,7 +145,7 @@ export function ProductsForm({
             }}
           />
         </Form.Item>
-      </Col>
+      </div>
 
       <Col>
         <Form.Item

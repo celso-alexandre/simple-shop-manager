@@ -1,6 +1,8 @@
 import { ProductsFormNode } from '.';
 
-export function productDto(product: ProductsFormNode): ProductsFormNode {
+export function productDto(
+  product: ProductsFormNode
+): Omit<ProductsFormNode, 'netMarginPercent'> {
   return {
     id: product.id,
     name: product.name,
@@ -11,6 +13,6 @@ export function productDto(product: ProductsFormNode): ProductsFormNode {
     providerId: product.providerId,
     controlsQty: product.controlsQty,
     qty: product.qty,
-    netMarginPercent: product.netMarginPercent,
+    // netMarginPercent: product.netMarginPercent,
   };
 }

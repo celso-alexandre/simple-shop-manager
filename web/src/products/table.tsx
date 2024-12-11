@@ -50,7 +50,7 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
         return x.createdAt;
       }),
       render: (value) => {
-        return dayjs(value).format('L');
+        return dayjs(value).format('DD/MM/YYYY');
       },
       sorter: (a, b) => {
         return dayjs(a.createdAt).unix() - dayjs(b.createdAt).unix();
