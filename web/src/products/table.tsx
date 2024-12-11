@@ -18,6 +18,9 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
         return x.id;
       }),
       ellipsis: true,
+      sorter: (a, b) => {
+        return a.id.localeCompare(b.id);
+      },
     },
     {
       title: 'Nome',
@@ -26,6 +29,9 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
         return x.name;
       }),
       ellipsis: true,
+      sorter: (a, b) => {
+        return a.name.localeCompare(b.name);
+      },
     },
     {
       title: 'Marca',
@@ -33,6 +39,9 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
       dataIndex: nameof<ProductsNode>((x) => {
         return x.brandName;
       }),
+      sorter: (a, b) => {
+        return a.brandName.localeCompare(b.brandName);
+      },
     },
     {
       title: 'Data',
@@ -43,6 +52,9 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
       render: (value) => {
         return dayjs(value).format('L');
       },
+      sorter: (a, b) => {
+        return dayjs(a.createdAt).unix() - dayjs(b.createdAt).unix();
+      },
     },
     {
       title: 'Preço',
@@ -51,6 +63,9 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
       }),
       render: (value) => {
         return formatMoneyFromDecimal(value);
+      },
+      sorter: (a, b) => {
+        return (a.priceValueDecimal || 0) - (b.priceValueDecimal || 0);
       },
     },
     {
@@ -61,6 +76,9 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
       render: (_, record) => {
         if (record.controlsQty) return record.qty;
         return null;
+      },
+      sorter: (a, b) => {
+        return (a.qty || 0) - (b.qty || 0);
       },
     },
     {
@@ -74,6 +92,9 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
             {value ? 'Consignado' : 'Normal'}
           </BooleanTag>
         );
+      },
+      sorter: (a, b) => {
+        return Number(a.isPostPaid) - Number(b.isPostPaid);
       },
     },
     {
@@ -96,6 +117,9 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
           </Tooltip>
         );
       },
+      sorter: (a, b) => {
+        return (a.netMarginPercent || 0) - (b.netMarginPercent || 0);
+      },
     },
     {
       title: 'Fornecedor',
@@ -111,6 +135,9 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
         );
       },
       ellipsis: true,
+      sorter: (a, b) => {
+        return a.provider?.name.localeCompare(b.provider?.name);
+      },
     },
     {
       width: 100,
