@@ -13,6 +13,7 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
   const columns: typeof props.columns = [
     {
       title: 'ID',
+      width: 100,
       dataIndex: nameof<ProductsNode>((x) => {
         return x.id;
       }),
@@ -20,6 +21,7 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
     },
     {
       title: 'Nome',
+      width: 300,
       dataIndex: nameof<ProductsNode>((x) => {
         return x.name;
       }),
@@ -27,13 +29,14 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
     },
     {
       title: 'Marca',
+      width: 300,
       dataIndex: nameof<ProductsNode>((x) => {
         return x.brandName;
       }),
-      ellipsis: true,
     },
     {
       title: 'Data',
+      width: 100,
       dataIndex: nameof<ProductsNode>((x) => {
         return x.createdAt;
       }),
@@ -117,10 +120,10 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
         return (
           <div>
             <Button
+              className="w-full"
               onClick={() => {
                 window.location.href = `/product/${record.id}`;
               }}
-              size="middle"
               type="primary">
               Editar
             </Button>
@@ -130,5 +133,5 @@ export function ProductsTable(props: TableProps<ProductsNode>) {
     },
   ];
 
-  return <Table columns={columns} {...props} />;
+  return <Table size="small" columns={columns} {...props} />;
 }

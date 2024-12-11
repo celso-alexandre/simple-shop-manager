@@ -10,7 +10,7 @@ import { useQueryParamsWithDebounce } from '../helpers/use-query-params-with-deb
 import { SortOrder, QueryMode, ProductWhereInput } from '../types';
 import { ProductsTable } from './table';
 import { useProductAggregateQuery } from '../graphql/__generated__/product-aggregate.gql.generated';
-import { formatMoneyFromInt } from '../helpers';
+import { formatMoneyFromInt, getPercentPretty } from '../helpers';
 import { SelectBoolean } from '../components/select-boolean';
 import { useMemo } from 'react';
 
@@ -123,7 +123,12 @@ export function Products() {
           <div className="flex justify-between">
             <span className="font-semibold text-gray-700">Líquido</span>
             <span className="text-gray-900">
-              {formatMoneyFromInt(dataAggregate?.productAggregate?.netValue)}
+              {formatMoneyFromInt(dataAggregate?.productAggregate?.netValue)} (
+              {getPercentPretty(
+                dataAggregate?.productAggregate?.netValue,
+                dataAggregate?.productAggregate?.priceValue
+              )}
+              )
             </span>
           </div>
           <div className="flex justify-between">

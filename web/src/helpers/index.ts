@@ -65,3 +65,12 @@ export function getNetMargin(
     percent: infinity ? infinityToDecimal : decimal * decimalToIntMultiplier,
   };
 }
+
+export function getPercentPretty(cost: number, value: number) {
+  if (!cost) return '0 %';
+  return Intl.NumberFormat(undefined, {
+    style: 'percent',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(cost / value);
+}

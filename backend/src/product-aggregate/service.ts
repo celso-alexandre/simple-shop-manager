@@ -18,23 +18,38 @@ export class ProductAggregateService {
           }
         },
         {
-          $project: {
+          $group: {
+            _id: null,
             qty: { $sum: '$qty' },
-            priceValue: { $multiply: ['$qty', '$priceValue'] },
-            costValue: { $multiply: ['$qty', '$costValue'] },
+            priceValue: { $sum: { $multiply: ['$qty', '$priceValue'] } },
+            costValue: { $sum: { $multiply: ['$qty', '$costValue'] } },
             netValue: {
-              $subtract: [
-                { $multiply: ['$qty', '$priceValue'] },
-                { $multiply: ['$qty', '$costValue'] }
-              ]
+              $sum: {
+                $subtract: [
+                  { $multiply: ['$qty', '$priceValue'] },
+                  { $multiply: ['$qty', '$costValue'] }
+                ]
+              }
             }
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            qty: 1,
+            priceValue: 1,
+            costValue: 1,
+            netValue: 1
           }
         }
       ]
     });
+    if (!result || (result as any).length > 1) {
+      throw new Error('Unexpected result');
+    }
 
     const res = (result as unknown as any[])[0] || {};
-    // console.log('Aggregated Result:', (result as unknown as any[])[0]);
+    console.log('Aggregated Result:', result);
     return {
       qty: res.qty || 0,
       priceValue: res.priceValue || 0,

@@ -24,7 +24,7 @@ export class ProductService {
   createOne(args: CreateOneProductArgs) {
     return this.prisma.$transaction(async (prisma) => {
       const product = await this.prisma.product.create(args);
-      if (!product.controlsQty || !product.qty) {
+      if (!product.qty) {
         return product;
       }
       await prisma.productMovement.create({
@@ -47,7 +47,7 @@ export class ProductService {
       });
       const product = await this.prisma.product.update(args);
       const balanceDiff = product.qty - prodBefore.qty;
-      if (!product.controlsQty || !balanceDiff) {
+      if (!balanceDiff) {
         return product;
       }
       await prisma.productMovement.create({
