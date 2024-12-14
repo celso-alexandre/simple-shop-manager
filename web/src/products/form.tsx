@@ -29,11 +29,15 @@ export function ProductsForm({
   return (
     <Form onFinish={onFinish} className="w-full" {...props}>
       <Form.Item
-        hidden
+        label="ID"
+        hidden={!props?.initialValues?.id}
         name={nameof<ProductsFormNode>((x) => {
           return x.id;
         })}>
-        <Input />
+        <Input
+          disabled
+          className="border-none bg-transparent text-black disabled:bg-transparent disabled:text-black"
+        />
       </Form.Item>
 
       <Col>
