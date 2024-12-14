@@ -9,7 +9,7 @@ export function InputNumberMoney(props: InputNumberProps) {
       min={0}
       decimalSeparator=","
       precision={2}
-      step={1}
+      step={0.25}
       stringMode
       required
       {...props}

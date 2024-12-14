@@ -1,10 +1,10 @@
 import { SelectProps } from 'antd';
 import { DecodedValueMap, QueryParamConfig, SetQuery } from 'use-query-params';
-import type { CSSProperties, FC } from 'react';
+import { useMemo, type CSSProperties, type FC } from 'react';
 import { useProductsSelectQuery } from '../graphql/__generated__/products.gql.generated';
 import type { ProductsSelectQuery } from '../graphql/__generated__/products.gql.generated';
 import { SelectDropdown } from './select.component';
-import { QueryMode } from '../types';
+import { ProductWhereInput, QueryMode } from '../types';
 import { useDebounce } from '../hooks/useDebounce';
 
 type queryFields = {
@@ -16,35 +16,45 @@ type ProductAsyncSelectProps = SelectProps<any> & {
   setQuery?: SetQuery<queryFields>;
   query?: Partial<DecodedValueMap<queryFields>>;
   style?: CSSProperties;
+  notInProductIds?: string[];
 };
 
 export const ProductAsyncSelect: FC<ProductAsyncSelectProps> = ({
   setQuery,
   query,
   style,
+  notInProductIds,
   ...props
 }) => {
   const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebounce('');
+  const where = useMemo(() => {
+    const w: ProductWhereInput = {};
+    if (notInProductIds) {
+      w.id = {
+        notIn: notInProductIds,
+      };
+    }
+    if (debouncedSearchTerm) {
+      w.OR = [
+        {
+          name: {
+            contains: debouncedSearchTerm,
+            mode: QueryMode.Insensitive,
+          },
+        },
+        {
+          brandName: {
+            contains: debouncedSearchTerm,
+            mode: QueryMode.Insensitive,
+          },
+        },
+      ];
+    }
+    return w;
+  }, [debouncedSearchTerm, notInProductIds]);
   const { data, loading, fetchMore, refetch } = useProductsSelectQuery({
     variables: {
-      where: !debouncedSearchTerm
-        ? undefined
-        : {
-            OR: [
-              {
-                name: {
-                  contains: debouncedSearchTerm,
-                  mode: QueryMode.Insensitive,
-                },
-              },
-              {
-                brandName: {
-                  contains: debouncedSearchTerm,
-                  mode: QueryMode.Insensitive,
-                },
-              },
-            ],
-          },
+      where,
     },
   });
 

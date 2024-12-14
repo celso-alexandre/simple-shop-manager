@@ -51,6 +51,16 @@ export function SalesForm({
     window.location.href = '/sales';
   }
   const [getProduct] = useProductLazyQuery();
+  const [selectedProducts, setSelectedProducts] = useState(
+    (props?.initialValues as SalesFormNode)?.saleItems?.nodes?.map(
+      ({ productId }, i) => {
+        return {
+          i,
+          productId,
+        };
+      }
+    ) || []
+  );
 
   type SaleItemRes = SalesFormNode['saleItems']['nodes'][number];
   async function setSaleItem(
@@ -215,7 +225,21 @@ export function SalesForm({
                         ]}>
                         <ProductAsyncSelect
                           style={{ width: 400 }}
-                          onChange={async () => {
+                          notInProductIds={selectedProducts
+                            ?.filter((_x, i) => {
+                              return i !== field.name;
+                            })
+                            ?.map((x) => {
+                              return x.productId;
+                            })}
+                          onChange={async (val) => {
+                            const selectedProductsCopy =
+                              _.cloneDeep(selectedProducts);
+                            selectedProductsCopy[field.name] = {
+                              i: field.name,
+                              productId: val,
+                            };
+                            setSelectedProducts(selectedProductsCopy);
                             props?.form?.resetFields([
                               ['saleItems', 'nodes', field.name, 'quantity'],
                               ['saleItems', 'nodes', field.name, 'totalValue'],
