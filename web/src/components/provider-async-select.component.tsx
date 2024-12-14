@@ -1,6 +1,6 @@
 import { SelectProps } from 'antd';
 import { DecodedValueMap, QueryParamConfig, SetQuery } from 'use-query-params';
-import type { CSSProperties, FC } from 'react';
+import { useEffect, type CSSProperties, type FC } from 'react';
 import { useProvidersSelectQuery } from '../graphql/__generated__/providers.gql.generated';
 import type { ProvidersSelectQuery } from '../graphql/__generated__/providers.gql.generated';
 import { SelectDropdown } from './select.component';
@@ -13,6 +13,7 @@ type queryFields = {
 };
 
 type ProviderAsyncSelectProps = SelectProps<any> & {
+  setFirst?: (id: string) => void;
   setQuery?: SetQuery<queryFields>;
   query?: Partial<DecodedValueMap<queryFields>>;
   style?: CSSProperties;
@@ -22,6 +23,7 @@ export const ProviderAsyncSelect: FC<ProviderAsyncSelectProps> = ({
   setQuery,
   query,
   style,
+  setFirst,
   ...props
 }) => {
   const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebounce('');
@@ -59,6 +61,11 @@ export const ProviderAsyncSelect: FC<ProviderAsyncSelectProps> = ({
           },
     },
   });
+
+  useEffect(() => {
+    if (!data?.providers?.nodes?.[0]?.value) return;
+    setFirst?.(data?.providers?.nodes?.[0]?.value);
+  }, [data]);
 
   return (
     <div style={style}>

@@ -180,7 +180,15 @@ export function ProductsForm({
             return x.providerId;
           })}
           style={{ width: 300 }}>
-          <ProviderAsyncSelect className="w-full" />
+          <ProviderAsyncSelect
+            className="w-full"
+            setFirst={(id) => {
+              if (!props.form) return;
+              if (!id) return;
+              if (props.form?.getFieldValue('providerId')) return;
+              props.form?.setFieldsValue({ providerId: id });
+            }}
+          />
         </Form.Item>
       </Col>
 
