@@ -1,5 +1,5 @@
 import type { DecodedValueMap } from 'use-query-params';
-import { Col, DatePicker } from 'antd';
+import { Col } from 'antd';
 import dayjs from 'dayjs';
 import {
   DateParam,
@@ -21,6 +21,7 @@ import { SalesTable } from './table';
 import { tablePagination } from '../helpers/pagination';
 import { formatMoneyFromInt, getPercentPretty } from '../helpers';
 import { useSaleAggregateQuery } from '../graphql/__generated__/sale-aggregate.gql.generated';
+import { CustomRangePicker } from '../components/range-picker';
 
 export type SalesNode = SalesQuery['sales']['nodes'][0];
 export type SaleItem = Pick<
@@ -44,7 +45,6 @@ export type SalesQueryParams = {
   startDate: QueryParamConfig<Date>;
   endDate: QueryParamConfig<Date>;
 };
-const { RangePicker } = DatePicker;
 export function Sales() {
   const queryDefaults: DecodedValueMap<SalesQueryParams> = {
     take: 10,
@@ -68,7 +68,7 @@ export function Sales() {
       skip,
       orderBy: { id: SortOrder.Desc },
       where: {
-        date: { gte: startDate, lte: endDate },
+        date: { gte: startDate, lte: dayjs(endDate).endOf('day').toDate() },
         OR: !search
           ? undefined
           : [
@@ -107,7 +107,7 @@ export function Sales() {
     variables: {
       where: {
         startDate,
-        endDate,
+        endDate: dayjs(endDate).endOf('day').toDate(),
       },
     },
   });
@@ -129,11 +129,9 @@ export function Sales() {
               Período
             </label>
 
-            <RangePicker
+            <CustomRangePicker
               id="dates"
-              format="DD/MM/YYYY"
               style={{ marginTop: 10 }}
-              allowClear
               value={[dayjs(startDate), dayjs(endDate)]}
               onChange={(dates) => {
                 const [startDay, endDay] = dates ?? [];
