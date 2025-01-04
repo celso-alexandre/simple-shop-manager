@@ -1,11 +1,17 @@
-import { SelectProps } from 'antd';
+import { Button, SelectProps, Tooltip } from 'antd';
 import { DecodedValueMap, QueryParamConfig, SetQuery } from 'use-query-params';
 import { useMemo, type CSSProperties, type FC } from 'react';
-import { useProductsSelectQuery } from '../graphql/__generated__/products.gql.generated';
+import {
+  ProductsDocument,
+  ProductsSelectDocument,
+  useCreateProductMutation,
+  useProductsSelectQuery,
+} from '../graphql/__generated__/products.gql.generated';
 import type { ProductsSelectQuery } from '../graphql/__generated__/products.gql.generated';
 import { SelectDropdown } from './select.component';
 import { ProductWhereInput, QueryMode } from '../types';
 import { useDebounce } from '../hooks/useDebounce';
+import { BiLink, BiRefresh } from 'react-icons/bi';
 
 type queryFields = {
   productId: QueryParamConfig<number>;
@@ -24,6 +30,7 @@ export const ProductAsyncSelect: FC<ProductAsyncSelectProps> = ({
   query,
   style,
   notInProductIds,
+  onChange,
   ...props
 }) => {
   const [searchTerm, setSearchTerm, debouncedSearchTerm] = useDebounce('');
@@ -58,14 +65,55 @@ export const ProductAsyncSelect: FC<ProductAsyncSelectProps> = ({
     },
   });
 
+  const [create] = useCreateProductMutation({
+    refetchQueries: [ProductsDocument, ProductsSelectDocument],
+  });
+
+  const value = props.value ?? query?.productDesc;
+
+  function createProductFromSearchTerm(term: string) {
+    if (!term?.startsWith('new|')) return;
+    const [, newProductName] = term.split('|');
+    if (!newProductName) return;
+    // window.alert(`Criar Produto: ${newProductName}`);
+    return create({
+      variables: {
+        data: {
+          name: newProductName,
+          costValue: 0,
+          isPostPaid: false,
+          priceValue: 0,
+          qty: 0,
+          controlsQty: false,
+        },
+      },
+    });
+  }
+
   return (
-    <div style={style}>
+    <div style={style} className="flex items-center">
       <SelectDropdown<ProductsSelectQuery, 'products'>
         autoClearSearchValue={false}
+        data={
+          !(searchTerm || !data || !onChange)
+            ? data
+            : {
+                products: {
+                  nodes: [
+                    {
+                      label: `Criar Produto: ${searchTerm}`,
+                      value: `new|${searchTerm}`,
+                    },
+                    ...(data?.products?.nodes ?? []),
+                  ],
+                  pageInfo: data?.products?.pageInfo,
+                },
+              }
+        }
+        entityName="products"
         mapData={({ value, label, label2 }) => {
           return { label: `${label} ${label2 ?? ''}`, value };
         }}
-        data={data}
         refetch={refetch}
         fetchMore={fetchMore}
         allowClear
@@ -87,25 +135,62 @@ export const ProductAsyncSelect: FC<ProductAsyncSelectProps> = ({
           });
         }}
         value={query?.productDesc}
-        entityName="products"
         placeholder="Selecione o Produto..."
-        onChange={(value, option) => {
-          if (!setQuery) return;
-          const { label } = option as unknown as { label: string };
-          setQuery((prev) => {
-            return {
-              ...prev,
-              productId: value,
-              productDesc: label,
-              skip: 0,
-            };
-          });
+        onChange={async (value, option) => {
+          const newProduct = await createProductFromSearchTerm(value);
+          const id = newProduct?.data?.createProduct?.id;
+          if (onChange) {
+            onChange(id ?? value, option);
+            return;
+          } else {
+            if (!setQuery) return;
+            const { label } = option as unknown as { label: string };
+            setQuery((prev) => {
+              return {
+                ...prev,
+                productId: value,
+                productDesc: label,
+                skip: 0,
+              };
+            });
+          }
         }}
         loading={loading}
         filterOption={false}
         style={style}
         {...props}
       />
+      <div className="flex items-center">
+        <Tooltip title="Atualizar lista">
+          <Button
+            type="link"
+            loading={loading}
+            disabled={loading}
+            className="anticon"
+            icon={
+              <BiRefresh
+                className={`anticon text-blue-600${loading ? 'anticon-spin' : ''}`}
+              />
+            }
+            onClick={() => {
+              refetch();
+            }}
+          />
+        </Tooltip>
+        <Tooltip title="Ver Produto Selecionado">
+          <a
+            href={`/product/${value}`}
+            target="_blank"
+            rel="noreferrer"
+            onClick={(e) => {
+              if (!value || value.startsWith('new|')) {
+                e.preventDefault();
+              }
+            }}>
+            <BiLink className="text-green-600" />
+          </a>
+        </Tooltip>
+      </div>
     </div>
   );
 };

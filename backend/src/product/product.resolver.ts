@@ -92,6 +92,9 @@ export class ProductResolver {
     { name: 'netMarginPercent' }
   )
   forNetMarginPercent(@Parent() { priceValue, costValue }: Product) {
+    if (!costValue || !priceValue) {
+      return 0;
+    }
     return (priceValue - costValue) / costValue;
   }
 

@@ -76,6 +76,7 @@ export function SalesForm({
     } = props.form.getFieldsValue();
     const item = nodes[index];
     const { productId } = item;
+    if (!productId || productId?.startsWith('new|')) return;
     const { data } = await getProduct({
       variables: {
         where: { id: productId },
