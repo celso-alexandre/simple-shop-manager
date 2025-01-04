@@ -174,6 +174,7 @@ export const ProductAsyncSelect: FC<ProductAsyncSelectProps> = ({
             }
             onClick={() => {
               refetch();
+              onChange?.(value);
             }}
           />
         </Tooltip>

@@ -49,7 +49,7 @@ export class ProductAggregateService {
     }
 
     const res = (result as unknown as any[])[0] || {};
-    console.log('Aggregated Result:', result);
+    // console.log('Aggregated Result:', result);
     return {
       qty: res.qty || 0,
       priceValue: res.priceValue || 0,

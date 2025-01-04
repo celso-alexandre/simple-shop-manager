@@ -19,6 +19,8 @@ import { useQueryParamsWithDebounce } from '../helpers/use-query-params-with-deb
 import { QueryMode, SortOrder } from '../types';
 import { SalesTable } from './table';
 import { tablePagination } from '../helpers/pagination';
+import { formatMoneyFromInt, getPercentPretty } from '../helpers';
+import { useSaleAggregateQuery } from '../graphql/__generated__/sale-aggregate.gql.generated';
 
 export type SalesNode = SalesQuery['sales']['nodes'][0];
 export type SaleItem = Pick<
@@ -100,6 +102,16 @@ export function Sales() {
     },
   });
 
+  const { data: dataAggregate } = useSaleAggregateQuery();
+  const { data: dataAggregatePeriod } = useSaleAggregateQuery({
+    variables: {
+      where: {
+        startDate,
+        endDate,
+      },
+    },
+  });
+
   return (
     <div style={{ margin: '0 25px 0 0' }}>
       <Title title="Vendas" />
@@ -140,6 +152,7 @@ export function Sales() {
 
       <div style={{ marginTop: 20 }}>
         <SalesTable
+          size="small"
           loading={loading}
           dataSource={data?.sales.nodes}
           rowKey={'id' as any}
@@ -154,6 +167,92 @@ export function Sales() {
             },
           })}
         />
+      </div>
+
+      <div className="mt-4">
+        {/* General Total */}
+        <div className="relative rounded-lg border border-gray-300 p-4">
+          <h3 className="absolute -top-3 left-4 bg-white px-2 text-sm font-semibold text-gray-700">
+            Total geral
+          </h3>
+          <div className="grid grid-cols-1 gap-x-28 sm:gap-x-12 lg:grid-cols-4">
+            <div className="flex justify-between">
+              <span className="font-semibold text-gray-700">Bruto</span>
+              <span className="text-gray-900">
+                {formatMoneyFromInt(dataAggregate?.totalSale?.totalValue)}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-gray-700">Custo</span>
+              <span className="text-gray-900">
+                {formatMoneyFromInt(dataAggregate?.totalSale?.totalCostValue)}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-gray-700">Líquido</span>
+              <span className="text-gray-900">
+                {formatMoneyFromInt(dataAggregate?.totalSale?.netValue)} (
+                {getPercentPretty(
+                  dataAggregate?.totalSale?.netValue,
+                  dataAggregate?.totalSale?.totalValue
+                )}
+                )
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-semibold text-gray-700">Vendas</span>
+              <span className="text-gray-900">
+                {dataAggregate?.totalSale?.count}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Selected Period Total */}
+        {!!startDate && !!endDate && (
+          <div className="relative mt-6 rounded-lg border border-gray-300 p-4">
+            <h3 className="absolute -top-3 left-4 bg-white px-2 text-sm font-semibold text-gray-700">
+              Total período {dayjs(startDate).format('DD/MM/YYYY')} -{' '}
+              {dayjs(endDate).format('DD/MM/YYYY')}
+            </h3>
+            <div className="grid grid-cols-1 gap-x-28 sm:gap-x-12 lg:grid-cols-4">
+              <div className="flex justify-between">
+                <span className="font-semibold text-gray-700">Bruto</span>
+                <span className="text-gray-900">
+                  {formatMoneyFromInt(
+                    dataAggregatePeriod?.totalSale?.totalValue
+                  )}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-semibold text-gray-700">Custo</span>
+                <span className="text-gray-900">
+                  {formatMoneyFromInt(
+                    dataAggregatePeriod?.totalSale?.totalCostValue
+                  )}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-semibold text-gray-700">Líquido</span>
+                <span className="text-gray-900">
+                  {formatMoneyFromInt(dataAggregatePeriod?.totalSale?.netValue)}{' '}
+                  (
+                  {getPercentPretty(
+                    dataAggregatePeriod?.totalSale?.netValue,
+                    dataAggregatePeriod?.totalSale?.totalValue
+                  )}
+                  )
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-semibold text-gray-700">Vendas</span>
+                <span className="text-gray-900">
+                  {dataAggregatePeriod?.totalSale?.count}
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

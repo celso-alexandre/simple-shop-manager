@@ -14,7 +14,7 @@ export function tablePagination({
   const current = Math.floor(skip / pageSize) + 1;
   return {
     pagination: {
-      size: 'default',
+      size: 'small',
       hideOnSinglePage: false,
       current,
       pageSize,

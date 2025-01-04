@@ -26,6 +26,19 @@ export type AggregateProduct = {
   qty: Scalars['Int']['output'];
 };
 
+export type AggregateSale = {
+  __typename?: 'AggregateSale';
+  count?: Maybe<Scalars['Float']['output']>;
+  netValue: Scalars['Int']['output'];
+  totalCostValue: Scalars['Int']['output'];
+  totalValue: Scalars['Int']['output'];
+};
+
+
+export type AggregateSaleCountArgs = {
+  where?: InputMaybe<SaleWhereInputCustom>;
+};
+
 export type BoolFieldUpdateOperationsInput = {
   set?: InputMaybe<Scalars['Boolean']['input']>;
 };
@@ -1917,6 +1930,7 @@ export type Query = {
   provider: Provider;
   providers: ProvidersOutput;
   sale: Sale;
+  saleAggregate: AggregateSale;
   saleItem: SaleItem;
   saleItems: SaleItemsOutput;
   sales: SalesOutput;
@@ -1957,6 +1971,11 @@ export type QueryProvidersArgs = {
 
 export type QuerySaleArgs = {
   where: SaleWhereUniqueInput;
+};
+
+
+export type QuerySaleAggregateArgs = {
+  where?: InputMaybe<SaleWhereInputCustom>;
 };
 
 
@@ -2981,6 +3000,11 @@ export type SaleWhereInput = {
   updatedAt?: InputMaybe<DateTimeFilter>;
 };
 
+export type SaleWhereInputCustom = {
+  endDate?: InputMaybe<Scalars['DateTime']['input']>;
+  startDate?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
 export type SaleWhereUniqueInput = {
   AND?: InputMaybe<Array<SaleWhereInput>>;
   NOT?: InputMaybe<Array<SaleWhereInput>>;
@@ -3524,6 +3548,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   AggregateProduct: ResolverTypeWrapper<AggregateProduct>;
+  AggregateSale: ResolverTypeWrapper<AggregateSale>;
   BoolFieldUpdateOperationsInput: BoolFieldUpdateOperationsInput;
   BoolFilter: BoolFilter;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
@@ -3840,6 +3865,7 @@ export type ResolversTypes = {
   SaleUpsertWithWhereUniqueWithoutBlameUserInput: SaleUpsertWithWhereUniqueWithoutBlameUserInput;
   SaleUpsertWithoutSaleItemsInput: SaleUpsertWithoutSaleItemsInput;
   SaleWhereInput: SaleWhereInput;
+  SaleWhereInputCustom: SaleWhereInputCustom;
   SaleWhereUniqueInput: SaleWhereUniqueInput;
   SalesOutput: ResolverTypeWrapper<SalesOutput>;
   SortOrder: SortOrder;
@@ -3902,6 +3928,7 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   AggregateProduct: AggregateProduct;
+  AggregateSale: AggregateSale;
   BoolFieldUpdateOperationsInput: BoolFieldUpdateOperationsInput;
   BoolFilter: BoolFilter;
   Boolean: Scalars['Boolean']['output'];
@@ -4210,6 +4237,7 @@ export type ResolversParentTypes = {
   SaleUpsertWithWhereUniqueWithoutBlameUserInput: SaleUpsertWithWhereUniqueWithoutBlameUserInput;
   SaleUpsertWithoutSaleItemsInput: SaleUpsertWithoutSaleItemsInput;
   SaleWhereInput: SaleWhereInput;
+  SaleWhereInputCustom: SaleWhereInputCustom;
   SaleWhereUniqueInput: SaleWhereUniqueInput;
   SalesOutput: SalesOutput;
   String: Scalars['String']['output'];
@@ -4273,6 +4301,14 @@ export type AggregateProductResolvers<ContextType = any, ParentType extends Reso
   netValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   priceValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   qty?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AggregateSaleResolvers<ContextType = any, ParentType extends ResolversParentTypes['AggregateSale'] = ResolversParentTypes['AggregateSale']> = {
+  count?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType, Partial<AggregateSaleCountArgs>>;
+  netValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totalCostValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  totalValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -4569,6 +4605,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   provider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<QueryProviderArgs, 'where'>>;
   providers?: Resolver<ResolversTypes['ProvidersOutput'], ParentType, ContextType, Partial<QueryProvidersArgs>>;
   sale?: Resolver<ResolversTypes['Sale'], ParentType, ContextType, RequireFields<QuerySaleArgs, 'where'>>;
+  saleAggregate?: Resolver<ResolversTypes['AggregateSale'], ParentType, ContextType, Partial<QuerySaleAggregateArgs>>;
   saleItem?: Resolver<ResolversTypes['SaleItem'], ParentType, ContextType, RequireFields<QuerySaleItemArgs, 'where'>>;
   saleItems?: Resolver<ResolversTypes['SaleItemsOutput'], ParentType, ContextType, Partial<QuerySaleItemsArgs>>;
   sales?: Resolver<ResolversTypes['SalesOutput'], ParentType, ContextType, Partial<QuerySalesArgs>>;
@@ -4839,6 +4876,7 @@ export type UsersOutputResolvers<ContextType = any, ParentType extends Resolvers
 
 export type Resolvers<ContextType = any> = {
   AggregateProduct?: AggregateProductResolvers<ContextType>;
+  AggregateSale?: AggregateSaleResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;

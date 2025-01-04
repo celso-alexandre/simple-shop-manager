@@ -11,6 +11,7 @@ import { ProviderModule } from './provider/provider.module';
 import { SaleModule } from './sale/sale.module';
 import { SaleItemModule } from './sale-item/sale-item.module';
 import { ProductAggregateModule } from './product-aggregate/module';
+import { SaleAggregateModule } from './sale-aggregate/module';
 
 @Module({
   imports: [
@@ -43,7 +44,8 @@ import { ProductAggregateModule } from './product-aggregate/module';
     ProviderModule,
     SaleModule,
     SaleItemModule,
-    ProductAggregateModule
+    ProductAggregateModule,
+    SaleAggregateModule
   ]
 })
 export class AppModule {}
