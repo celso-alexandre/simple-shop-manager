@@ -35,15 +35,15 @@ model User {
 
   /// Relations
   /// @HideField({ output: true })
-  providers       Provider[]
+  providers        Provider[]
   /// @HideField({ output: true })
-  products        Product[]
+  products         Product[]
   /// @HideField({ output: true })
-  sales           Sale[]
+  sales            Sale[]
   /// @HideField({ output: true })
-  saleItems       SaleItem[]
+  saleItems        SaleItem[]
   /// @HideField({ output: true })
-  ProductMovement ProductMovement[]
+  ProductMovements ProductMovement[]
 }
 
 model Provider {
@@ -105,13 +105,15 @@ model Product {
 
   /// Relations
   /// @HideField({ output: true })
-  blameUser       User?             @relation(fields: [blameUserId], references: [id])
+  blameUser         User?               @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
-  provider        Provider?         @relation(fields: [providerId], references: [id])
+  provider          Provider?           @relation(fields: [providerId], references: [id])
   /// @HideField({ output: true })
-  SaleItems       SaleItem[]
+  SaleItems         SaleItem[]
   /// @HideField({ output: true })
-  ProductMovement ProductMovement[]
+  ProductMovements  ProductMovement[]
+  /// @HideField({ output: true })
+  ProviderOrderItem ProviderOrderItem[]
 }
 
 enum ProductMovementType {
@@ -120,6 +122,7 @@ enum ProductMovementType {
   SALE
   SALE_EDIT
   SALE_DELETE
+  PROVIDER_ORDER
 }
 
 enum ProductMovementGroupType {
@@ -137,9 +140,9 @@ model ProductMovementGroup {
   createdAt DateTime @default(now())
 
   /// @HideField({ output: true })
-  Provider        Provider?         @relation(fields: [providerId], references: [id])
+  Provider         Provider?         @relation(fields: [providerId], references: [id])
   /// @HideField({ output: true })
-  ProductMovement ProductMovement[]
+  ProductMovements ProductMovement[]
 
   @@unique([type, providerId, documentId])
 }
@@ -158,6 +161,10 @@ model ProductMovement {
   /// FK: User.id - User to blame for
   blameUserId            String?             @db.ObjectId
   productMovementGroupId String?             @db.ObjectId
+
+  providerOrderItemId String?            @db.ObjectId
+  /// @HideField({ output: true })
+  providerOrderItem   ProviderOrderItem? @relation(fields: [providerOrderItemId], references: [id])
 
   /// @HideField({ match: '@(*Update*|*Create*)Input' })
   createdAt DateTime @default(now())
@@ -196,9 +203,11 @@ model Sale {
 
   /// Relations
   /// @HideField({ output: true })
-  blameUser User?      @relation(fields: [blameUserId], references: [id])
+  blameUser         User?               @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
-  saleItems SaleItem[]
+  saleItems         SaleItem[]
+  /// @HideField({ output: true })
+  FinancialMovement FinancialMovement[]
 }
 
 model SaleItem {
@@ -236,15 +245,89 @@ model SaleItem {
 
   /// Relations
   /// @HideField({ output: true })
-  blameUser       User?             @relation(fields: [blameUserId], references: [id])
+  blameUser        User?             @relation(fields: [blameUserId], references: [id])
   /// @HideField({ output: true })
-  sale            Sale?             @relation(fields: [saleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  sale             Sale?             @relation(fields: [saleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   /// @HideField({ output: true })
-  provider        Provider?         @relation(fields: [providerId], references: [id])
+  provider         Provider?         @relation(fields: [providerId], references: [id])
   /// @HideField({ output: true })
-  product         Product           @relation(fields: [productId], references: [id])
+  product          Product           @relation(fields: [productId], references: [id])
   /// @HideField({ output: true })
-  ProductMovement ProductMovement[]
+  productMovements ProductMovement[]
 
   @@unique([costIsPostPaid, productId, saleId])
+}
+
+model ProviderOrder {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  date       DateTime @default(now())
+  itemsValue Int      @default(0)
+  otherValue Int      @default(0)
+
+  // @HideField({ match: '@(*Update*|*Create*)Input' }) 
+  createdAt DateTime @default(now())
+  // @HideField({ match: '@(*Update*|*Create*)Input' })
+  updatedAt DateTime @updatedAt
+
+  /// @HideField({ output: true })
+  providerOrderItems ProviderOrderItem[]
+  /// @HideField({ output: true })
+  financialMovement  FinancialMovement[]
+}
+
+model ProviderOrderItem {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  quantity   Int     @default(0)
+  moveQty    Boolean @default(false)
+  totalValue Int
+
+  providerId String @db.ObjectId
+
+  providerOrderId String        @db.ObjectId
+  /// @HideField({ output: true })
+  providerOrder   ProviderOrder @relation(fields: [providerOrderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  productId String  @db.ObjectId
+  /// @HideField({ output: true })
+  product   Product @relation(fields: [productId], references: [id])
+
+  // @HideField({ match: '@(*Update*|*Create*)Input' })
+  createdAt DateTime @default(now())
+  // @HideField({ match: '@(*Update*|*Create*)Input' })
+  updatedAt DateTime @updatedAt
+
+  /// @HideField({ output: true })
+  productMovements ProductMovement[]
+
+  @@unique([providerOrderId, productId])
+}
+
+enum FinancialMovementType {
+  MANUAL
+  SALE
+  PROVIDER_ORDER
+}
+
+model FinancialMovement {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  type FinancialMovementType
+
+  date  DateTime @default(now())
+  value Int      @default(0)
+
+  saleId String? @unique @db.ObjectId
+  /// @HideField({ output: true })
+  sale   Sale?   @relation(fields: [saleId], references: [id])
+
+  providerOrderId String?        @unique @db.ObjectId
+  /// @HideField({ output: true })
+  providerOrder   ProviderOrder? @relation(fields: [providerOrderId], references: [id])
+
+  // @HideField({ match: '@(*Update*|*Create*)Input' }) 
+  createdAt DateTime @default(now())
+  // @HideField({ match: '@(*Update*|*Create*)Input' })
+  updatedAt DateTime @updatedAt
 }

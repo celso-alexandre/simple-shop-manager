@@ -112,7 +112,7 @@ export class SaleService {
           }
         },
         include: {
-          saleItems: { include: { product: true, ProductMovement: true } }
+          saleItems: { include: { product: true, productMovements: true } }
         }
       });
       this.validateSale(sale);
@@ -130,41 +130,39 @@ export class SaleService {
         data: { updatedAt: new Date() },
         where: { id: args.where.id },
         include: {
-          saleItems: { include: { product: true, ProductMovement: true } }
+          saleItems: { include: { product: true, productMovements: true } }
         }
       });
 
       const sale = await prisma.sale.update({
-        ...args,
+        where: args.where,
         data: {
-          ...args.data,
-          saleItems: {
-            ...args.data.saleItems,
-            create: args.data.saleItems?.create?.map((item) => {
-              return {
-                ...item,
-                totalCostValue: 0
-              };
-            }),
-            update: args.data.saleItems?.update?.map((item) => {
-              return {
-                ...item,
-                data: {
-                  ...item.data,
-                  totalCostValue: 0
-                }
-              };
-            })
-          }
+          date: args.data.date,
+          totalCostValue: args.data.totalCostValue,
+          totalValue: args.data.totalValue,
+          saleItems: args.data.saleItems as any
         },
         include: {
-          saleItems: { include: { product: true, ProductMovement: true } }
+          saleItems: { include: { product: true, productMovements: true } }
         }
       });
       this.validateSale(sale);
 
       await Promise.all([
-        handleProductMovement(prisma, sale, saleBefore),
+        handleProductMovement(
+          prisma,
+          {
+            date: sale.date,
+            totalCostValue: sale.totalCostValue,
+            totalValue: sale.totalValue,
+            saleItems: (sale as any).saleItems,
+            blameUserId: '',
+            createdAt: new Date(),
+            id: sale.id,
+            updatedAt: new Date()
+          },
+          saleBefore
+        ),
         this.updateSaleAndItemsTotals(prisma, sale)
       ]);
     });
@@ -176,7 +174,7 @@ export class SaleService {
         data: { updatedAt: new Date() },
         where: { id: args.where.id },
         include: {
-          saleItems: { include: { product: true, ProductMovement: true } }
+          saleItems: { include: { product: true, productMovements: true } }
         }
       });
 

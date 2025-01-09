@@ -33,7 +33,15 @@ export class ProviderService {
   }
 
   updateOne(args: UpdateOneProviderArgs) {
-    return this.prisma.provider.update(args);
+    return this.prisma.provider.update({
+      where: args.where,
+      data: {
+        document: args.data.document,
+        email: args.data.email,
+        name: args.data.name,
+        whatsapp: args.data.whatsapp
+      }
+    });
   }
 
   deleteOne(args: DeleteOneProviderArgs) {

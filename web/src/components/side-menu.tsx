@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { MenuProps } from 'antd';
 import { Button, Menu } from 'antd';
-import { FiUsers } from 'react-icons/fi';
 import { BiBarcode, BiListPlus, BiListUl } from 'react-icons/bi';
 import { MdOutlineAddBusiness, MdOutlinePointOfSale } from 'react-icons/md';
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from 'react-icons/ai';
 import { useMediaQuery } from 'react-responsive';
 import { matchRoutes, useLocation } from 'react-router-dom';
+import { FaRegClipboard } from 'react-icons/fa';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -49,6 +49,23 @@ export function SideMenu() {
     },
     {
       key: '2',
+      label: 'Ordens Compra',
+      icon: <FaRegClipboard />,
+      children: [
+        {
+          key: '/provider-orders',
+          label: <a href="/provider-orders">Listar Ordens</a>,
+          icon: <BiListUl />,
+        },
+        {
+          key: '/provider-order',
+          label: <a href="/provider-order">Nova Ordem</a>,
+          icon: <BiListPlus />,
+        },
+      ],
+    },
+    {
+      key: '3',
       label: 'Produtos',
       icon: <BiBarcode />,
       children: [
@@ -69,7 +86,7 @@ export function SideMenu() {
       ],
     },
     {
-      key: '3',
+      key: '4',
       label: 'Fornecedores',
       icon: <MdOutlineAddBusiness />,
       children: [
@@ -89,11 +106,11 @@ export function SideMenu() {
         },
       ],
     },
-    {
-      key: '/users',
-      label: <a href="/users">Administradores</a>,
-      icon: <FiUsers />,
-    },
+    // {
+    //   key: '5',
+    //   label: <a href="/users">Administradores</a>,
+    //   icon: <FiUsers />,
+    // },
   ];
 
   const routes = useMemo(() => {
