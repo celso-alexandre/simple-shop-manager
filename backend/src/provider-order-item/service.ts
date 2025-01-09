@@ -78,7 +78,8 @@ export class ProviderOrderItemService {
         qty: {
           increment: movedQty
         },
-        controlsQty: true
+        controlsQty: true,
+        providerId: updatedItem.providerId
       };
 
       if (!costValue) {
