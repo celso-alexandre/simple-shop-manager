@@ -1,13 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../common/prisma.service';
-import {
-  CreateManyUserArgs,
-  CreateOneUserArgs,
-  DeleteOneUserArgs,
-  FindManyUserArgs,
-  FindUniqueUserArgs,
-  UpdateOneUserArgs
-} from './dto';
+import { FindManyUserArgs, FindUniqueUserArgs } from './dto';
 
 @Injectable()
 export class UserService {
@@ -21,20 +14,20 @@ export class UserService {
     return this.prisma.findManyPaginated(this.prisma.user, args);
   }
 
-  createOne(args: CreateOneUserArgs) {
-    return this.prisma.user.create(args);
-  }
+  // createOne(args: CreateOneUserArgs) {
+  //   return this.prisma.user.create(args);
+  // }
 
-  async createMany(args: CreateManyUserArgs) {
-    await this.prisma.user.createMany(args);
-    return true;
-  }
+  // async createMany(args: CreateManyUserArgs) {
+  //   await this.prisma.user.createMany(args);
+  //   return true;
+  // }
 
-  updateOne(args: UpdateOneUserArgs) {
-    return this.prisma.user.update(args);
-  }
+  // updateOne(args: UpdateOneUserArgs) {
+  //   return this.prisma.user.update(args);
+  // }
 
-  deleteOne(args: DeleteOneUserArgs) {
-    return this.prisma.user.delete(args);
-  }
+  // deleteOne(args: DeleteOneUserArgs) {
+  //   return this.prisma.user.delete(args);
+  // }
 }

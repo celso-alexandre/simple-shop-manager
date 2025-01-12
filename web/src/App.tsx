@@ -15,6 +15,12 @@ import { ProductInsert } from './products/insert';
 import { ProductEdit } from './products/edit';
 import { SaleInsert } from './sales/insert';
 import { SaleEdit } from './sales/edit';
+import { ProviderOrderInsert } from './provider-orders/insert';
+import { ProviderOrders } from './provider-orders';
+import { ProviderOrderEdit } from './provider-orders/edit';
+import { FinancialMovements } from './financial-movements';
+import { FinancialMovementInsert } from './financial-movements/insert';
+import { FinancialMovementEdit } from './financial-movements/edit';
 
 import('dayjs/locale/pt-br');
 
@@ -39,6 +45,23 @@ export function App() {
             <Route path="/sales" element={<Sales />} />
             <Route path="/sale" element={<SaleInsert />} />
             <Route path="/sale/:id" element={<SaleEdit />} />
+
+            <Route path="/provider-orders" element={<ProviderOrders />} />
+            <Route path="/provider-order" element={<ProviderOrderInsert />} />
+            <Route path="/provider-order/:id" element={<ProviderOrderEdit />} />
+
+            <Route
+              path="/financial-movements"
+              element={<FinancialMovements />}
+            />
+            <Route
+              path="/financial-movement"
+              element={<FinancialMovementInsert />}
+            />
+            <Route
+              path="/financial-movement/:id"
+              element={<FinancialMovementEdit />}
+            />
 
             <Route path="/providers" element={<Providers />} />
             <Route path="/provider" element={<ProviderInsert />} />

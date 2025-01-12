@@ -7,9 +7,9 @@ import {
 } from '@prisma/client';
 
 type SaleType = Sale & {
-  saleItems: (SaleItem & {
+  saleItems: (Pick<SaleItem, 'quantity' | 'id'> & {
     product: Product;
-    ProductMovement: ProductMovement[];
+    productMovements: ProductMovement[];
   })[];
 };
 
@@ -78,7 +78,7 @@ export async function handleProductMovement(
   for (const item of saleAfter.saleItems) {
     // not sure if !item.ProductMovement?.length!item.ProductMovement?.length is good: !item.ProductMovement?.length
     // it ensures that if the product moved stock before, it keeps doing that in updates
-    if (!item.product.controlsQty && !item.ProductMovement?.length) {
+    if (!item.product.controlsQty && !item.productMovements?.length) {
       continue;
     }
 
@@ -108,7 +108,7 @@ export async function handleProductMovement(
 
   // Iteration over sale items that were removed only
   for (const item of saleBefore.saleItems) {
-    if (!item.product.controlsQty && !item.ProductMovement?.length) {
+    if (!item.product.controlsQty && !item.productMovements?.length) {
       continue;
     }
 

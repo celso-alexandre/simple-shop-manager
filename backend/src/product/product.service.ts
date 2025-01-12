@@ -23,7 +23,9 @@ export class ProductService {
 
   createOne(args: CreateOneProductArgs) {
     return this.prisma.$transaction(async (prisma) => {
-      const product = await this.prisma.product.create(args);
+      const product = await this.prisma.product.create({
+        data: args.data
+      });
       if (!product.qty) {
         return product;
       }
@@ -45,7 +47,23 @@ export class ProductService {
         where: { id: args.where.id },
         select: { qty: true }
       });
-      const product = await this.prisma.product.update(args);
+      const product = await this.prisma.product.update({
+        where: args.where,
+        data: {
+          brandName: args.data.brandName,
+          controlsQty: args.data.controlsQty,
+          costValue: args.data.costValue,
+          isPostPaid: args.data.isPostPaid,
+          name: args.data.name,
+          priceValue: args.data.priceValue,
+          provider: !args.data.provider?.connect?.id
+            ? undefined
+            : {
+                connect: { id: args.data.provider.connect.id }
+              },
+          qty: args.data.qty
+        }
+      });
       const balanceDiff = product.qty - prodBefore.qty;
       if (!balanceDiff) {
         return product;
