@@ -22,18 +22,66 @@ export class ProviderOrderService {
   }
 
   createOne(args: CreateOneProviderOrderArgs) {
-    return this.prisma.providerOrder.create(args);
+    const itemsValue = args.data.providerOrderItems.create.reduce(
+      (prev, cur) => cur.totalValue + prev,
+      0
+    );
+    args.data.itemsValue = itemsValue;
+    args.data.financialMovements = undefined;
+    return this.prisma.$transaction(async (prisma) => {
+      const res = await prisma.providerOrder.create(args);
+      await prisma.financialMovement.create({
+        data: {
+          type: 'PROVIDER_ORDER',
+          value: args.data.itemsValue * -1,
+          providerOrder: { connect: { id: res.id } }
+        }
+      });
+      return res;
+    });
   }
 
   updateOne(args: UpdateOneProviderOrderArgs) {
-    return this.prisma.providerOrder.update({
-      where: args.where,
-      data: {
-        date: args.data.date,
-        itemsValue: args.data.itemsValue,
-        otherValue: args.data.otherValue,
-        providerOrderItems: args.data.providerOrderItems as any
+    return this.prisma.$transaction(async (prisma) => {
+      const order = await prisma.providerOrder.findUniqueOrThrow({
+        where: args.where,
+        include: { providerOrderItems: true }
+      });
+      const itemsValue = order.providerOrderItems.reduce(
+        (prev, cur) => cur.totalValue + prev,
+        0
+      );
+      const updatedOrder = await prisma.providerOrder.update({
+        where: args.where,
+        data: {
+          ...args.data,
+          itemsValue
+        },
+        include: { providerOrderItems: true }
+      });
+      const newItemsValue = updatedOrder.providerOrderItems.reduce(
+        (prev, cur) => cur.totalValue + prev,
+        0
+      );
+      if (itemsValue !== newItemsValue) {
+        const diffVal = newItemsValue - itemsValue;
+        await Promise.all([
+          prisma.financialMovement.create({
+            data: {
+              value: diffVal * -1,
+              type: 'PROVIDER_ORDER',
+              providerOrder: { connect: { id: updatedOrder.id } }
+            }
+          }),
+          prisma.providerOrder.update({
+            where: { id: updatedOrder.id },
+            data: {
+              itemsValue: newItemsValue
+            }
+          })
+        ]);
       }
+      return updatedOrder;
     });
   }
 

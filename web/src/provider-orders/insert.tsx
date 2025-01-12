@@ -48,7 +48,7 @@ export function ProviderOrderInsert() {
 
   return (
     <>
-      <Title title="Nova Venda" />
+      <Title title="Nova Compra" />
 
       <ProviderOrdersForm
         form={form}

@@ -50,7 +50,7 @@ export function ProviderOrdersTable(props: TableProps<ProviderOrdersNode>) {
               display: 'flex',
               justifyContent: 'space-between',
             }}>
-            <a href={`/providerOrder/${record.id}`}>
+            <a href={`/provider-order/${record.id}`}>
               <Button size="middle" type="primary">
                 Editar
               </Button>

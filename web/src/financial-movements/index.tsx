@@ -11,38 +11,34 @@ import {
 import { Filter } from '../components/filter';
 import { Title } from '../components/title';
 import {
-  ProviderOrderQuery,
-  ProviderOrdersQuery,
-  useProviderOrdersQuery,
-} from '../graphql/__generated__/provider-orders.gql.generated';
+  FinancialMovementQuery,
+  FinancialMovementsQuery,
+  useFinancialMovementsQuery,
+} from '../graphql/__generated__/financial-movements.gql.generated';
 import { useQueryParamsWithDebounce } from '../helpers/use-query-params-with-debounce';
-import { QueryMode, SortOrder } from '../types';
-import { ProviderOrdersTable } from './table';
+import { SortOrder } from '../types';
+import { FinancialMovementsTable } from './table';
 import { tablePagination } from '../helpers/pagination';
 import { CustomRangePicker } from '../components/range-picker';
 
-export type ProviderOrdersNode =
-  ProviderOrdersQuery['providerOrders']['nodes'][0];
-export type ProviderOrderItem = Pick<
-  ProviderOrderQuery['providerOrder']['providerOrderItems']['nodes'][number],
-  'productId' | 'providerId' | 'totalValue' | 'quantity'
-> & { id?: string };
-export type ProviderOrdersFormNode = Pick<
-  ProviderOrderQuery['providerOrder'],
-  'date'
+export type FinancialMovementsNode =
+  FinancialMovementsQuery['financialMovements']['nodes'][0];
+export type FinancialMovementsFormNode = Pick<
+  FinancialMovementQuery['financialMovement'],
+  'date' | 'value'
 > & {
   id?: string;
-  providerOrderItems: { nodes: ProviderOrderItem[] };
+  kind: 'credit' | 'debit';
 };
-export type ProviderOrdersQueryParams = {
+export type FinancialMovementsQueryParams = {
   take: QueryParamConfig<number>;
   skip: QueryParamConfig<number>;
   search: QueryParamConfig<string | null | undefined>;
   startDate: QueryParamConfig<Date>;
   endDate: QueryParamConfig<Date>;
 };
-export function ProviderOrders() {
-  const queryDefaults: DecodedValueMap<ProviderOrdersQueryParams> = {
+export function FinancialMovements() {
+  const queryDefaults: DecodedValueMap<FinancialMovementsQueryParams> = {
     take: 10,
     skip: 0,
     search: undefined,
@@ -50,57 +46,29 @@ export function ProviderOrders() {
     endDate: dayjs().endOf('month').toDate(),
   };
   const [query, , queryObj, setQueryDebounced] =
-    useQueryParamsWithDebounce<ProviderOrdersQueryParams>({
+    useQueryParamsWithDebounce<FinancialMovementsQueryParams>({
       take: withDefault(NumberParam, queryDefaults.take),
       skip: withDefault(NumberParam, queryDefaults.skip),
       search: StringParam,
       startDate: withDefault(DateParam, queryDefaults.startDate),
       endDate: withDefault(DateParam, queryDefaults.endDate),
     });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { skip, take, search, startDate, endDate } = query;
-  const { data, loading, refetch } = useProviderOrdersQuery({
+  const { data, loading, refetch } = useFinancialMovementsQuery({
     variables: {
       take,
       skip,
       orderBy: { id: SortOrder.Desc },
       where: {
         date: { gte: startDate, lte: dayjs(endDate).endOf('day').toDate() },
-        OR: !search
-          ? undefined
-          : [
-              {
-                providerOrderItems: {
-                  some: {
-                    product: {
-                      is: {
-                        name: { contains: search, mode: QueryMode.Insensitive },
-                      },
-                    },
-                  },
-                },
-              },
-              {
-                providerOrderItems: {
-                  some: {
-                    product: {
-                      is: {
-                        brandName: {
-                          contains: search,
-                          mode: QueryMode.Insensitive,
-                        },
-                      },
-                    },
-                  },
-                },
-              },
-            ],
       },
     },
   });
 
   return (
     <div style={{ margin: '0 25px 0 0' }}>
-      <Title title="Compras" />
+      <Title title="Movimentação Financeira" />
 
       <Filter
         query={queryObj}
@@ -135,15 +103,15 @@ export function ProviderOrders() {
       />
 
       <div style={{ marginTop: 20 }}>
-        <ProviderOrdersTable
+        <FinancialMovementsTable
           size="small"
           loading={loading}
-          dataSource={data?.providerOrders.nodes}
+          dataSource={data?.financialMovements.nodes}
           rowKey={'id' as any}
           {...tablePagination({
             pageSize: take,
             skip,
-            totalPages: data?.providerOrders.pageInfo?.total || 0,
+            totalPages: data?.financialMovements.pageInfo?.total || 0,
             setPagination(newSkip, newTake) {
               setQueryDebounced((prev) => {
                 return { ...prev, skip: newSkip, take: newTake };

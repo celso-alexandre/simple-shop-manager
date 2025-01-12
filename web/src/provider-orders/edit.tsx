@@ -13,7 +13,7 @@ import {
   useProviderOrderQuery,
   ProviderOrderQuery,
 } from '../graphql/__generated__/provider-orders.gql.generated';
-import { objectPropertiesSet, serializeDecimalAsInt } from '../helpers';
+import { serializeDecimalAsInt } from '../helpers';
 import { ProviderOrderItemUpdateWithWhereUniqueWithoutProviderOrderInput } from '../types';
 import { ProviderOrdersForm } from './form';
 import { providerOrderDto } from './helper';
@@ -63,10 +63,10 @@ async function onSubmit(
                   productId,
                   providerId,
                   totalValue,
-                  ...rest
+                  quantity,
                 } = item;
                 return {
-                  ...rest,
+                  quantity,
                   totalValue: serializeDecimalAsInt(totalValue),
                   product: { connect: { id: productId } },
                   providerId,
@@ -83,18 +83,19 @@ async function onSubmit(
                   productId,
                   providerId,
                   totalValue,
-                  ...rest
+                  quantity,
                 } = item;
                 const res: ProviderOrderItemUpdateWithWhereUniqueWithoutProviderOrderInput =
                   {
                     where: { id: providerOrderItemId },
                     data: {
-                      ...objectPropertiesSet(rest),
+                      quantity: { set: quantity },
                       totalValue: { set: serializeDecimalAsInt(totalValue) },
                       product: { connect: { id: productId } },
-                      provider: !providerId
-                        ? { disconnect: true }
-                        : { connect: { id: providerId } },
+                      providerId: { set: providerId },
+                      // provider: !providerId
+                      //   ? { disconnect: true }
+                      //   : { connect: { id: providerId } },
                     },
                   };
                 return res;
@@ -138,7 +139,7 @@ export function ProviderOrderEdit() {
 
   return (
     <>
-      <Title title={data?.providerOrder?.id ?? 'Venda não encontrada'} />
+      <Title title={data?.providerOrder?.id ?? 'Compra não encontrada'} />
 
       <ProviderOrdersForm
         initialValues={initialValues}

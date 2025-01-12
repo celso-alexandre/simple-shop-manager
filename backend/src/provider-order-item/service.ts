@@ -28,12 +28,12 @@ export class ProviderOrderItemService {
       const updatedItem = await prisma.providerOrderItem.update({
         where: args.where,
         data: {
-          moveQty: args.data.moveQty,
-          quantity: args.data.quantity,
-          providerId: args.data.providerId,
-          productId: args.data.product.connect.id,
-          providerOrderId: args.data.providerOrder.connect.id,
-          totalValue: args.data.totalValue
+          moveQty: args.data.moveQty
+          // quantity: args.data.quantity,
+          // providerId: args.data.providerId,
+          // productId: args.data.product.connect.id,
+          // providerOrderId: args.data.providerOrder.connect.id,
+          // totalValue: args.data.totalValue
         },
         include: { providerOrder: true, product: true }
       });
@@ -49,18 +49,23 @@ export class ProviderOrderItemService {
         }
       });
 
-      let newQty = 0;
-      if (updatedItem.moveQty) {
-        newQty = updatedItem.quantity;
+      let prevMovedQty = 0;
+      if (item.moveQty) {
+        prevMovedQty = item.quantity;
       }
-      const movedQty = newQty - item.quantity;
+
+      let newMovedQty = 0;
+      if (updatedItem.moveQty) {
+        newMovedQty = updatedItem.quantity;
+      }
+      const movedQty = newMovedQty - prevMovedQty;
       console.log({ movedQty });
 
       if (!movedQty) {
         return updatedItem;
       }
 
-      await prisma.productMovement.create({
+      prisma.productMovement.create({
         data: {
           quantity: movedQty,
           type: 'PROVIDER_ORDER',
@@ -83,6 +88,10 @@ export class ProviderOrderItemService {
       };
 
       if (!costValue) {
+        // providerId: args.data.providerId,
+        // productId: args.data.product.connect.id,
+        // providerOrderId: args.data.providerOrder.connect.id,
+        // totalValue: args.data.totalValue
         console.log('No cost value', {
           costValue,
           totalValue: updatedItem.totalValue,

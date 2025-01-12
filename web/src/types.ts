@@ -48,6 +48,10 @@ export type BoolFilter = {
   not?: InputMaybe<NestedBoolFilter>;
 };
 
+export type CustomProviderOrderItemUpdateInput = {
+  moveQty?: InputMaybe<BoolFieldUpdateOperationsInput>;
+};
+
 export type DateTimeFieldUpdateOperationsInput = {
   set?: InputMaybe<Scalars['DateTime']['input']>;
 };
@@ -96,6 +100,19 @@ export type EnumProductMovementTypeFilter = {
   notIn?: InputMaybe<Array<ProductMovementType>>;
 };
 
+export type FinancialMovement = {
+  __typename?: 'FinancialMovement';
+  createdAt: Scalars['DateTime']['output'];
+  date: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  providerOrderId?: Maybe<Scalars['String']['output']>;
+  saleId?: Maybe<Scalars['String']['output']>;
+  type: FinancialMovementType;
+  updatedAt: Scalars['DateTime']['output'];
+  value: Scalars['Int']['output'];
+  valueDecimal: Scalars['Float']['output'];
+};
+
 export type FinancialMovementAvgAggregate = {
   __typename?: 'FinancialMovementAvgAggregate';
   value?: Maybe<Scalars['Float']['output']>;
@@ -112,6 +129,17 @@ export type FinancialMovementCountAggregate = {
   type: Scalars['Int']['output'];
   updatedAt: Scalars['Int']['output'];
   value: Scalars['Int']['output'];
+};
+
+export type FinancialMovementCreateInput = {
+  createdAt?: InputMaybe<Scalars['DateTime']['input']>;
+  date?: InputMaybe<Scalars['DateTime']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  providerOrder?: InputMaybe<ProviderOrderCreateNestedOneWithoutFinancialMovementsInput>;
+  sale?: InputMaybe<SaleCreateNestedOneWithoutFinancialMovementInput>;
+  type: FinancialMovementType;
+  updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  value?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type FinancialMovementCreateManyProviderOrderInput = {
@@ -180,7 +208,7 @@ export type FinancialMovementCreateWithoutSaleInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   date?: InputMaybe<Scalars['DateTime']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
-  providerOrder?: InputMaybe<ProviderOrderCreateNestedOneWithoutFinancialMovementInput>;
+  providerOrder?: InputMaybe<ProviderOrderCreateNestedOneWithoutFinancialMovementsInput>;
   type: FinancialMovementType;
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
   value?: InputMaybe<Scalars['Int']['input']>;
@@ -220,6 +248,43 @@ export type FinancialMovementOrderByRelationAggregateInput = {
   _count?: InputMaybe<SortOrder>;
 };
 
+export type FinancialMovementOrderByWithRelationInput = {
+  createdAt?: InputMaybe<SortOrder>;
+  date?: InputMaybe<SortOrder>;
+  id?: InputMaybe<SortOrder>;
+  providerOrder?: InputMaybe<ProviderOrderOrderByWithRelationInput>;
+  providerOrderId?: InputMaybe<SortOrder>;
+  sale?: InputMaybe<SaleOrderByWithRelationInput>;
+  saleId?: InputMaybe<SortOrder>;
+  type?: InputMaybe<SortOrder>;
+  updatedAt?: InputMaybe<SortOrder>;
+  value?: InputMaybe<SortOrder>;
+};
+
+export type FinancialMovementPaginated = {
+  __typename?: 'FinancialMovementPaginated';
+  /** Number of current page */
+  currentPage?: Maybe<Scalars['Int']['output']>;
+  /** Boolean to use on a cursor-based pagination. E.g: Mobile scroll */
+  hasNextPage?: Maybe<Scalars['Boolean']['output']>;
+  /** Number of last page */
+  lastPage?: Maybe<Scalars['Int']['output']>;
+  nextCursor?: Maybe<Scalars['Int']['output']>;
+  /** Count for query results without skip, take and cursor */
+  total?: Maybe<Scalars['Int']['output']>;
+};
+
+export enum FinancialMovementScalarFieldEnum {
+  CreatedAt = 'createdAt',
+  Date = 'date',
+  Id = 'id',
+  ProviderOrderId = 'providerOrderId',
+  SaleId = 'saleId',
+  Type = 'type',
+  UpdatedAt = 'updatedAt',
+  Value = 'value'
+}
+
 export type FinancialMovementScalarWhereInput = {
   AND?: InputMaybe<Array<FinancialMovementScalarWhereInput>>;
   NOT?: InputMaybe<Array<FinancialMovementScalarWhereInput>>;
@@ -244,6 +309,16 @@ export enum FinancialMovementType {
   ProviderOrder = 'PROVIDER_ORDER',
   Sale = 'SALE'
 }
+
+export type FinancialMovementUpdateInput = {
+  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  providerOrder?: InputMaybe<ProviderOrderUpdateOneWithoutFinancialMovementsNestedInput>;
+  sale?: InputMaybe<SaleUpdateOneWithoutFinancialMovementNestedInput>;
+  type?: InputMaybe<EnumFinancialMovementTypeFieldUpdateOperationsInput>;
+  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  value?: InputMaybe<IntFieldUpdateOperationsInput>;
+};
 
 export type FinancialMovementUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -313,7 +388,7 @@ export type FinancialMovementUpdateWithoutProviderOrderInput = {
 export type FinancialMovementUpdateWithoutSaleInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  providerOrder?: InputMaybe<ProviderOrderUpdateOneWithoutFinancialMovementNestedInput>;
+  providerOrder?: InputMaybe<ProviderOrderUpdateOneWithoutFinancialMovementsNestedInput>;
   type?: InputMaybe<EnumFinancialMovementTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   value?: InputMaybe<IntFieldUpdateOperationsInput>;
@@ -363,6 +438,13 @@ export type FinancialMovementWhereUniqueInput = {
   value?: InputMaybe<IntFilter>;
 };
 
+export type FinancialMovementsOutput = {
+  __typename?: 'FinancialMovementsOutput';
+  nodes: Array<FinancialMovement>;
+  /** Pagination info for findMany requests */
+  pageInfo?: Maybe<FinancialMovementPaginated>;
+};
+
 export type IntFieldUpdateOperationsInput = {
   decrement?: InputMaybe<Scalars['Int']['input']>;
   divide?: InputMaybe<Scalars['Int']['input']>;
@@ -394,20 +476,28 @@ export enum MainExceptionKeys {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createFinancialMovement: FinancialMovement;
   createProduct: Product;
   createProvider: Provider;
   createProviderOrder: ProviderOrder;
   createProviders: Scalars['Boolean']['output'];
   createSale?: Maybe<Sale>;
+  deleteFinancialMovement: Scalars['Boolean']['output'];
   deleteProduct: Product;
   deleteProvider: Provider;
   deleteProviderOrder: Scalars['Boolean']['output'];
   deleteSale?: Maybe<Sale>;
+  updateFinancialMovement: FinancialMovement;
   updateProduct: Product;
   updateProvider: Provider;
   updateProviderOrder: ProviderOrder;
   updateProviderOrderItem: ProviderOrderItem;
   updateSale?: Maybe<Sale>;
+};
+
+
+export type MutationCreateFinancialMovementArgs = {
+  data: FinancialMovementCreateInput;
 };
 
 
@@ -436,6 +526,11 @@ export type MutationCreateSaleArgs = {
 };
 
 
+export type MutationDeleteFinancialMovementArgs = {
+  where: FinancialMovementWhereUniqueInput;
+};
+
+
 export type MutationDeleteProductArgs = {
   where: ProductWhereUniqueInput;
 };
@@ -453,6 +548,12 @@ export type MutationDeleteProviderOrderArgs = {
 
 export type MutationDeleteSaleArgs = {
   where: SaleWhereUniqueInput;
+};
+
+
+export type MutationUpdateFinancialMovementArgs = {
+  data: FinancialMovementUpdateInput;
+  where: FinancialMovementWhereUniqueInput;
 };
 
 
@@ -475,7 +576,7 @@ export type MutationUpdateProviderOrderArgs = {
 
 
 export type MutationUpdateProviderOrderItemArgs = {
-  data: ProviderOrderItemUpdateInput;
+  data: CustomProviderOrderItemUpdateInput;
   where: ProviderOrderItemWhereUniqueInput;
 };
 
@@ -2178,7 +2279,7 @@ export type ProviderOrderByWithRelationInput = {
 
 export type ProviderOrderCount = {
   __typename?: 'ProviderOrderCount';
-  financialMovement: Scalars['Int']['output'];
+  financialMovements: Scalars['Int']['output'];
   providerOrderItems: Scalars['Int']['output'];
 };
 
@@ -2196,7 +2297,7 @@ export type ProviderOrderCountAggregate = {
 export type ProviderOrderCreateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   date?: InputMaybe<Scalars['DateTime']['input']>;
-  financialMovement?: InputMaybe<FinancialMovementCreateNestedManyWithoutProviderOrderInput>;
+  financialMovements?: InputMaybe<FinancialMovementCreateNestedManyWithoutProviderOrderInput>;
   id?: InputMaybe<Scalars['String']['input']>;
   itemsValue?: InputMaybe<Scalars['Int']['input']>;
   otherValue?: InputMaybe<Scalars['Int']['input']>;
@@ -2204,10 +2305,10 @@ export type ProviderOrderCreateInput = {
   updatedAt?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
-export type ProviderOrderCreateNestedOneWithoutFinancialMovementInput = {
+export type ProviderOrderCreateNestedOneWithoutFinancialMovementsInput = {
   connect?: InputMaybe<ProviderOrderWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<ProviderOrderCreateOrConnectWithoutFinancialMovementInput>;
-  create?: InputMaybe<ProviderOrderCreateWithoutFinancialMovementInput>;
+  connectOrCreate?: InputMaybe<ProviderOrderCreateOrConnectWithoutFinancialMovementsInput>;
+  create?: InputMaybe<ProviderOrderCreateWithoutFinancialMovementsInput>;
 };
 
 export type ProviderOrderCreateNestedOneWithoutProviderOrderItemsInput = {
@@ -2216,8 +2317,8 @@ export type ProviderOrderCreateNestedOneWithoutProviderOrderItemsInput = {
   create?: InputMaybe<ProviderOrderCreateWithoutProviderOrderItemsInput>;
 };
 
-export type ProviderOrderCreateOrConnectWithoutFinancialMovementInput = {
-  create: ProviderOrderCreateWithoutFinancialMovementInput;
+export type ProviderOrderCreateOrConnectWithoutFinancialMovementsInput = {
+  create: ProviderOrderCreateWithoutFinancialMovementsInput;
   where: ProviderOrderWhereUniqueInput;
 };
 
@@ -2226,7 +2327,7 @@ export type ProviderOrderCreateOrConnectWithoutProviderOrderItemsInput = {
   where: ProviderOrderWhereUniqueInput;
 };
 
-export type ProviderOrderCreateWithoutFinancialMovementInput = {
+export type ProviderOrderCreateWithoutFinancialMovementsInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   date?: InputMaybe<Scalars['DateTime']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
@@ -2239,7 +2340,7 @@ export type ProviderOrderCreateWithoutFinancialMovementInput = {
 export type ProviderOrderCreateWithoutProviderOrderItemsInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   date?: InputMaybe<Scalars['DateTime']['input']>;
-  financialMovement?: InputMaybe<FinancialMovementCreateNestedManyWithoutProviderOrderInput>;
+  financialMovements?: InputMaybe<FinancialMovementCreateNestedManyWithoutProviderOrderInput>;
   id?: InputMaybe<Scalars['String']['input']>;
   itemsValue?: InputMaybe<Scalars['Int']['input']>;
   otherValue?: InputMaybe<Scalars['Int']['input']>;
@@ -2497,18 +2598,6 @@ export type ProviderOrderItemSumAggregate = {
   totalValue?: Maybe<Scalars['Int']['output']>;
 };
 
-export type ProviderOrderItemUpdateInput = {
-  createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  moveQty?: InputMaybe<BoolFieldUpdateOperationsInput>;
-  product?: InputMaybe<ProductUpdateOneRequiredWithoutProviderOrderItemNestedInput>;
-  productMovements?: InputMaybe<ProductMovementUpdateManyWithoutProviderOrderItemNestedInput>;
-  providerId?: InputMaybe<StringFieldUpdateOperationsInput>;
-  providerOrder?: InputMaybe<ProviderOrderUpdateOneRequiredWithoutProviderOrderItemsNestedInput>;
-  quantity?: InputMaybe<IntFieldUpdateOperationsInput>;
-  totalValue?: InputMaybe<IntFieldUpdateOperationsInput>;
-  updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-};
-
 export type ProviderOrderItemUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   moveQty?: InputMaybe<BoolFieldUpdateOperationsInput>;
@@ -2704,7 +2793,7 @@ export type ProviderOrderNullableScalarRelationFilter = {
 export type ProviderOrderOrderByWithRelationInput = {
   createdAt?: InputMaybe<SortOrder>;
   date?: InputMaybe<SortOrder>;
-  financialMovement?: InputMaybe<FinancialMovementOrderByRelationAggregateInput>;
+  financialMovements?: InputMaybe<FinancialMovementOrderByRelationAggregateInput>;
   id?: InputMaybe<SortOrder>;
   itemsValue?: InputMaybe<SortOrder>;
   otherValue?: InputMaybe<SortOrder>;
@@ -2748,7 +2837,7 @@ export type ProviderOrderSumAggregate = {
 export type ProviderOrderUpdateInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  financialMovement?: InputMaybe<FinancialMovementUpdateManyWithoutProviderOrderNestedInput>;
+  financialMovements?: InputMaybe<FinancialMovementUpdateManyWithoutProviderOrderNestedInput>;
   itemsValue?: InputMaybe<IntFieldUpdateOperationsInput>;
   otherValue?: InputMaybe<IntFieldUpdateOperationsInput>;
   providerOrderItems?: InputMaybe<ProviderOrderItemUpdateManyWithoutProviderOrderNestedInput>;
@@ -2763,18 +2852,18 @@ export type ProviderOrderUpdateOneRequiredWithoutProviderOrderItemsNestedInput =
   upsert?: InputMaybe<ProviderOrderUpsertWithoutProviderOrderItemsInput>;
 };
 
-export type ProviderOrderUpdateOneWithoutFinancialMovementNestedInput = {
+export type ProviderOrderUpdateOneWithoutFinancialMovementsNestedInput = {
   connect?: InputMaybe<ProviderOrderWhereUniqueInput>;
-  connectOrCreate?: InputMaybe<ProviderOrderCreateOrConnectWithoutFinancialMovementInput>;
-  create?: InputMaybe<ProviderOrderCreateWithoutFinancialMovementInput>;
+  connectOrCreate?: InputMaybe<ProviderOrderCreateOrConnectWithoutFinancialMovementsInput>;
+  create?: InputMaybe<ProviderOrderCreateWithoutFinancialMovementsInput>;
   delete?: InputMaybe<ProviderOrderWhereInput>;
   disconnect?: InputMaybe<Scalars['Boolean']['input']>;
-  update?: InputMaybe<ProviderOrderUpdateToOneWithWhereWithoutFinancialMovementInput>;
-  upsert?: InputMaybe<ProviderOrderUpsertWithoutFinancialMovementInput>;
+  update?: InputMaybe<ProviderOrderUpdateToOneWithWhereWithoutFinancialMovementsInput>;
+  upsert?: InputMaybe<ProviderOrderUpsertWithoutFinancialMovementsInput>;
 };
 
-export type ProviderOrderUpdateToOneWithWhereWithoutFinancialMovementInput = {
-  data: ProviderOrderUpdateWithoutFinancialMovementInput;
+export type ProviderOrderUpdateToOneWithWhereWithoutFinancialMovementsInput = {
+  data: ProviderOrderUpdateWithoutFinancialMovementsInput;
   where?: InputMaybe<ProviderOrderWhereInput>;
 };
 
@@ -2783,7 +2872,7 @@ export type ProviderOrderUpdateToOneWithWhereWithoutProviderOrderItemsInput = {
   where?: InputMaybe<ProviderOrderWhereInput>;
 };
 
-export type ProviderOrderUpdateWithoutFinancialMovementInput = {
+export type ProviderOrderUpdateWithoutFinancialMovementsInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   itemsValue?: InputMaybe<IntFieldUpdateOperationsInput>;
@@ -2795,15 +2884,15 @@ export type ProviderOrderUpdateWithoutFinancialMovementInput = {
 export type ProviderOrderUpdateWithoutProviderOrderItemsInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
-  financialMovement?: InputMaybe<FinancialMovementUpdateManyWithoutProviderOrderNestedInput>;
+  financialMovements?: InputMaybe<FinancialMovementUpdateManyWithoutProviderOrderNestedInput>;
   itemsValue?: InputMaybe<IntFieldUpdateOperationsInput>;
   otherValue?: InputMaybe<IntFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
 };
 
-export type ProviderOrderUpsertWithoutFinancialMovementInput = {
-  create: ProviderOrderCreateWithoutFinancialMovementInput;
-  update: ProviderOrderUpdateWithoutFinancialMovementInput;
+export type ProviderOrderUpsertWithoutFinancialMovementsInput = {
+  create: ProviderOrderCreateWithoutFinancialMovementsInput;
+  update: ProviderOrderUpdateWithoutFinancialMovementsInput;
   where?: InputMaybe<ProviderOrderWhereInput>;
 };
 
@@ -2819,7 +2908,7 @@ export type ProviderOrderWhereInput = {
   OR?: InputMaybe<Array<ProviderOrderWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
   date?: InputMaybe<DateTimeFilter>;
-  financialMovement?: InputMaybe<FinancialMovementListRelationFilter>;
+  financialMovements?: InputMaybe<FinancialMovementListRelationFilter>;
   id?: InputMaybe<StringFilter>;
   itemsValue?: InputMaybe<IntFilter>;
   otherValue?: InputMaybe<IntFilter>;
@@ -2833,7 +2922,7 @@ export type ProviderOrderWhereUniqueInput = {
   OR?: InputMaybe<Array<ProviderOrderWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
   date?: InputMaybe<DateTimeFilter>;
-  financialMovement?: InputMaybe<FinancialMovementListRelationFilter>;
+  financialMovements?: InputMaybe<FinancialMovementListRelationFilter>;
   id?: InputMaybe<Scalars['String']['input']>;
   itemsValue?: InputMaybe<IntFilter>;
   otherValue?: InputMaybe<IntFilter>;
@@ -3082,6 +3171,8 @@ export type ProvidersOutput = {
 
 export type Query = {
   __typename?: 'Query';
+  financialMovement: FinancialMovement;
+  financialMovements: FinancialMovementsOutput;
   product: Product;
   productAggregate: AggregateProduct;
   products: ProductsOutput;
@@ -3098,6 +3189,21 @@ export type Query = {
   sales: SalesOutput;
   user: User;
   users: UsersOutput;
+};
+
+
+export type QueryFinancialMovementArgs = {
+  where: FinancialMovementWhereUniqueInput;
+};
+
+
+export type QueryFinancialMovementsArgs = {
+  cursor?: InputMaybe<FinancialMovementWhereUniqueInput>;
+  distinct?: InputMaybe<Array<FinancialMovementScalarFieldEnum>>;
+  orderBy?: InputMaybe<Array<FinancialMovementOrderByWithRelationInput>>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<FinancialMovementWhereInput>;
 };
 
 
@@ -4764,6 +4870,7 @@ export type ResolversTypes = {
   BoolFieldUpdateOperationsInput: BoolFieldUpdateOperationsInput;
   BoolFilter: BoolFilter;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  CustomProviderOrderItemUpdateInput: CustomProviderOrderItemUpdateInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   DateTimeFieldUpdateOperationsInput: DateTimeFieldUpdateOperationsInput;
   DateTimeFilter: DateTimeFilter;
@@ -4773,8 +4880,10 @@ export type ResolversTypes = {
   EnumProductMovementGroupTypeFilter: EnumProductMovementGroupTypeFilter;
   EnumProductMovementTypeFieldUpdateOperationsInput: EnumProductMovementTypeFieldUpdateOperationsInput;
   EnumProductMovementTypeFilter: EnumProductMovementTypeFilter;
+  FinancialMovement: ResolverTypeWrapper<FinancialMovement>;
   FinancialMovementAvgAggregate: ResolverTypeWrapper<FinancialMovementAvgAggregate>;
   FinancialMovementCountAggregate: ResolverTypeWrapper<FinancialMovementCountAggregate>;
+  FinancialMovementCreateInput: FinancialMovementCreateInput;
   FinancialMovementCreateManyProviderOrderInput: FinancialMovementCreateManyProviderOrderInput;
   FinancialMovementCreateManyProviderOrderInputEnvelope: FinancialMovementCreateManyProviderOrderInputEnvelope;
   FinancialMovementCreateManySaleInput: FinancialMovementCreateManySaleInput;
@@ -4789,9 +4898,13 @@ export type ResolversTypes = {
   FinancialMovementMaxAggregate: ResolverTypeWrapper<FinancialMovementMaxAggregate>;
   FinancialMovementMinAggregate: ResolverTypeWrapper<FinancialMovementMinAggregate>;
   FinancialMovementOrderByRelationAggregateInput: FinancialMovementOrderByRelationAggregateInput;
+  FinancialMovementOrderByWithRelationInput: FinancialMovementOrderByWithRelationInput;
+  FinancialMovementPaginated: ResolverTypeWrapper<FinancialMovementPaginated>;
+  FinancialMovementScalarFieldEnum: FinancialMovementScalarFieldEnum;
   FinancialMovementScalarWhereInput: FinancialMovementScalarWhereInput;
   FinancialMovementSumAggregate: ResolverTypeWrapper<FinancialMovementSumAggregate>;
   FinancialMovementType: FinancialMovementType;
+  FinancialMovementUpdateInput: FinancialMovementUpdateInput;
   FinancialMovementUpdateManyMutationInput: FinancialMovementUpdateManyMutationInput;
   FinancialMovementUpdateManyWithWhereWithoutProviderOrderInput: FinancialMovementUpdateManyWithWhereWithoutProviderOrderInput;
   FinancialMovementUpdateManyWithWhereWithoutSaleInput: FinancialMovementUpdateManyWithWhereWithoutSaleInput;
@@ -4805,6 +4918,7 @@ export type ResolversTypes = {
   FinancialMovementUpsertWithWhereUniqueWithoutSaleInput: FinancialMovementUpsertWithWhereUniqueWithoutSaleInput;
   FinancialMovementWhereInput: FinancialMovementWhereInput;
   FinancialMovementWhereUniqueInput: FinancialMovementWhereUniqueInput;
+  FinancialMovementsOutput: ResolverTypeWrapper<FinancialMovementsOutput>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
@@ -5004,11 +5118,11 @@ export type ResolversTypes = {
   ProviderOrderCount: ResolverTypeWrapper<ProviderOrderCount>;
   ProviderOrderCountAggregate: ResolverTypeWrapper<ProviderOrderCountAggregate>;
   ProviderOrderCreateInput: ProviderOrderCreateInput;
-  ProviderOrderCreateNestedOneWithoutFinancialMovementInput: ProviderOrderCreateNestedOneWithoutFinancialMovementInput;
+  ProviderOrderCreateNestedOneWithoutFinancialMovementsInput: ProviderOrderCreateNestedOneWithoutFinancialMovementsInput;
   ProviderOrderCreateNestedOneWithoutProviderOrderItemsInput: ProviderOrderCreateNestedOneWithoutProviderOrderItemsInput;
-  ProviderOrderCreateOrConnectWithoutFinancialMovementInput: ProviderOrderCreateOrConnectWithoutFinancialMovementInput;
+  ProviderOrderCreateOrConnectWithoutFinancialMovementsInput: ProviderOrderCreateOrConnectWithoutFinancialMovementsInput;
   ProviderOrderCreateOrConnectWithoutProviderOrderItemsInput: ProviderOrderCreateOrConnectWithoutProviderOrderItemsInput;
-  ProviderOrderCreateWithoutFinancialMovementInput: ProviderOrderCreateWithoutFinancialMovementInput;
+  ProviderOrderCreateWithoutFinancialMovementsInput: ProviderOrderCreateWithoutFinancialMovementsInput;
   ProviderOrderCreateWithoutProviderOrderItemsInput: ProviderOrderCreateWithoutProviderOrderItemsInput;
   ProviderOrderItem: ResolverTypeWrapper<ProviderOrderItem>;
   ProviderOrderItemAvgAggregate: ResolverTypeWrapper<ProviderOrderItemAvgAggregate>;
@@ -5038,7 +5152,6 @@ export type ResolversTypes = {
   ProviderOrderItemScalarFieldEnum: ProviderOrderItemScalarFieldEnum;
   ProviderOrderItemScalarWhereInput: ProviderOrderItemScalarWhereInput;
   ProviderOrderItemSumAggregate: ResolverTypeWrapper<ProviderOrderItemSumAggregate>;
-  ProviderOrderItemUpdateInput: ProviderOrderItemUpdateInput;
   ProviderOrderItemUpdateManyMutationInput: ProviderOrderItemUpdateManyMutationInput;
   ProviderOrderItemUpdateManyWithWhereWithoutProductInput: ProviderOrderItemUpdateManyWithWhereWithoutProductInput;
   ProviderOrderItemUpdateManyWithWhereWithoutProviderOrderInput: ProviderOrderItemUpdateManyWithWhereWithoutProviderOrderInput;
@@ -5067,12 +5180,12 @@ export type ResolversTypes = {
   ProviderOrderSumAggregate: ResolverTypeWrapper<ProviderOrderSumAggregate>;
   ProviderOrderUpdateInput: ProviderOrderUpdateInput;
   ProviderOrderUpdateOneRequiredWithoutProviderOrderItemsNestedInput: ProviderOrderUpdateOneRequiredWithoutProviderOrderItemsNestedInput;
-  ProviderOrderUpdateOneWithoutFinancialMovementNestedInput: ProviderOrderUpdateOneWithoutFinancialMovementNestedInput;
-  ProviderOrderUpdateToOneWithWhereWithoutFinancialMovementInput: ProviderOrderUpdateToOneWithWhereWithoutFinancialMovementInput;
+  ProviderOrderUpdateOneWithoutFinancialMovementsNestedInput: ProviderOrderUpdateOneWithoutFinancialMovementsNestedInput;
+  ProviderOrderUpdateToOneWithWhereWithoutFinancialMovementsInput: ProviderOrderUpdateToOneWithWhereWithoutFinancialMovementsInput;
   ProviderOrderUpdateToOneWithWhereWithoutProviderOrderItemsInput: ProviderOrderUpdateToOneWithWhereWithoutProviderOrderItemsInput;
-  ProviderOrderUpdateWithoutFinancialMovementInput: ProviderOrderUpdateWithoutFinancialMovementInput;
+  ProviderOrderUpdateWithoutFinancialMovementsInput: ProviderOrderUpdateWithoutFinancialMovementsInput;
   ProviderOrderUpdateWithoutProviderOrderItemsInput: ProviderOrderUpdateWithoutProviderOrderItemsInput;
-  ProviderOrderUpsertWithoutFinancialMovementInput: ProviderOrderUpsertWithoutFinancialMovementInput;
+  ProviderOrderUpsertWithoutFinancialMovementsInput: ProviderOrderUpsertWithoutFinancialMovementsInput;
   ProviderOrderUpsertWithoutProviderOrderItemsInput: ProviderOrderUpsertWithoutProviderOrderItemsInput;
   ProviderOrderWhereInput: ProviderOrderWhereInput;
   ProviderOrderWhereUniqueInput: ProviderOrderWhereUniqueInput;
@@ -5278,6 +5391,7 @@ export type ResolversParentTypes = {
   BoolFieldUpdateOperationsInput: BoolFieldUpdateOperationsInput;
   BoolFilter: BoolFilter;
   Boolean: Scalars['Boolean']['output'];
+  CustomProviderOrderItemUpdateInput: CustomProviderOrderItemUpdateInput;
   DateTime: Scalars['DateTime']['output'];
   DateTimeFieldUpdateOperationsInput: DateTimeFieldUpdateOperationsInput;
   DateTimeFilter: DateTimeFilter;
@@ -5287,8 +5401,10 @@ export type ResolversParentTypes = {
   EnumProductMovementGroupTypeFilter: EnumProductMovementGroupTypeFilter;
   EnumProductMovementTypeFieldUpdateOperationsInput: EnumProductMovementTypeFieldUpdateOperationsInput;
   EnumProductMovementTypeFilter: EnumProductMovementTypeFilter;
+  FinancialMovement: FinancialMovement;
   FinancialMovementAvgAggregate: FinancialMovementAvgAggregate;
   FinancialMovementCountAggregate: FinancialMovementCountAggregate;
+  FinancialMovementCreateInput: FinancialMovementCreateInput;
   FinancialMovementCreateManyProviderOrderInput: FinancialMovementCreateManyProviderOrderInput;
   FinancialMovementCreateManyProviderOrderInputEnvelope: FinancialMovementCreateManyProviderOrderInputEnvelope;
   FinancialMovementCreateManySaleInput: FinancialMovementCreateManySaleInput;
@@ -5303,8 +5419,11 @@ export type ResolversParentTypes = {
   FinancialMovementMaxAggregate: FinancialMovementMaxAggregate;
   FinancialMovementMinAggregate: FinancialMovementMinAggregate;
   FinancialMovementOrderByRelationAggregateInput: FinancialMovementOrderByRelationAggregateInput;
+  FinancialMovementOrderByWithRelationInput: FinancialMovementOrderByWithRelationInput;
+  FinancialMovementPaginated: FinancialMovementPaginated;
   FinancialMovementScalarWhereInput: FinancialMovementScalarWhereInput;
   FinancialMovementSumAggregate: FinancialMovementSumAggregate;
+  FinancialMovementUpdateInput: FinancialMovementUpdateInput;
   FinancialMovementUpdateManyMutationInput: FinancialMovementUpdateManyMutationInput;
   FinancialMovementUpdateManyWithWhereWithoutProviderOrderInput: FinancialMovementUpdateManyWithWhereWithoutProviderOrderInput;
   FinancialMovementUpdateManyWithWhereWithoutSaleInput: FinancialMovementUpdateManyWithWhereWithoutSaleInput;
@@ -5318,6 +5437,7 @@ export type ResolversParentTypes = {
   FinancialMovementUpsertWithWhereUniqueWithoutSaleInput: FinancialMovementUpsertWithWhereUniqueWithoutSaleInput;
   FinancialMovementWhereInput: FinancialMovementWhereInput;
   FinancialMovementWhereUniqueInput: FinancialMovementWhereUniqueInput;
+  FinancialMovementsOutput: FinancialMovementsOutput;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
@@ -5513,11 +5633,11 @@ export type ResolversParentTypes = {
   ProviderOrderCount: ProviderOrderCount;
   ProviderOrderCountAggregate: ProviderOrderCountAggregate;
   ProviderOrderCreateInput: ProviderOrderCreateInput;
-  ProviderOrderCreateNestedOneWithoutFinancialMovementInput: ProviderOrderCreateNestedOneWithoutFinancialMovementInput;
+  ProviderOrderCreateNestedOneWithoutFinancialMovementsInput: ProviderOrderCreateNestedOneWithoutFinancialMovementsInput;
   ProviderOrderCreateNestedOneWithoutProviderOrderItemsInput: ProviderOrderCreateNestedOneWithoutProviderOrderItemsInput;
-  ProviderOrderCreateOrConnectWithoutFinancialMovementInput: ProviderOrderCreateOrConnectWithoutFinancialMovementInput;
+  ProviderOrderCreateOrConnectWithoutFinancialMovementsInput: ProviderOrderCreateOrConnectWithoutFinancialMovementsInput;
   ProviderOrderCreateOrConnectWithoutProviderOrderItemsInput: ProviderOrderCreateOrConnectWithoutProviderOrderItemsInput;
-  ProviderOrderCreateWithoutFinancialMovementInput: ProviderOrderCreateWithoutFinancialMovementInput;
+  ProviderOrderCreateWithoutFinancialMovementsInput: ProviderOrderCreateWithoutFinancialMovementsInput;
   ProviderOrderCreateWithoutProviderOrderItemsInput: ProviderOrderCreateWithoutProviderOrderItemsInput;
   ProviderOrderItem: ProviderOrderItem;
   ProviderOrderItemAvgAggregate: ProviderOrderItemAvgAggregate;
@@ -5546,7 +5666,6 @@ export type ResolversParentTypes = {
   ProviderOrderItemProviderOrderIdProductIdCompoundUniqueInput: ProviderOrderItemProviderOrderIdProductIdCompoundUniqueInput;
   ProviderOrderItemScalarWhereInput: ProviderOrderItemScalarWhereInput;
   ProviderOrderItemSumAggregate: ProviderOrderItemSumAggregate;
-  ProviderOrderItemUpdateInput: ProviderOrderItemUpdateInput;
   ProviderOrderItemUpdateManyMutationInput: ProviderOrderItemUpdateManyMutationInput;
   ProviderOrderItemUpdateManyWithWhereWithoutProductInput: ProviderOrderItemUpdateManyWithWhereWithoutProductInput;
   ProviderOrderItemUpdateManyWithWhereWithoutProviderOrderInput: ProviderOrderItemUpdateManyWithWhereWithoutProviderOrderInput;
@@ -5574,12 +5693,12 @@ export type ResolversParentTypes = {
   ProviderOrderSumAggregate: ProviderOrderSumAggregate;
   ProviderOrderUpdateInput: ProviderOrderUpdateInput;
   ProviderOrderUpdateOneRequiredWithoutProviderOrderItemsNestedInput: ProviderOrderUpdateOneRequiredWithoutProviderOrderItemsNestedInput;
-  ProviderOrderUpdateOneWithoutFinancialMovementNestedInput: ProviderOrderUpdateOneWithoutFinancialMovementNestedInput;
-  ProviderOrderUpdateToOneWithWhereWithoutFinancialMovementInput: ProviderOrderUpdateToOneWithWhereWithoutFinancialMovementInput;
+  ProviderOrderUpdateOneWithoutFinancialMovementsNestedInput: ProviderOrderUpdateOneWithoutFinancialMovementsNestedInput;
+  ProviderOrderUpdateToOneWithWhereWithoutFinancialMovementsInput: ProviderOrderUpdateToOneWithWhereWithoutFinancialMovementsInput;
   ProviderOrderUpdateToOneWithWhereWithoutProviderOrderItemsInput: ProviderOrderUpdateToOneWithWhereWithoutProviderOrderItemsInput;
-  ProviderOrderUpdateWithoutFinancialMovementInput: ProviderOrderUpdateWithoutFinancialMovementInput;
+  ProviderOrderUpdateWithoutFinancialMovementsInput: ProviderOrderUpdateWithoutFinancialMovementsInput;
   ProviderOrderUpdateWithoutProviderOrderItemsInput: ProviderOrderUpdateWithoutProviderOrderItemsInput;
-  ProviderOrderUpsertWithoutFinancialMovementInput: ProviderOrderUpsertWithoutFinancialMovementInput;
+  ProviderOrderUpsertWithoutFinancialMovementsInput: ProviderOrderUpsertWithoutFinancialMovementsInput;
   ProviderOrderUpsertWithoutProviderOrderItemsInput: ProviderOrderUpsertWithoutProviderOrderItemsInput;
   ProviderOrderWhereInput: ProviderOrderWhereInput;
   ProviderOrderWhereUniqueInput: ProviderOrderWhereUniqueInput;
@@ -5793,6 +5912,19 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
   name: 'DateTime';
 }
 
+export type FinancialMovementResolvers<ContextType = any, ParentType extends ResolversParentTypes['FinancialMovement'] = ResolversParentTypes['FinancialMovement']> = {
+  createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  date?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  providerOrderId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  saleId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<ResolversTypes['FinancialMovementType'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  valueDecimal?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type FinancialMovementAvgAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['FinancialMovementAvgAggregate'] = ResolversParentTypes['FinancialMovementAvgAggregate']> = {
   value?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -5835,21 +5967,39 @@ export type FinancialMovementMinAggregateResolvers<ContextType = any, ParentType
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type FinancialMovementPaginatedResolvers<ContextType = any, ParentType extends ResolversParentTypes['FinancialMovementPaginated'] = ResolversParentTypes['FinancialMovementPaginated']> = {
+  currentPage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  hasNextPage?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  lastPage?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  nextCursor?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  total?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type FinancialMovementSumAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['FinancialMovementSumAggregate'] = ResolversParentTypes['FinancialMovementSumAggregate']> = {
   value?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type FinancialMovementsOutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['FinancialMovementsOutput'] = ResolversParentTypes['FinancialMovementsOutput']> = {
+  nodes?: Resolver<Array<ResolversTypes['FinancialMovement']>, ParentType, ContextType>;
+  pageInfo?: Resolver<Maybe<ResolversTypes['FinancialMovementPaginated']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createFinancialMovement?: Resolver<ResolversTypes['FinancialMovement'], ParentType, ContextType, RequireFields<MutationCreateFinancialMovementArgs, 'data'>>;
   createProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationCreateProductArgs, 'data'>>;
   createProvider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<MutationCreateProviderArgs, 'data'>>;
   createProviderOrder?: Resolver<ResolversTypes['ProviderOrder'], ParentType, ContextType, RequireFields<MutationCreateProviderOrderArgs, 'data'>>;
   createProviders?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationCreateProvidersArgs, 'data'>>;
   createSale?: Resolver<Maybe<ResolversTypes['Sale']>, ParentType, ContextType, RequireFields<MutationCreateSaleArgs, 'data'>>;
+  deleteFinancialMovement?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteFinancialMovementArgs, 'where'>>;
   deleteProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationDeleteProductArgs, 'where'>>;
   deleteProvider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<MutationDeleteProviderArgs, 'where'>>;
   deleteProviderOrder?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType, RequireFields<MutationDeleteProviderOrderArgs, 'where'>>;
   deleteSale?: Resolver<Maybe<ResolversTypes['Sale']>, ParentType, ContextType, RequireFields<MutationDeleteSaleArgs, 'where'>>;
+  updateFinancialMovement?: Resolver<ResolversTypes['FinancialMovement'], ParentType, ContextType, RequireFields<MutationUpdateFinancialMovementArgs, 'data' | 'where'>>;
   updateProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationUpdateProductArgs, 'data' | 'where'>>;
   updateProvider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<MutationUpdateProviderArgs, 'data' | 'where'>>;
   updateProviderOrder?: Resolver<ResolversTypes['ProviderOrder'], ParentType, ContextType, RequireFields<MutationUpdateProviderOrderArgs, 'data' | 'where'>>;
@@ -6133,7 +6283,7 @@ export type ProviderOrderAvgAggregateResolvers<ContextType = any, ParentType ext
 };
 
 export type ProviderOrderCountResolvers<ContextType = any, ParentType extends ResolversParentTypes['ProviderOrderCount'] = ResolversParentTypes['ProviderOrderCount']> = {
-  financialMovement?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  financialMovements?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   providerOrderItems?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -6296,6 +6446,8 @@ export type ProvidersOutputResolvers<ContextType = any, ParentType extends Resol
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  financialMovement?: Resolver<ResolversTypes['FinancialMovement'], ParentType, ContextType, RequireFields<QueryFinancialMovementArgs, 'where'>>;
+  financialMovements?: Resolver<ResolversTypes['FinancialMovementsOutput'], ParentType, ContextType, Partial<QueryFinancialMovementsArgs>>;
   product?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<QueryProductArgs, 'where'>>;
   productAggregate?: Resolver<ResolversTypes['AggregateProduct'], ParentType, ContextType>;
   products?: Resolver<ResolversTypes['ProductsOutput'], ParentType, ContextType, Partial<QueryProductsArgs>>;
@@ -6580,11 +6732,14 @@ export type Resolvers<ContextType = any> = {
   AggregateProduct?: AggregateProductResolvers<ContextType>;
   AggregateSale?: AggregateSaleResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
+  FinancialMovement?: FinancialMovementResolvers<ContextType>;
   FinancialMovementAvgAggregate?: FinancialMovementAvgAggregateResolvers<ContextType>;
   FinancialMovementCountAggregate?: FinancialMovementCountAggregateResolvers<ContextType>;
   FinancialMovementMaxAggregate?: FinancialMovementMaxAggregateResolvers<ContextType>;
   FinancialMovementMinAggregate?: FinancialMovementMinAggregateResolvers<ContextType>;
+  FinancialMovementPaginated?: FinancialMovementPaginatedResolvers<ContextType>;
   FinancialMovementSumAggregate?: FinancialMovementSumAggregateResolvers<ContextType>;
+  FinancialMovementsOutput?: FinancialMovementsOutputResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Product?: ProductResolvers<ContextType>;
   ProductAvgAggregate?: ProductAvgAggregateResolvers<ContextType>;

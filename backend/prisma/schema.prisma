@@ -273,7 +273,7 @@ model ProviderOrder {
   /// @HideField({ output: true })
   providerOrderItems ProviderOrderItem[]
   /// @HideField({ output: true })
-  financialMovement  FinancialMovement[]
+  financialMovements FinancialMovement[]
 }
 
 model ProviderOrderItem {

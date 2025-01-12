@@ -6,7 +6,7 @@ import { MdOutlineAddBusiness, MdOutlinePointOfSale } from 'react-icons/md';
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from 'react-icons/ai';
 import { useMediaQuery } from 'react-responsive';
 import { matchRoutes, useLocation } from 'react-router-dom';
-import { FaRegClipboard } from 'react-icons/fa';
+import { FaMoneyBill, FaRegClipboard } from 'react-icons/fa';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -49,23 +49,40 @@ export function SideMenu() {
     },
     {
       key: '2',
-      label: 'Ordens Compra',
+      label: 'Compras',
       icon: <FaRegClipboard />,
       children: [
         {
           key: '/provider-orders',
-          label: <a href="/provider-orders">Listar Ordens</a>,
+          label: <a href="/provider-orders">Listar Compras</a>,
           icon: <BiListUl />,
         },
         {
           key: '/provider-order',
-          label: <a href="/provider-order">Nova Ordem</a>,
+          label: <a href="/provider-order">Nova Compra</a>,
           icon: <BiListPlus />,
         },
       ],
     },
     {
       key: '3',
+      label: 'Financeiro',
+      icon: <FaMoneyBill />,
+      children: [
+        {
+          key: '/financial-movements',
+          label: <a href="/financial-movements">Listar Movimentos</a>,
+          icon: <BiListUl />,
+        },
+        {
+          key: '/financial-movement',
+          label: <a href="/financial-movement">Novo Movimento</a>,
+          icon: <BiListPlus />,
+        },
+      ],
+    },
+    {
+      key: '4',
       label: 'Produtos',
       icon: <BiBarcode />,
       children: [
@@ -86,7 +103,7 @@ export function SideMenu() {
       ],
     },
     {
-      key: '4',
+      key: '5',
       label: 'Fornecedores',
       icon: <MdOutlineAddBusiness />,
       children: [

@@ -13,10 +13,7 @@ export function providerOrderDto(providerOrder: ProviderOrdersFormNode): Omit<
   'providerOrderItems'
 > & {
   providerOrderItems: {
-    nodes: Omit<
-      ProviderOrdersFormNode['providerOrderItems']['nodes'][0],
-      'netMarginPercent' | 'totalCostValue'
-    >[];
+    nodes: ProviderOrdersFormNode['providerOrderItems']['nodes'][0][];
   };
 } {
   return {
