@@ -17,6 +17,12 @@ export type Scalars = {
   DateTime: { input: any; output: any; }
 };
 
+export type AggregateFinancialMovement = {
+  __typename?: 'AggregateFinancialMovement';
+  count?: Maybe<Scalars['Float']['output']>;
+  value: Scalars['Int']['output'];
+};
+
 export type AggregateProduct = {
   __typename?: 'AggregateProduct';
   costValue: Scalars['Int']['output'];
@@ -3172,6 +3178,7 @@ export type ProvidersOutput = {
 export type Query = {
   __typename?: 'Query';
   financialMovement: FinancialMovement;
+  financialMovementAggregate: AggregateFinancialMovement;
   financialMovements: FinancialMovementsOutput;
   product: Product;
   productAggregate: AggregateProduct;
@@ -4865,6 +4872,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  AggregateFinancialMovement: ResolverTypeWrapper<AggregateFinancialMovement>;
   AggregateProduct: ResolverTypeWrapper<AggregateProduct>;
   AggregateSale: ResolverTypeWrapper<AggregateSale>;
   BoolFieldUpdateOperationsInput: BoolFieldUpdateOperationsInput;
@@ -5386,6 +5394,7 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  AggregateFinancialMovement: AggregateFinancialMovement;
   AggregateProduct: AggregateProduct;
   AggregateSale: AggregateSale;
   BoolFieldUpdateOperationsInput: BoolFieldUpdateOperationsInput;
@@ -5889,6 +5898,12 @@ export type ResolversParentTypes = {
   UserWhereInput: UserWhereInput;
   UserWhereUniqueInput: UserWhereUniqueInput;
   UsersOutput: UsersOutput;
+};
+
+export type AggregateFinancialMovementResolvers<ContextType = any, ParentType extends ResolversParentTypes['AggregateFinancialMovement'] = ResolversParentTypes['AggregateFinancialMovement']> = {
+  count?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type AggregateProductResolvers<ContextType = any, ParentType extends ResolversParentTypes['AggregateProduct'] = ResolversParentTypes['AggregateProduct']> = {
@@ -6447,6 +6462,7 @@ export type ProvidersOutputResolvers<ContextType = any, ParentType extends Resol
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   financialMovement?: Resolver<ResolversTypes['FinancialMovement'], ParentType, ContextType, RequireFields<QueryFinancialMovementArgs, 'where'>>;
+  financialMovementAggregate?: Resolver<ResolversTypes['AggregateFinancialMovement'], ParentType, ContextType>;
   financialMovements?: Resolver<ResolversTypes['FinancialMovementsOutput'], ParentType, ContextType, Partial<QueryFinancialMovementsArgs>>;
   product?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<QueryProductArgs, 'where'>>;
   productAggregate?: Resolver<ResolversTypes['AggregateProduct'], ParentType, ContextType>;
@@ -6729,6 +6745,7 @@ export type UsersOutputResolvers<ContextType = any, ParentType extends Resolvers
 };
 
 export type Resolvers<ContextType = any> = {
+  AggregateFinancialMovement?: AggregateFinancialMovementResolvers<ContextType>;
   AggregateProduct?: AggregateProductResolvers<ContextType>;
   AggregateSale?: AggregateSaleResolvers<ContextType>;
   DateTime?: GraphQLScalarType;

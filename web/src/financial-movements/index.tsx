@@ -15,11 +15,13 @@ import {
   FinancialMovementsQuery,
   useFinancialMovementsQuery,
 } from '../graphql/__generated__/financial-movements.gql.generated';
+import { useFinancialMovementAggregateQuery } from '../graphql/__generated__/financial-movement-aggregate.gql.generated';
 import { useQueryParamsWithDebounce } from '../helpers/use-query-params-with-debounce';
 import { SortOrder } from '../types';
 import { FinancialMovementsTable } from './table';
 import { tablePagination } from '../helpers/pagination';
 import { CustomRangePicker } from '../components/range-picker';
+import { formatMoneyFromInt } from '../helpers';
 
 export type FinancialMovementsNode =
   FinancialMovementsQuery['financialMovements']['nodes'][0];
@@ -65,6 +67,8 @@ export function FinancialMovements() {
       },
     },
   });
+
+  const { data: dataAggregate } = useFinancialMovementAggregateQuery();
 
   return (
     <div style={{ margin: '0 25px 0 0' }}>
@@ -119,6 +123,22 @@ export function FinancialMovements() {
             },
           })}
         />
+      </div>
+
+      <div className="relative rounded-lg border border-gray-300 p-4">
+        <h3 className="absolute -top-3 left-4 bg-white px-2 text-sm font-semibold text-gray-700">
+          Caixa
+        </h3>
+        <div className="grid grid-cols-1 gap-x-28 sm:gap-x-12 lg:grid-cols-4">
+          <div className="flex justify-between">
+            <span className="font-semibold text-gray-700">Total</span>
+            <span className="text-gray-900">
+              {formatMoneyFromInt(
+                dataAggregate?.financialMovementAggregate?.value
+              )}
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -15,6 +15,7 @@ import { SaleAggregateModule } from './sale-aggregate/module';
 import { ProviderOrderModule } from './provider-order/module';
 import { ProviderOrderItemModule } from './provider-order-item/module';
 import { FinancialMovementModule } from './financial-movement/module';
+import { FinancialMovementAggregateModule } from './financial-movement-aggregate/module';
 
 @Module({
   imports: [
@@ -51,7 +52,8 @@ import { FinancialMovementModule } from './financial-movement/module';
     SaleItemModule,
     ProductAggregateModule,
     SaleAggregateModule,
-    FinancialMovementModule
+    FinancialMovementModule,
+    FinancialMovementAggregateModule
   ]
 })
 export class AppModule {}
