@@ -13,9 +13,9 @@ import { SaleItemModule } from './sale-item/sale-item.module';
 import { ProductAggregateModule } from './product-aggregate/module';
 import { SaleAggregateModule } from './sale-aggregate/module';
 import { ProviderOrderModule } from './provider-order/module';
-import { ProviderOrderItemModule } from './provider-order-item/module';
 import { FinancialMovementModule } from './financial-movement/module';
 import { FinancialMovementAggregateModule } from './financial-movement-aggregate/module';
+import { ProviderOrderItemModule } from './provider-order-item/module';
 
 @Module({
   imports: [

@@ -30,7 +30,7 @@ export type ProviderOrderQueryVariables = Types.Exact<{
 }>;
 
 
-export type ProviderOrderQuery = { __typename?: 'Query', providerOrder: { __typename?: 'ProviderOrder', id: string, date: any, totalValue: number, totalValueDecimal: number, createdAt: any, updatedAt: any, providerOrderItems: { __typename?: 'ProviderOrderItemsOutput', nodes: Array<{ __typename?: 'ProviderOrderItem', id: string, quantity: number, totalValue: number, totalValueDecimal: number, productId: string, providerId: string, product: { __typename?: 'Product', id: string, name: string, brandName?: string | null }, provider?: { __typename?: 'Provider', id: string, name: string, whatsapp?: string | null } | null }> } } };
+export type ProviderOrderQuery = { __typename?: 'Query', providerOrder: { __typename?: 'ProviderOrder', id: string, date: any, totalValue: number, totalValueDecimal: number, createdAt: any, updatedAt: any, providerOrderItems: { __typename?: 'ProviderOrderItemsOutput', nodes: Array<{ __typename?: 'ProviderOrderItem', id: string, quantity: number, moveQty: boolean, totalValue: number, totalValueDecimal: number, productId: string, providerId: string, product: { __typename?: 'Product', id: string, name: string, brandName?: string | null }, provider?: { __typename?: 'Provider', id: string, name: string, whatsapp?: string | null } | null }> } } };
 
 export type ProviderOrdersQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.ProviderOrderWhereInput>;
@@ -154,6 +154,7 @@ export const ProviderOrderDocument = gql`
       nodes {
         id
         quantity
+        moveQty
         totalValue
         totalValueDecimal
         productId

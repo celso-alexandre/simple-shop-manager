@@ -35,6 +35,7 @@ gql`
         nodes {
           id
           quantity
+          moveQty
           totalValue
           totalValueDecimal
           productId

@@ -54,10 +54,6 @@ export type BoolFilter = {
   not?: InputMaybe<NestedBoolFilter>;
 };
 
-export type CustomProviderOrderItemUpdateInput = {
-  moveQty?: InputMaybe<BoolFieldUpdateOperationsInput>;
-};
-
 export type DateTimeFieldUpdateOperationsInput = {
   set?: InputMaybe<Scalars['DateTime']['input']>;
 };
@@ -497,7 +493,6 @@ export type Mutation = {
   updateProduct: Product;
   updateProvider: Provider;
   updateProviderOrder: ProviderOrder;
-  updateProviderOrderItem: ProviderOrderItem;
   updateSale?: Maybe<Sale>;
 };
 
@@ -578,12 +573,6 @@ export type MutationUpdateProviderArgs = {
 export type MutationUpdateProviderOrderArgs = {
   data: ProviderOrderUpdateInput;
   where: ProviderOrderWhereUniqueInput;
-};
-
-
-export type MutationUpdateProviderOrderItemArgs = {
-  data: CustomProviderOrderItemUpdateInput;
-  where: ProviderOrderItemWhereUniqueInput;
 };
 
 
@@ -2363,7 +2352,6 @@ export type ProviderOrderItem = {
   productId: Scalars['String']['output'];
   provider?: Maybe<Provider>;
   providerId: Scalars['String']['output'];
-  providerOrder?: Maybe<Provider>;
   providerOrderId: Scalars['String']['output'];
   quantity: Scalars['Int']['output'];
   totalValue: Scalars['Int']['output'];
@@ -3185,7 +3173,6 @@ export type Query = {
   products: ProductsOutput;
   provider: Provider;
   providerOrder: ProviderOrder;
-  providerOrderItem: ProviderOrderItem;
   providerOrderItems: ProviderOrderItemsOutput;
   providerOrders: ProviderOrdersOutput;
   providers: ProvidersOutput;
@@ -3236,11 +3223,6 @@ export type QueryProviderArgs = {
 
 export type QueryProviderOrderArgs = {
   where: ProviderOrderWhereUniqueInput;
-};
-
-
-export type QueryProviderOrderItemArgs = {
-  where: ProviderOrderItemWhereUniqueInput;
 };
 
 
@@ -4878,7 +4860,6 @@ export type ResolversTypes = {
   BoolFieldUpdateOperationsInput: BoolFieldUpdateOperationsInput;
   BoolFilter: BoolFilter;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
-  CustomProviderOrderItemUpdateInput: CustomProviderOrderItemUpdateInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   DateTimeFieldUpdateOperationsInput: DateTimeFieldUpdateOperationsInput;
   DateTimeFilter: DateTimeFilter;
@@ -5400,7 +5381,6 @@ export type ResolversParentTypes = {
   BoolFieldUpdateOperationsInput: BoolFieldUpdateOperationsInput;
   BoolFilter: BoolFilter;
   Boolean: Scalars['Boolean']['output'];
-  CustomProviderOrderItemUpdateInput: CustomProviderOrderItemUpdateInput;
   DateTime: Scalars['DateTime']['output'];
   DateTimeFieldUpdateOperationsInput: DateTimeFieldUpdateOperationsInput;
   DateTimeFilter: DateTimeFilter;
@@ -6018,7 +5998,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateProduct?: Resolver<ResolversTypes['Product'], ParentType, ContextType, RequireFields<MutationUpdateProductArgs, 'data' | 'where'>>;
   updateProvider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<MutationUpdateProviderArgs, 'data' | 'where'>>;
   updateProviderOrder?: Resolver<ResolversTypes['ProviderOrder'], ParentType, ContextType, RequireFields<MutationUpdateProviderOrderArgs, 'data' | 'where'>>;
-  updateProviderOrderItem?: Resolver<ResolversTypes['ProviderOrderItem'], ParentType, ContextType, RequireFields<MutationUpdateProviderOrderItemArgs, 'data' | 'where'>>;
   updateSale?: Resolver<Maybe<ResolversTypes['Sale']>, ParentType, ContextType, RequireFields<MutationUpdateSaleArgs, 'data' | 'where'>>;
 };
 
@@ -6323,7 +6302,6 @@ export type ProviderOrderItemResolvers<ContextType = any, ParentType extends Res
   productId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   provider?: Resolver<Maybe<ResolversTypes['Provider']>, ParentType, ContextType>;
   providerId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  providerOrder?: Resolver<Maybe<ResolversTypes['Provider']>, ParentType, ContextType>;
   providerOrderId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   quantity?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   totalValue?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -6469,7 +6447,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   products?: Resolver<ResolversTypes['ProductsOutput'], ParentType, ContextType, Partial<QueryProductsArgs>>;
   provider?: Resolver<ResolversTypes['Provider'], ParentType, ContextType, RequireFields<QueryProviderArgs, 'where'>>;
   providerOrder?: Resolver<ResolversTypes['ProviderOrder'], ParentType, ContextType, RequireFields<QueryProviderOrderArgs, 'where'>>;
-  providerOrderItem?: Resolver<ResolversTypes['ProviderOrderItem'], ParentType, ContextType, RequireFields<QueryProviderOrderItemArgs, 'where'>>;
   providerOrderItems?: Resolver<ResolversTypes['ProviderOrderItemsOutput'], ParentType, ContextType, Partial<QueryProviderOrderItemsArgs>>;
   providerOrders?: Resolver<ResolversTypes['ProviderOrdersOutput'], ParentType, ContextType, Partial<QueryProviderOrdersArgs>>;
   providers?: Resolver<ResolversTypes['ProvidersOutput'], ParentType, ContextType, Partial<QueryProvidersArgs>>;

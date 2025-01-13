@@ -45,6 +45,10 @@ export function SideMenu() {
           label: <a href="/sale">Nova Venda</a>,
           icon: <BiListPlus />,
         },
+        {
+          style: { visibility: 'hidden', height: 0 },
+          key: '/sale/:id',
+        },
       ],
     },
     {
@@ -62,6 +66,10 @@ export function SideMenu() {
           label: <a href="/provider-order">Nova Compra</a>,
           icon: <BiListPlus />,
         },
+        {
+          style: { visibility: 'hidden', height: 0 },
+          key: '/provider-order/:id',
+        },
       ],
     },
     {
@@ -78,6 +86,10 @@ export function SideMenu() {
           key: '/financial-movement',
           label: <a href="/financial-movement">Novo Movimento</a>,
           icon: <BiListPlus />,
+        },
+        {
+          style: { visibility: 'hidden', height: 0 },
+          key: '/financial-movement/:id',
         },
       ],
     },
@@ -157,6 +169,8 @@ export function SideMenu() {
 
   const matches = matchRoutes(routes, location);
   const { route } = matches?.[0] || {};
+
+  console.log({ matches, routes, location });
 
   return (
     <div style={{ width: !collapsed ? 256 : 80, justifyContent: 'flex-start' }}>

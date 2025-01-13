@@ -23,9 +23,11 @@ async function onSubmit(
         date,
         providerOrderItems: {
           create: providerOrderItems.nodes.map((item) => {
-            const { productId, providerId, totalValue, ...rest } = item;
+            const { productId, providerId, totalValue, quantity, moveQty } =
+              item;
             return {
-              ...rest,
+              quantity,
+              moveQty,
               totalValue: serializeDecimalAsInt(totalValue),
               product: { connect: { id: productId } },
               providerId,

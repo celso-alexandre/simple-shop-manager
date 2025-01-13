@@ -64,9 +64,11 @@ async function onSubmit(
                   providerId,
                   totalValue,
                   quantity,
+                  moveQty,
                 } = item;
                 return {
                   quantity,
+                  moveQty,
                   totalValue: serializeDecimalAsInt(totalValue),
                   product: { connect: { id: productId } },
                   providerId,
@@ -84,12 +86,14 @@ async function onSubmit(
                   providerId,
                   totalValue,
                   quantity,
+                  moveQty,
                 } = item;
                 const res: ProviderOrderItemUpdateWithWhereUniqueWithoutProviderOrderInput =
                   {
                     where: { id: providerOrderItemId },
                     data: {
                       quantity: { set: quantity },
+                      moveQty: { set: moveQty },
                       totalValue: { set: serializeDecimalAsInt(totalValue) },
                       product: { connect: { id: productId } },
                       providerId: { set: providerId },

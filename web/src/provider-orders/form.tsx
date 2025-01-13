@@ -1,4 +1,12 @@
-import { Button, Col, DatePicker, Form, Input, InputNumber } from 'antd';
+import {
+  Button,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Switch,
+} from 'antd';
 import dayjs from 'dayjs';
 import _ from 'lodash';
 import { Fragment, useEffect, useState } from 'react';
@@ -101,19 +109,12 @@ export function ProviderOrdersForm({
 
   function setProviderOrderItemProduct(index: number) {
     return setProviderOrderItem(index, (providerOrderItem, product) => {
-      const { percent } = getNetMargin(
-        product.priceValue * 100,
-        product.costValue * 100,
-        0
-      );
       return {
         ...providerOrderItem,
         quantity: 1,
-        costIsPostPaid: product.isPostPaid,
-        netMarginPercent: percent,
+        moveQty: false,
         providerId: product.provider?.id || null,
-        totalValue: serializeIntAsDecimal(product.priceValue),
-        totalCostValue: serializeIntAsDecimal(product.costValue),
+        totalValue: serializeIntAsDecimal(product.costValue),
       };
     });
   }
@@ -292,6 +293,23 @@ export function ProviderOrdersForm({
                         />
                       </Form.Item>
                     </div>
+
+                    <div>
+                      <div>
+                        <label>Entrar Estoque</label>
+                      </div>
+                      <Form.Item
+                        name={[
+                          field.name,
+                          nameof<ProviderOrderItem>((x) => {
+                            return x.moveQty;
+                          }),
+                        ]}>
+                        <Switch />
+                      </Form.Item>
+                    </div>
+
+                    <div className="mr-3" />
 
                     <div>
                       <div>

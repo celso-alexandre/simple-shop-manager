@@ -27,6 +27,7 @@ export function providerOrderDto(providerOrder: ProviderOrdersFormNode): Omit<
             id: item.id,
             productId: item.productId,
             quantity: item.quantity,
+            moveQty: item.moveQty ?? false,
             totalValue: item.totalValue,
             providerId: item.providerId,
           };

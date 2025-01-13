@@ -25,7 +25,7 @@ export type ProviderOrdersNode =
   ProviderOrdersQuery['providerOrders']['nodes'][0];
 export type ProviderOrderItem = Pick<
   ProviderOrderQuery['providerOrder']['providerOrderItems']['nodes'][number],
-  'productId' | 'providerId' | 'totalValue' | 'quantity'
+  'productId' | 'providerId' | 'totalValue' | 'quantity' | 'moveQty'
 > & { id?: string };
 export type ProviderOrdersFormNode = Pick<
   ProviderOrderQuery['providerOrder'],
