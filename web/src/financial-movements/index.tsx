@@ -136,6 +136,11 @@ export function FinancialMovements() {
               {formatMoneyFromInt(
                 dataAggregate?.financialMovementAggregate?.value
               )}
+              {(dataAggregate?.financialMovementAggregate?.value || 0) < 0 ? (
+                <span className="ml-2 text-red-600">
+                  (Caixa negativo. Verifique)
+                </span>
+              ) : null}
             </span>
           </div>
         </div>
