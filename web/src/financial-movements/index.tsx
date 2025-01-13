@@ -21,7 +21,7 @@ import { SortOrder } from '../types';
 import { FinancialMovementsTable } from './table';
 import { tablePagination } from '../helpers/pagination';
 import { CustomRangePicker } from '../components/range-picker';
-import { formatMoneyFromInt } from '../helpers';
+import { FinancialMovementsFooter } from './common/footer';
 
 export type FinancialMovementsNode =
   FinancialMovementsQuery['financialMovements']['nodes'][0];
@@ -125,26 +125,9 @@ export function FinancialMovements() {
         />
       </div>
 
-      <div className="relative rounded-lg border border-gray-300 p-4">
-        <h3 className="absolute -top-3 left-4 bg-white px-2 text-sm font-semibold text-gray-700">
-          Caixa
-        </h3>
-        <div className="grid grid-cols-1 gap-x-28 sm:gap-x-12 lg:grid-cols-4">
-          <div className="flex justify-between">
-            <span className="font-semibold text-gray-700">Total</span>
-            <span className="text-gray-900">
-              {formatMoneyFromInt(
-                dataAggregate?.financialMovementAggregate?.value
-              )}
-              {(dataAggregate?.financialMovementAggregate?.value || 0) < 0 ? (
-                <span className="ml-2 text-red-600">
-                  (Caixa negativo. Verifique)
-                </span>
-              ) : null}
-            </span>
-          </div>
-        </div>
-      </div>
+      <FinancialMovementsFooter
+        value={dataAggregate?.financialMovementAggregate?.value}
+      />
     </div>
   );
 }

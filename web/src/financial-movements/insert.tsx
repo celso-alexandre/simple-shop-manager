@@ -9,8 +9,10 @@ import {
 } from '../graphql/__generated__/financial-movements.gql.generated';
 import { FinancialMovementsForm } from './form';
 import { FinancialMovementType } from '../types';
-import { formatMoneyFromInt, serializeDecimalAsInt } from '../helpers';
+import { serializeDecimalAsInt } from '../helpers';
 import { useFinancialMovementAggregateQuery } from '../graphql/__generated__/financial-movement-aggregate.gql.generated';
+import { FinancialMovementsFooter } from './common/footer';
+import { useState } from 'react';
 
 async function onSubmit(
   data: FinancialMovementsFormNode,
@@ -36,6 +38,7 @@ export function FinancialMovementInsert() {
     refetchQueries: [FinancialMovementsDocument],
   });
   const { data: dataAggregate } = useFinancialMovementAggregateQuery();
+  const [value, setValue] = useState(0);
 
   return (
     <>
@@ -47,6 +50,13 @@ export function FinancialMovementInsert() {
             form={form}
             onFinish={async (values) => {
               await onSubmit(values, create);
+            }}
+            onValuesChange={(_, values) => {
+              let v = values.value || 0;
+              if (values.kind === 'debit') {
+                v = v * -1;
+              }
+              setValue(v);
             }}
           />
 
@@ -63,21 +73,13 @@ export function FinancialMovementInsert() {
           </Row>
         </div>
 
-        <div className="relative rounded-lg border border-gray-300 p-4">
-          <h3 className="absolute -top-3 left-4 bg-white px-2 text-sm font-semibold text-gray-700">
-            Caixa
-          </h3>
-          <div className="grid grid-cols-1 gap-x-28 sm:gap-x-12 lg:grid-cols-4">
-            <div className="flex justify-between">
-              <span className="font-semibold text-gray-700">Total</span>
-              <span className="text-gray-900">
-                {formatMoneyFromInt(
-                  dataAggregate?.financialMovementAggregate?.value
-                )}
-              </span>
-            </div>
-          </div>
-        </div>
+        <FinancialMovementsFooter
+          value={dataAggregate?.financialMovementAggregate?.value}
+          pendingMovement={{
+            value: serializeDecimalAsInt(value),
+            prevValue: 0,
+          }}
+        />
       </div>
     </>
   );
