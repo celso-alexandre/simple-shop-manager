@@ -31,7 +31,7 @@ export class FinancialMovementAggregateService {
     }
 
     const res = (result as unknown as any[])[0] || {};
-    console.log('Aggregated Result:', result);
+    // console.log('Aggregated Result:', result);
     return {
       value: res.value || 0
     };

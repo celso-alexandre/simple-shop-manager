@@ -117,10 +117,18 @@ export class SaleService {
       });
       this.validateSale(sale);
 
-      await Promise.all([
-        handleProductMovement(prisma, sale),
-        this.updateSaleAndItemsTotals(prisma, sale)
+      const res = await Promise.all([
+        this.updateSaleAndItemsTotals(prisma, sale),
+        handleProductMovement(prisma, sale)
       ]);
+      await prisma.financialMovement.create({
+        data: {
+          type: 'SALE',
+          value: res[0].totalValue,
+          sale: { connect: { id: res[0].id } },
+          date: sale.date
+        }
+      });
     });
   }
 
@@ -148,7 +156,8 @@ export class SaleService {
       });
       this.validateSale(sale);
 
-      await Promise.all([
+      const res = await Promise.all([
+        this.updateSaleAndItemsTotals(prisma, sale),
         handleProductMovement(
           prisma,
           {
@@ -162,9 +171,20 @@ export class SaleService {
             updatedAt: new Date()
           },
           saleBefore
-        ),
-        this.updateSaleAndItemsTotals(prisma, sale)
+        )
       ]);
+
+      const totalDiff = res[0].totalValue - saleBefore.totalValue;
+      if (totalDiff !== 0) {
+        await prisma.financialMovement.create({
+          data: {
+            type: 'SALE',
+            value: totalDiff,
+            sale: { connect: { id: res[0].id } },
+            date: sale.date
+          }
+        });
+      }
     });
   }
 
