@@ -320,11 +320,11 @@ model FinancialMovement {
 
   saleId String? @unique @db.ObjectId
   /// @HideField({ output: true })
-  sale   Sale?   @relation(fields: [saleId], references: [id])
+  sale   Sale?   @relation(fields: [saleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   providerOrderId String?        @unique @db.ObjectId
   /// @HideField({ output: true })
-  providerOrder   ProviderOrder? @relation(fields: [providerOrderId], references: [id])
+  providerOrder   ProviderOrder? @relation(fields: [providerOrderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   // @HideField({ match: '@(*Update*|*Create*)Input' }) 
   createdAt DateTime @default(now())
