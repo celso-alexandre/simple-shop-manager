@@ -28,6 +28,7 @@ gql`
       id
       date
       type
+      description
       value
       valueDecimal
       providerOrderId
@@ -43,6 +44,7 @@ gql`
         id
         date
         type
+        description
         value
         valueDecimal
         providerOrderId

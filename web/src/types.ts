@@ -106,6 +106,7 @@ export type FinancialMovement = {
   __typename?: 'FinancialMovement';
   createdAt: Scalars['DateTime']['output'];
   date: Scalars['DateTime']['output'];
+  description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   providerOrderId?: Maybe<Scalars['String']['output']>;
   saleId?: Maybe<Scalars['String']['output']>;
@@ -125,6 +126,7 @@ export type FinancialMovementCountAggregate = {
   _all: Scalars['Int']['output'];
   createdAt: Scalars['Int']['output'];
   date: Scalars['Int']['output'];
+  description: Scalars['Int']['output'];
   id: Scalars['Int']['output'];
   providerOrderId: Scalars['Int']['output'];
   saleId: Scalars['Int']['output'];
@@ -136,6 +138,7 @@ export type FinancialMovementCountAggregate = {
 export type FinancialMovementCreateInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   date?: InputMaybe<Scalars['DateTime']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   providerOrder?: InputMaybe<ProviderOrderCreateNestedOneWithoutFinancialMovementsInput>;
   sale?: InputMaybe<SaleCreateNestedOneWithoutFinancialMovementInput>;
@@ -147,6 +150,7 @@ export type FinancialMovementCreateInput = {
 export type FinancialMovementCreateManyProviderOrderInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   date?: InputMaybe<Scalars['DateTime']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   saleId?: InputMaybe<Scalars['String']['input']>;
   type: FinancialMovementType;
@@ -161,6 +165,7 @@ export type FinancialMovementCreateManyProviderOrderInputEnvelope = {
 export type FinancialMovementCreateManySaleInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   date?: InputMaybe<Scalars['DateTime']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   providerOrderId?: InputMaybe<Scalars['String']['input']>;
   type: FinancialMovementType;
@@ -199,6 +204,7 @@ export type FinancialMovementCreateOrConnectWithoutSaleInput = {
 export type FinancialMovementCreateWithoutProviderOrderInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   date?: InputMaybe<Scalars['DateTime']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   sale?: InputMaybe<SaleCreateNestedOneWithoutFinancialMovementInput>;
   type: FinancialMovementType;
@@ -209,6 +215,7 @@ export type FinancialMovementCreateWithoutProviderOrderInput = {
 export type FinancialMovementCreateWithoutSaleInput = {
   createdAt?: InputMaybe<Scalars['DateTime']['input']>;
   date?: InputMaybe<Scalars['DateTime']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   providerOrder?: InputMaybe<ProviderOrderCreateNestedOneWithoutFinancialMovementsInput>;
   type: FinancialMovementType;
@@ -226,6 +233,7 @@ export type FinancialMovementMaxAggregate = {
   __typename?: 'FinancialMovementMaxAggregate';
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   date?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   providerOrderId?: Maybe<Scalars['String']['output']>;
   saleId?: Maybe<Scalars['String']['output']>;
@@ -238,6 +246,7 @@ export type FinancialMovementMinAggregate = {
   __typename?: 'FinancialMovementMinAggregate';
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   date?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   providerOrderId?: Maybe<Scalars['String']['output']>;
   saleId?: Maybe<Scalars['String']['output']>;
@@ -253,6 +262,7 @@ export type FinancialMovementOrderByRelationAggregateInput = {
 export type FinancialMovementOrderByWithRelationInput = {
   createdAt?: InputMaybe<SortOrder>;
   date?: InputMaybe<SortOrder>;
+  description?: InputMaybe<SortOrder>;
   id?: InputMaybe<SortOrder>;
   providerOrder?: InputMaybe<ProviderOrderOrderByWithRelationInput>;
   providerOrderId?: InputMaybe<SortOrder>;
@@ -279,6 +289,7 @@ export type FinancialMovementPaginated = {
 export enum FinancialMovementScalarFieldEnum {
   CreatedAt = 'createdAt',
   Date = 'date',
+  Description = 'description',
   Id = 'id',
   ProviderOrderId = 'providerOrderId',
   SaleId = 'saleId',
@@ -293,6 +304,7 @@ export type FinancialMovementScalarWhereInput = {
   OR?: InputMaybe<Array<FinancialMovementScalarWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
   date?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
   providerOrderId?: InputMaybe<StringNullableFilter>;
   saleId?: InputMaybe<StringNullableFilter>;
@@ -315,6 +327,7 @@ export enum FinancialMovementType {
 export type FinancialMovementUpdateInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   providerOrder?: InputMaybe<ProviderOrderUpdateOneWithoutFinancialMovementsNestedInput>;
   sale?: InputMaybe<SaleUpdateOneWithoutFinancialMovementNestedInput>;
   type?: InputMaybe<EnumFinancialMovementTypeFieldUpdateOperationsInput>;
@@ -325,6 +338,7 @@ export type FinancialMovementUpdateInput = {
 export type FinancialMovementUpdateManyMutationInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   type?: InputMaybe<EnumFinancialMovementTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   value?: InputMaybe<IntFieldUpdateOperationsInput>;
@@ -381,6 +395,7 @@ export type FinancialMovementUpdateWithWhereUniqueWithoutSaleInput = {
 export type FinancialMovementUpdateWithoutProviderOrderInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   sale?: InputMaybe<SaleUpdateOneWithoutFinancialMovementNestedInput>;
   type?: InputMaybe<EnumFinancialMovementTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -390,6 +405,7 @@ export type FinancialMovementUpdateWithoutProviderOrderInput = {
 export type FinancialMovementUpdateWithoutSaleInput = {
   createdAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
   date?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
+  description?: InputMaybe<NullableStringFieldUpdateOperationsInput>;
   providerOrder?: InputMaybe<ProviderOrderUpdateOneWithoutFinancialMovementsNestedInput>;
   type?: InputMaybe<EnumFinancialMovementTypeFieldUpdateOperationsInput>;
   updatedAt?: InputMaybe<DateTimeFieldUpdateOperationsInput>;
@@ -414,6 +430,7 @@ export type FinancialMovementWhereInput = {
   OR?: InputMaybe<Array<FinancialMovementWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
   date?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<StringFilter>;
   providerOrder?: InputMaybe<ProviderOrderNullableScalarRelationFilter>;
   providerOrderId?: InputMaybe<StringNullableFilter>;
@@ -430,6 +447,7 @@ export type FinancialMovementWhereUniqueInput = {
   OR?: InputMaybe<Array<FinancialMovementWhereInput>>;
   createdAt?: InputMaybe<DateTimeFilter>;
   date?: InputMaybe<DateTimeFilter>;
+  description?: InputMaybe<StringNullableFilter>;
   id?: InputMaybe<Scalars['String']['input']>;
   providerOrder?: InputMaybe<ProviderOrderNullableScalarRelationFilter>;
   providerOrderId?: InputMaybe<Scalars['String']['input']>;
@@ -5910,6 +5928,7 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 export type FinancialMovementResolvers<ContextType = any, ParentType extends ResolversParentTypes['FinancialMovement'] = ResolversParentTypes['FinancialMovement']> = {
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   date?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   providerOrderId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   saleId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -5929,6 +5948,7 @@ export type FinancialMovementCountAggregateResolvers<ContextType = any, ParentTy
   _all?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   date?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   providerOrderId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   saleId?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -5941,6 +5961,7 @@ export type FinancialMovementCountAggregateResolvers<ContextType = any, ParentTy
 export type FinancialMovementMaxAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['FinancialMovementMaxAggregate'] = ResolversParentTypes['FinancialMovementMaxAggregate']> = {
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   date?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   providerOrderId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   saleId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -5953,6 +5974,7 @@ export type FinancialMovementMaxAggregateResolvers<ContextType = any, ParentType
 export type FinancialMovementMinAggregateResolvers<ContextType = any, ParentType extends ResolversParentTypes['FinancialMovementMinAggregate'] = ResolversParentTypes['FinancialMovementMinAggregate']> = {
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   date?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   providerOrderId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   saleId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

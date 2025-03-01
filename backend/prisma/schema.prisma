@@ -315,8 +315,9 @@ model FinancialMovement {
 
   type FinancialMovementType
 
-  date  DateTime @default(now())
-  value Int      @default(0)
+  date        DateTime @default(now())
+  value       Int      @default(0)
+  description String?
 
   saleId String? @unique @db.ObjectId
   /// @HideField({ output: true })

@@ -30,7 +30,7 @@ export type FinancialMovementQueryVariables = Types.Exact<{
 }>;
 
 
-export type FinancialMovementQuery = { __typename?: 'Query', financialMovement: { __typename?: 'FinancialMovement', id: string, date: any, type: Types.FinancialMovementType, value: number, valueDecimal: number, providerOrderId?: string | null, saleId?: string | null } };
+export type FinancialMovementQuery = { __typename?: 'Query', financialMovement: { __typename?: 'FinancialMovement', id: string, date: any, type: Types.FinancialMovementType, description?: string | null, value: number, valueDecimal: number, providerOrderId?: string | null, saleId?: string | null } };
 
 export type FinancialMovementsQueryVariables = Types.Exact<{
   where?: Types.InputMaybe<Types.FinancialMovementWhereInput>;
@@ -40,7 +40,7 @@ export type FinancialMovementsQueryVariables = Types.Exact<{
 }>;
 
 
-export type FinancialMovementsQuery = { __typename?: 'Query', financialMovements: { __typename?: 'FinancialMovementsOutput', nodes: Array<{ __typename?: 'FinancialMovement', id: string, date: any, type: Types.FinancialMovementType, value: number, valueDecimal: number, providerOrderId?: string | null, saleId?: string | null }>, pageInfo?: { __typename?: 'FinancialMovementPaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
+export type FinancialMovementsQuery = { __typename?: 'Query', financialMovements: { __typename?: 'FinancialMovementsOutput', nodes: Array<{ __typename?: 'FinancialMovement', id: string, date: any, type: Types.FinancialMovementType, description?: string | null, value: number, valueDecimal: number, providerOrderId?: string | null, saleId?: string | null }>, pageInfo?: { __typename?: 'FinancialMovementPaginated', currentPage?: number | null, hasNextPage?: boolean | null, lastPage?: number | null, nextCursor?: number | null, total?: number | null } | null } };
 
 
 export const CreateFinancialMovementDocument = gql`
@@ -147,6 +147,7 @@ export const FinancialMovementDocument = gql`
     id
     date
     type
+    description
     value
     valueDecimal
     providerOrderId
@@ -194,6 +195,7 @@ export const FinancialMovementsDocument = gql`
       id
       date
       type
+      description
       value
       valueDecimal
       providerOrderId

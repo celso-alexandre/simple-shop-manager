@@ -24,6 +24,7 @@ async function onSubmit(
       data: {
         type: FinancialMovementType.Manual,
         date: data.date,
+        description: data.description,
         value:
           serializeDecimalAsInt(data.value) * (data.kind === 'debit' ? -1 : 1),
         // todo: maybe add a comment?

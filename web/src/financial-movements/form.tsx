@@ -68,6 +68,16 @@ export function FinancialMovementsForm({
               <InputNumberMoney />
             </Form.Item>
           </Col>
+
+          <Col>
+            <label>Descrição</label>
+            <Form.Item
+              name={nameof<FinancialMovementsFormNode>((x) => {
+                return x.description;
+              })}>
+              <Input allowClear />
+            </Form.Item>
+          </Col>
         </Form>
       </div>
     </div>

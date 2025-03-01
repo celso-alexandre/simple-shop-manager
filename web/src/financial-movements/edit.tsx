@@ -18,16 +18,17 @@ import { useFinancialMovementAggregateQuery } from '../graphql/__generated__/fin
 import { FinancialMovementsFooter } from './common/footer';
 
 async function onSubmit(
-  financialMovement: FinancialMovementsFormNode,
+  data: FinancialMovementsFormNode,
   update: ReturnType<typeof useUpdateFinancialMovementMutation>[0]
 ) {
-  const { id, date, kind, value } = financialMovement;
+  const { id, date, kind, value, description } = data;
   await update({
     refetchQueries: [FinancialMovementDocument, FinancialMovementsDocument],
     variables: {
       where: { id },
       data: {
         date: { set: date },
+        description: { set: description },
         value: {
           set: serializeDecimalAsInt(value) * (kind === 'debit' ? -1 : 1),
         },
@@ -58,6 +59,7 @@ export function FinancialMovementEdit() {
       date: dayjs(financialMovement.date),
       kind: financialMovement.value < 0 ? 'debit' : 'credit',
       value: Math.abs(financialMovement.valueDecimal),
+      description: financialMovement.description,
     };
   }, [data]);
 

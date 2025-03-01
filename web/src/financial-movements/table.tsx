@@ -69,6 +69,12 @@ export function FinancialMovementsTable(
       },
     },
     {
+      title: 'Descrição',
+      dataIndex: nameof<FinancialMovementsNode>((x) => {
+        return x.description;
+      }),
+    },
+    {
       key: 'actions',
       width: 200,
       render: (value, record) => {

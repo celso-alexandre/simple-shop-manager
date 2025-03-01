@@ -27,7 +27,7 @@ export type FinancialMovementsNode =
   FinancialMovementsQuery['financialMovements']['nodes'][0];
 export type FinancialMovementsFormNode = Pick<
   FinancialMovementQuery['financialMovement'],
-  'date' | 'value'
+  'date' | 'value' | 'description'
 > & {
   id?: string;
   kind: 'credit' | 'debit';

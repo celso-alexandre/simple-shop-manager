@@ -67,4 +67,14 @@ export class FinancialMovementResolver {
   forTotalValueDecimal(@Parent() { value }: FinancialMovement) {
     return this.normalizeFloat(value / 100);
   }
+
+  @ResolveField(() => String)
+  description(
+    @Parent() { description, saleId, providerOrderId }: FinancialMovement
+  ) {
+    if (description) return description;
+    if (saleId) return 'Venda';
+    if (providerOrderId) return 'Compra';
+    return '';
+  }
 }
